@@ -1,13 +1,22 @@
 package com.roninaks.hellomywork.activities;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.fragment.CareersFragment;
+
+//import android.app.Fragment;
+//import android.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     return true;
+                    case R.id.navigation_careers: //help fragment
+                    {
+                        item.setIcon(R.drawable.ic_careers_fill);
+                        CareersFragment careersFragment = new CareersFragment();
+                        initFragment(careersFragment);
+                    }
+                    return true;
                 }
             }catch (Exception e) {
 //                Log.e("Main:BottomSheet", e.getMessage());
@@ -48,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    private void initFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content, fragment, "FragmentName");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

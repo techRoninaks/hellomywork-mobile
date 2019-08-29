@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="logo_width_careers">100dp</dimen>
+    <dimen name="logo_height_careers">100dp</dimen>
+    <dimen name="logo_margin_top_bottom_careers">70dp</dimen>
+    <dimen name="text_margin_career">30dp</dimen>
+    <dimen name="career_margin_left_right">15dp</dimen>
+</resources>
