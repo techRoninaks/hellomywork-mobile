@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MobileBase.iml" filepath="$PROJECT_DIR$/MobileBase.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hellomywork-mobile.iml" filepath="$PROJECT_DIR$/hellomywork-mobile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/hellomywork-mobile-app.iml" filepath="$PROJECT_DIR$/app/hellomywork-mobile-app.iml" />
     </modules>
   </component>
 </project>

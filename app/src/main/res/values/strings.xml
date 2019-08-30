@@ -8,7 +8,7 @@
     <string name="nav_help">Help</string>
 
     <!-- Connection Strings -->
-    <string name="master_url"></string>
+    <string name="master_url">http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/</string>
 
     <!-- No Internet Activity -->
     <string name="no_internet_retry">Retry</string>
@@ -18,4 +18,46 @@
     <string name="email_tech_support">tech@roninaks.com</string>
     <string name="email_admin">tech@roninaks.com</string>
     <string name="email_all">tech@roninaks.com</string>
+
+    <!-- Login Page-->
+    <string name="login_text">login</string>
+    <string name="login_sign_up_prompt">New user? Sign Up</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_button">Log In</string>
+    <string name="login_incorrect_pasword">Incorrect password or contact number. Please check the details you have entered.</string>
+    <string name="new_user">New user?</string>
+    <string name="new_user_prompt">If you are a new user, tap yes to register.</string>
+    <string name="default_signin">default</string>
+
+
+    <!-- Register Page-->
+    <string name="register_text">sign up</string>
+    <string name="register_sign_in_prompt">Already a user? Log in</string>
+    <string name="register_send_otp">Send OTP</string>
+    <string name="register_resend_otp">Resend OTP</string>
+    <string name="register_enter_otp">Please enter the OTP</string>
+
+    <!-- Error Resource Strings -->
+    <string name="required_field">This field is required</string>
+    <string name="invalid_email">Please enter a valid email</string>
+    <string name="invalid_cred">Username or Password is incorrect</string>
+    <string name="unexpected">Something went wrong. Please try again later</string>
+    <string name="exception">exception</string>
+
+
+    <!-- Success Resource Strings -->
+    <string name="success_register">Registration Successful</string>
+    <string name="success_login">Login Successful</string>
+    <string name="response_success">successful</string>
+    <string name="response_unsuccessful">unsuccessful</string>
+    <string name="has_seen">1</string>
+
+    <!-- DB Resource Strings -->
+    <string name="method_get">GET</string>
+    <string name="method_post">POST</string>
+
+    <!-- Other Resource Strings-->
+    <string name="confirmation_yes">Yes</string>
+    <string name="confirmation_no">No</string>
+
 </resources>
