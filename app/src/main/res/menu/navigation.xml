@@ -22,4 +22,8 @@
         android:id="@+id/navigation_help"
         android:icon="@drawable/ic_help"
         android:title="@string/nav_users" />
+    <item
+        android:id="@+id/navigation_careers"
+        android:icon="@drawable/ic_careers_"
+        android:title="@string/nav_careers" />
 </menu>

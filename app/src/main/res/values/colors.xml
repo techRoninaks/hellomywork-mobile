@@ -19,4 +19,7 @@
     <color name="colorTextWhiteSecondary">#b2ffffff</color>
     <color name="colorTextWhiteHint">#80ffffff</color>
     <color name="colorTextWhiteSeperators">#1fffffff</color>
+
+    <!-- Careers Background -->
+    <color name="colorCareerBackground">#6fd2b6</color>
 </resources>

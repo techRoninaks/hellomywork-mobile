@@ -8,6 +8,11 @@ import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.fragment.CareersFragment;
+import com.roninaks.hellomywork.fragment.ProfileFragment;
+
+//import android.app.Fragment;
+//import android.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
