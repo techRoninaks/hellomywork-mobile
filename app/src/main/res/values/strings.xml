@@ -32,6 +32,48 @@
     <string name="email_admin">tech@roninaks.com</string>
     <string name="email_all">tech@roninaks.com</string>
 
+    <!-- Login Page-->
+    <string name="login_text">login</string>
+    <string name="login_sign_up_prompt">New user? Sign Up</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_button">Log In</string>
+    <string name="login_incorrect_pasword">Incorrect password or contact number. Please check the details you have entered.</string>
+    <string name="new_user">New user?</string>
+    <string name="new_user_prompt">If you are a new user, tap yes to register.</string>
+    <string name="default_signin">default</string>
+
+
+    <!-- Register Page-->
+    <string name="register_text">sign up</string>
+    <string name="register_sign_in_prompt">Already a user? Log in</string>
+    <string name="register_send_otp">Send OTP</string>
+    <string name="register_resend_otp">Resend OTP</string>
+    <string name="register_enter_otp">Please enter the OTP</string>
+
+    <!-- Error Resource Strings -->
+    <string name="required_field">This field is required</string>
+    <string name="invalid_email">Please enter a valid email</string>
+    <string name="invalid_cred">Username or Password is incorrect</string>
+    <string name="unexpected">Something went wrong. Please try again later</string>
+    <string name="exception">exception</string>
+
+
+    <!-- Success Resource Strings -->
+    <string name="success_register">Registration Successful</string>
+    <string name="success_login">Login Successful</string>
+    <string name="response_success">successful</string>
+    <string name="response_unsuccessful">unsuccessful</string>
+    <string name="has_seen">1</string>
+
+    <!-- DB Resource Strings -->
+    <string name="method_get">GET</string>
+    <string name="method_post">POST</string>
+
+    <!-- Other Resource Strings-->
+    <string name="confirmation_yes">Yes</string>
+    <string name="confirmation_no">No</string>
+
+
     <!-- Premium Signup -->
     <string name="ps_privacy">Privacy</string>
     <string name="ps_name">Name</string>
@@ -598,4 +640,5 @@ The primary focus at Hellomywork is to be an easy to use, elegant interface, whi
 For the service providers, Hellomywork acts as a platform to advertise their offerings and gain access to a customer market geographically distributed across our country. It enables the service providers to expand their reach and market by penetrating areas which would have otherwise been difficult to scale to. The platform uses an algorithm to list the top performing service providers in each month thereby enabling them to gain free publicity and industry edge over their competitors.
 <br></br><br></br>
 Hellomywork is determinant to provide to our service providers the best possible outcomes of sales and profit. For this very purpose, we have designed a digital identity card which validates their membership with our website. What’s more, the ID card has been tailored with just enough information to act as a business card for our service providers which they can advertise and share digitally across the internet. Now spend less time on generating market plans and focus on delivering quality to your buyers.</string>
+
 </resources>
