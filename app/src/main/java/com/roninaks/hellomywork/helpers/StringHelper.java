@@ -3,7 +3,7 @@ package com.roninaks.hellomywork.helpers;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;

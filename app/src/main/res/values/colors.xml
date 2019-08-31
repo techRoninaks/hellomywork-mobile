@@ -21,6 +21,10 @@
     <color name="colorTextWhiteHint">#80ffffff</color>
     <color name="colorTextWhiteSeperators">#1fffffff</color>
 
+
+    <!-- Careers Background -->
+    <color name="colorCareerBackground">#6fd2b6</color>
+
     <!-- Card colors -->
     <color name="card_background">#ffffff</color>
     <color name="card_shadow_1">#d4d4d4</color>
@@ -32,4 +36,5 @@
     <color name="palette_brown">#a3916a</color>
     <color name="palette_green">#49c3b1</color>
     <color name="palette_blue">#0362b4</color>
+
 </resources>

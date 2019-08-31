@@ -1,14 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.UnionsIndividualFragment">
+    tools:context=".fragment.UnionsIndividualFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_margin="30dp"
+            android:text="UNINON NAME"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                >
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RANDOM"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:padding="15dp"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:background="@drawable/profile_postfilter_color_purple"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FOR SALE"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:padding="15dp"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:background="@drawable/profile_postfilter_color_blood"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REQUIRED"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:padding="15dp"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:background="@drawable/profile_postfilter_color_mint"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OFFERES"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:padding="15dp"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:background="@drawable/profile_postfilter_color_yellow"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACHIEVEMENT"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:padding="15dp"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:background="@drawable/profile_postfilter_color_black"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/unionPostRv"
+            android:orientation="vertical"></androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+</ScrollView>
