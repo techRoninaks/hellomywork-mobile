@@ -107,10 +107,6 @@ public class SqlHelper {
         }
     }
 
-    public String getStringResponse(){
-        return StringResponse;
-    }
-
     public SqlDelegate getSqlDelegate() {
         return sqlDelegate;
     }
