@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/containerMaster"
+    android:padding="@dimen/standard_gap_large"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="@dimen/home_category_layout_width"
+        android:layout_height="wrap_content"
+        android:id="@+id/containerIndividualRow"
+        android:orientation="vertical"
+        android:gravity="center_vertical|center_horizontal">
+        <LinearLayout
+            android:layout_width="@dimen/home_category_icon_width"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/service_list_icon"
+                android:src="@drawable/ic_white_photographers"
+                android:id="@+id/ivCategoryIcon"
+                android:background="@color/palette_blue"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hp_service"
+            android:id="@+id/tvCategoryName"
+            android:textSize="@dimen/font_secondary_text"
+            android:textColor="@color/colorTextBlackPrimary"
+            android:textAlignment="center"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

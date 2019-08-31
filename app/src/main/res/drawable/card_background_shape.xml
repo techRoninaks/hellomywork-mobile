@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <padding android:top="@dimen/standard_gap_extra_small" android:right="@dimen/standard_gap_extra_small" android:bottom="@dimen/standard_gap_extra_small" android:left="@dimen/standard_gap_extra_small" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+            <solid android:color="@color/card_shadow_1" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+            <solid android:color="@color/card_shadow_2" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+    <!-- Background -->
+    <item>
+        <shape >
+            <solid android:color="@color/card_background" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+
+</layer-list>

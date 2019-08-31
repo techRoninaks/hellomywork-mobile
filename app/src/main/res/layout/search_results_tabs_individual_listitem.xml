@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/containerMaster"
+    android:padding="@dimen/standard_gap_large"
+    android:orientation="vertical"
+    android:layout_marginStart="@dimen/standard_gap_small"
+    android:layout_marginEnd="@dimen/standard_gap_small">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTabName"
+        android:textSize="@dimen/font_page_title"
+        android:textColor="@color/colorTextWhitePrimary"
+        android:textAllCaps="true"/>
+</LinearLayout>

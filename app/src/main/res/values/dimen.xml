@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Standard Gaps -->
+    <dimen name="standard_gap_large">16dp</dimen>
+    <dimen name="standard_gap_medium">12dp</dimen>
+    <dimen name="standard_gap_small">8dp</dimen>
+    <dimen name="standard_gap_extra_small">4dp</dimen>
+    
+    <!-- Font Sizes -->
+    <dimen name="font_page_title">20sp</dimen>
+    <dimen name="font_page_title_emphasis">22sp</dimen>
+    <dimen name="font_para">14sp</dimen>
+    <dimen name="font_list_title">14sp</dimen>
+    <dimen name="font_text_important">16sp</dimen>
+    <dimen name="font_secondary_text">14sp</dimen>
+    <dimen name="font_button">14sp</dimen>
+    <dimen name="font_inputs">16sp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="service_list_icon">32dp</dimen>
+
+    <!-- Home Page -->
+    <dimen name="home_banner">250dp</dimen>
+    <dimen name="home_union">300dp</dimen>
+    <dimen name="home_category_icon_width">48dp</dimen>
+    <dimen name="home_category_layout_width">65dp</dimen>
+
+    <!-- Search Landing Page-->
+    <dimen name="sl_banner">180dp</dimen>
+
+    <!-- About Page -->
+    <dimen name="about_logo">48dp</dimen>
+</resources>

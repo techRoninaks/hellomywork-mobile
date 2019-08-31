@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/containerMaster"
+    android:padding="@dimen/standard_gap_large">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/containerIndividualRow"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:background="@drawable/custom_textview_white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/id_card_thumpnail_green"
+            android:orientation="vertical">
+            <!-- Logo and QR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_gap_medium"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/about_logo"
+                    android:layout_weight="1"
+                    android:paddingTop="@dimen/standard_gap_small"
+                    android:src="@drawable/ic_black_photographers" />
+            </LinearLayout>
+            <!-- Premium -->
+            <LinearLayout
+                android:id="@+id/containerMemberShip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/standard_gap_large">
+
+                <TextView
+                    android:id="@+id/tvPremium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sr_profile_premium"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:textSize="@dimen/font_list_title" />
+            </LinearLayout>
+            <!-- Information -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.25"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerTextInformation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.75"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Noufal"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="@dimen/font_page_title"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvRole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UI/UX Designer"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="@dimen/font_inputs"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kundannoor, Kochi"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="@dimen/font_para"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_star_white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/standard_gap_extra_small"
+                            android:text="3.4"
+                            android:textColor="@color/colorTextWhitePrimary"
+                            android:textSize="@dimen/font_para" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:weightSum="4">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/home_category_icon_width"
+                android:src="@drawable/ic_whatsapp_search"
+                android:layout_weight="1"
+                android:id="@+id/imgWhatsapp"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/home_category_icon_width"
+                android:src="@drawable/ic_call_search"
+                android:layout_weight="1"
+                android:id="@+id/imgPhone"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/home_category_icon_width"
+                android:src="@drawable/ic_mail_search"
+                android:layout_weight="1"
+                android:id="@+id/imgEmail"/>
+            <ImageView
+                android:layout_width="@dimen/home_category_icon_width"
+                android:layout_height="@dimen/home_category_icon_width"
+                android:src="@drawable/ic_bookmark_green"
+                android:layout_weight="1"
+                android:id="@+id/imgBookmark"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
