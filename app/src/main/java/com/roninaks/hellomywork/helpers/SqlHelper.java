@@ -94,6 +94,10 @@ public class SqlHelper {
         return ActionString;
     }
 
+    public String getStringResponse() {
+        return StringResponse;
+    }
+
     public String getStringResponse(String key) {
         try {
             return JSONResponse.getString(key);
@@ -296,11 +300,10 @@ public class SqlHelper {
                     }
                     try {
                         JSONResponse = new JSONObject(response);
-                    }catch (Exception e){}
-                    try {
-                        StringResponse= response;
-                    }catch (Exception e){}
+                    }catch (Exception e){
 
+                    }
+                    StringResponse = response;
                     return null;
 //                }
             } catch (Exception e){
