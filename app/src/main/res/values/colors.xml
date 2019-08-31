@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#0877d7</color>
     <color name="colorPrimaryDark">#0362b4</color>
-    <color name="colorAccent">#0362b4</color>
+    <color name="colorAccent">#49c3b1</color>
+    <color name="colorBlackTransparent">#CC000000</color>
 
     <!-- Navigation Colors  -->
     <color name="colorNavigaionBarBkg">#49c3b1</color>
@@ -19,4 +20,16 @@
     <color name="colorTextWhiteSecondary">#b2ffffff</color>
     <color name="colorTextWhiteHint">#80ffffff</color>
     <color name="colorTextWhiteSeperators">#1fffffff</color>
+
+    <!-- Card colors -->
+    <color name="card_background">#ffffff</color>
+    <color name="card_shadow_1">#d4d4d4</color>
+    <color name="card_shadow_2">#dddddd</color>
+    <color name="card_detailing">#eee</color>
+
+    <!-- HMW Colour Palette -->
+    <color name="palette_orange">#f2b21d</color>
+    <color name="palette_brown">#a3916a</color>
+    <color name="palette_green">#49c3b1</color>
+    <color name="palette_blue">#0362b4</color>
 </resources>
