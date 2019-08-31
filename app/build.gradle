@@ -39,4 +39,10 @@ dependencies {
     }
     implementation "androidx.cardview:cardview:1.0.0"
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.jpardogo.materialtabstrip:library:1.1.1'
+    //Toasty library for displaying toast
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
+    //OTP View library
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.0.3'
 }

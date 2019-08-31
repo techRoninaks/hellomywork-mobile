@@ -1,6 +1,7 @@
 package com.roninaks.hellomywork.helpers;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
@@ -265,6 +266,21 @@ public class StringHelper {
             }
         }
         return salt;
+    }
+
+    public static String imageToString(Bitmap bitmap){
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+            byte[] imageBytes = outputStream.toByteArray();
+
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            return encodedImage;
+        }catch (Exception e){
+//            EmailHelper emailHelper = new EmailHelper(ProfileImage.this, EmailHelper.TECH_SUPPORT, "Error: ProfileImage", StringHelper.convertStackTrace(e));
+//            emailHelper.sendEmail();
+        }
+        return "";
     }
 
     private static String generateStrongPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {

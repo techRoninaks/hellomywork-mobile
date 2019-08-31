@@ -94,6 +94,10 @@ public class SqlHelper {
         return ActionString;
     }
 
+    public String getStringResponse() {
+        return StringResponse;
+    }
+
     public String getStringResponse(String key) {
         try {
             return JSONResponse.getString(key);
@@ -101,9 +105,6 @@ public class SqlHelper {
             Log.e("SqlHelper:getStringResp", e.getMessage());
             return "exception";
         }
-    }
-    public  String getStringResponse(){
-        return StringResponse;
     }
 
     public SqlDelegate getSqlDelegate() {
@@ -293,13 +294,11 @@ public class SqlHelper {
                     while ((temp = IS.read()) != -1) {
                         response += (char) temp;
                     }
-                    try{
+                    try {
                         JSONResponse = new JSONObject(response);
-                    }
-                    catch (Exception e){
+                    }catch (Exception e){
 
                     }
-
                     StringResponse = response;
                     return null;
 //                }
