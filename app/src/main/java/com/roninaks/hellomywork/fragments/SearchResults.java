@@ -4,11 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import android.support.v7.widget.GridLayoutManager;
+//import android.support.v7.widget.LinearLayoutManager;
+import androidx.appcompat.widget.PopupMenu;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -373,7 +377,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
                 categoryModels.add(categoryModel);
             }
             SearchServiceAdapter adapter = new SearchServiceAdapter(context, categoryModels, rootView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
             rvServices.setLayoutManager(layoutManager);
             rvServices.setAdapter(adapter);
         }catch (Exception e){
@@ -389,7 +393,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
                 unionModels.add(unionModel);
             }
             SearchUnionAdapter adapter = new SearchUnionAdapter(context, unionModels, rootView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
             rvUnions.setLayoutManager(layoutManager);
             rvUnions.setAdapter(adapter);
         }catch (Exception e){

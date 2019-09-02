@@ -1,9 +1,9 @@
 package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import androidx.core.app.Fragment;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.fragments.UnionsIndividualFragment;
-import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
 import java.util.ArrayList;
@@ -24,16 +27,16 @@ public class UnionsAdapter extends RecyclerView.Adapter<UnionsAdapter.ViewHolder
     private ArrayList<UnionModel> unionModels;
     private Context context;
     private View rootview;
-    private RequestOptions requestOptions;
+//    private RequestOptions requestOptions;
 
 
     public UnionsAdapter(Context context, ArrayList<UnionModel> unionModels, View rootview) {
         this.context = context;
         this.unionModels = unionModels;
         this.rootview = rootview;
-        requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.profile_default);
-        requestOptions.error(R.drawable.profile_default);
+//        requestOptions = new RequestOptions();
+//        requestOptions.placeholder(R.drawable.profile_default);
+//        requestOptions.error(R.drawable.profile_default);
     }
 
 

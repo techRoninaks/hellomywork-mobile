@@ -1,17 +1,22 @@
 package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.helpers.StringHelper;
 import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
@@ -25,7 +30,7 @@ public class HomeTopPerformersAdapter extends RecyclerView.Adapter<HomeTopPerfor
     private ArrayList<ServiceProviderModel> serviceProviderModels;
     private Context context;
     private View rootview;
-    private RequestOptions requestOptions;
+//    private RequestOptions requestOptions;
     private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
 
 
@@ -33,9 +38,9 @@ public class HomeTopPerformersAdapter extends RecyclerView.Adapter<HomeTopPerfor
         this.context = context;
         this.serviceProviderModels = serviceProviderModels;
         this.rootview = rootview;
-        requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.profile_default);
-        requestOptions.error(R.drawable.profile_default);
+//        requestOptions = new RequestOptions();
+//        requestOptions.placeholder(R.drawable.profile_default);
+//        requestOptions.error(R.drawable.profile_default);
     }
 
 
@@ -47,7 +52,7 @@ public class HomeTopPerformersAdapter extends RecyclerView.Adapter<HomeTopPerfor
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeTopPerformersAdapter.ViewHolder holder, final int position)  {
+    public void onBindViewHolder(@NonNull final HomeTopPerformersAdapter.ViewHolder holder, final int position)  {
         try {
             Random rand = new Random();
             int n = rand.nextInt(4);
@@ -58,8 +63,8 @@ public class HomeTopPerformersAdapter extends RecyclerView.Adapter<HomeTopPerfor
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-//                    ((MainActivity) context).initFragment();
+                    Fragment fragment = ProfileFragment.newInstance(""+serviceProviderModels.get(position).getId(),"");
+                    ((MainActivity) context).initFragment(fragment);
                 }
             });
 

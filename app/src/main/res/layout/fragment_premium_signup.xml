@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/ps_privacy"
-                        android:backgroundTint="@color/colorNavigaionBarBkg"
+                        android:backgroundTint="@color/colorNavigationBarBkg"
                         android:id="@+id/switch_Privacy"/>
                 </LinearLayout>
                 <!-- Name -->
@@ -230,7 +230,7 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorNavigaionBarBkg"
+                            android:backgroundTint="@color/colorNavigationBarBkg"
                             android:tooltipText="@string/ps_country"
                             android:id="@+id/spinner_country"></Spinner>
                     </LinearLayout>
@@ -250,7 +250,7 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorNavigaionBarBkg"
+                            android:backgroundTint="@color/colorNavigationBarBkg"
                             android:tooltipText="@string/ps_state"
                             android:id="@+id/spinner_state"></Spinner>
                     </LinearLayout>
@@ -278,7 +278,7 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorNavigaionBarBkg"
+                            android:backgroundTint="@color/colorNavigationBarBkg"
                             android:tooltipText="@string/ps_location"
                             android:id="@+id/spinner_location"></Spinner>
                     </LinearLayout>
@@ -393,7 +393,7 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorNavigaionBarBkg"
+                            android:backgroundTint="@color/colorNavigationBarBkg"
                             android:tooltipText="@string/ps_organisation_type"
                             android:id="@+id/spinner_org_type"></Spinner>
                     </LinearLayout>
@@ -449,7 +449,7 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorNavigaionBarBkg"
+                            android:backgroundTint="@color/colorNavigationBarBkg"
                             android:tooltipText="@string/ps_category"
                             android:id="@+id/spinner_category"></Spinner>
                     </LinearLayout>

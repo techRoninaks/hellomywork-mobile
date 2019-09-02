@@ -19,7 +19,7 @@
     <!-- Background -->
     <item>
         <shape >
-            <solid android:color="@color/colorNavigaionBarBkg" />
+            <solid android:color="@color/colorNavigationBarBkg" />
             <corners android:radius="6dp" />
         </shape>
     </item>

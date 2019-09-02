@@ -24,6 +24,9 @@ public class ModelHelper {
         this.context = context;
     }
 
+    public ModelHelper() {
+    }
+
     public ProfilePostModel buildProfilePostModel(JSONObject jsonObject) {
         try{
             ProfilePostModel profilePostModel = new ProfilePostModel();

@@ -1,29 +1,26 @@
 package com.roninaks.hellomywork.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.roninaks.hellomywork.R;
 
-import com.roninaks.hellomywork.interfaces.SqlDelegate;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.helpers.EmailHelper;
-import com.roninaks.hellomywork.helpers.ModelHelper;
-import com.roninaks.hellomywork.helpers.PermissionsHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.helpers.StringHelper;
+import com.roninaks.hellomywork.interfaces.SqlDelegate;
 
 import org.json.JSONObject;
 
@@ -84,8 +81,8 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         case R.id.textView_SignUp:
                             //startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                             //Toasty.normal(LoginActivity.this, "Hi").show();
-                            Intent myIntent = new Intent(LoginActivity.this,RegisterActivity.class);
-                            startActivity(myIntent);
+//                            Intent myIntent = new Intent(LoginActivity.this,RegisterActivity.class);
+//                            startActivity(myIntent);
                             break;
 
                         case R.id.textView_ForgotPassword:
@@ -211,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                                   // startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                                     break;
 
                                 case DialogInterface.BUTTON_NEGATIVE:

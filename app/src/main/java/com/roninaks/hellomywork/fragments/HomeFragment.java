@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+//import android.support.v7.widget.LinearLayoutManager;
+import androidx.appcompat.widget.PopupMenu;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +27,6 @@ import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.adapters.HomeCategoriesAdapter;
 import com.roninaks.hellomywork.adapters.HomeTopPerformersAdapter;
 import com.roninaks.hellomywork.adapters.HomeUnionAdapter;
-import com.roninaks.hellomywork.adapters.SearchServiceAdapter;
-import com.roninaks.hellomywork.adapters.SearchUnionAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
@@ -230,6 +230,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
             @Override
             public void onClick(View v) {
                 //TODO: ProfileFragment
+
             }
         });
         ivOptions.setOnClickListener(new View.OnClickListener() {
@@ -407,7 +408,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                 unionModels.add(unionModel);
             }
             HomeUnionAdapter adapter = new HomeUnionAdapter(context, unionModels, rootView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
             rvUnions.setLayoutManager(layoutManager);
             rvUnions.setAdapter(adapter);
         }catch (Exception e){

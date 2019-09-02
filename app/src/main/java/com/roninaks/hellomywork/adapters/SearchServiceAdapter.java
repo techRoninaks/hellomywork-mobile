@@ -1,17 +1,26 @@
 package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.fragments.ProfileFragment;
+import com.roninaks.hellomywork.fragments.SearchResults;
 import com.roninaks.hellomywork.models.CategoryModel;
 
 import java.util.ArrayList;
@@ -49,6 +58,13 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
                     .load(context.getDrawable(R.drawable.ic_help))
                     .into(holder.ivIcon);
             holder.tvCategoryName.setText(categoryModels.get(position).getName());
+            holder.llMaster.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = SearchResults.newInstance("","",""+categoryModels.get(position).getId(),"");
+                    ((MainActivity) context).initFragment(fragment);
+                }
+            });
             //holder.imgDefinitionImageType.setImageResource(categoryModels.get(position).getType() == null || categoryModels.get(position).getType().equalsIgnoreCase("director")? R.drawable.ic_director: R.drawable.ic_actor);
 
         }catch (Exception e){
@@ -69,10 +85,12 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
 //        Typeface tfRegular = Typeface.createFromAsset(context.getAssets(), "fonts/myriadpro.otf");
         TextView tvCategoryName;
         ImageView ivIcon;
+        LinearLayout llMaster;
         public ViewHolder(View itemView) {
             super(itemView);
             tvCategoryName = itemView.findViewById(R.id.tvCategoryName);
             ivIcon = itemView.findViewById(R.id.ivCategoryIcon);
+            llMaster = itemView.findViewById(R.id.containerMaster);
         }
     }
 }

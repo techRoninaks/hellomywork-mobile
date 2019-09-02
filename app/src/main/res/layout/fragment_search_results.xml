@@ -86,12 +86,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:id="@+id/containerService">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/rvServices">
 
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
         <!-- Profiles Section-->
         <LinearLayout
@@ -100,12 +100,12 @@
             android:orientation="vertical"
             android:id="@+id/containerProfile"
             android:visibility="gone">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/rvProfiles">
 
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
         <!-- Unions Section -->
         <LinearLayout
@@ -114,12 +114,12 @@
             android:orientation="vertical"
             android:id="@+id/containerUnions"
             android:visibility="gone">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/rvUnions">
 
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </LinearLayout>
 
