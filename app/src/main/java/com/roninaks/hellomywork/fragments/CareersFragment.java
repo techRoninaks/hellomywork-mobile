@@ -1,4 +1,4 @@
-package com.roninaks.hellomywork.fragment;
+package com.roninaks.hellomywork.fragments;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +17,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
-import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.helpers.EmailHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.helpers.StringHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.

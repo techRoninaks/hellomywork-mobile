@@ -1,9 +1,9 @@
 package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import androidx.core.app.Fragment;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.fragments.SearchResults;
@@ -25,7 +28,7 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
     private ArrayList<CategoryModel> categoryModels;
     private Context context;
     private View rootview;
-    private RequestOptions requestOptions;
+//    private RequestOptions requestOptions;
     private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
 
 
@@ -33,9 +36,9 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
         this.context = context;
         this.categoryModels = categoryModels;
         this.rootview = rootview;
-        requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.profile_default);
-        requestOptions.error(R.drawable.profile_default);
+//        requestOptions = new RequestOptions();
+//        requestOptions.placeholder(R.drawable.profile_default);
+//        requestOptions.error(R.drawable.profile_default);
     }
 
 

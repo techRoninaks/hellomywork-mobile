@@ -64,15 +64,15 @@
                             android:id="@+id/imgOptions"/>
                     </LinearLayout>
                     <!-- Tabs -->
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rvTabs">
 
-                    </android.support.v7.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
                 <!-- Content Section -->
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/rvCategories"
@@ -81,7 +81,7 @@
                     android:layout_marginTop="150dp"
                     android:paddingStart="@dimen/standard_gap_large"
                     android:paddingEnd="@dimen/standard_gap_large">
-                </android.support.v7.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
             </RelativeLayout>
         </ScrollView>
     </LinearLayout>

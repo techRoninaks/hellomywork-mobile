@@ -148,11 +148,11 @@
                         android:textColor="@color/colorTextBlackPrimary"
                         android:textStyle="bold"
                         android:textAllCaps="true"/>
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rvPopularCategories">
-                    </android.support.v7.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
                 <!-- Major Categories Section -->
                 <LinearLayout
@@ -564,10 +564,10 @@
                         android:layout_height="1dp"
                         android:background="@color/colorTextBlackSeperators"
                         android:layout_marginTop="@dimen/standard_gap_medium"/>
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rvUnions"></android.support.v7.widget.RecyclerView>
+                        android:id="@+id/rvUnions"></androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
                 <!-- Top Performers Section -->
                 <LinearLayout
@@ -585,10 +585,10 @@
                         android:textSize="@dimen/font_list_title"
                         android:textColor="@color/colorTextBlackPrimary"
                         android:textStyle="bold"/>
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rvTopPerformers"></android.support.v7.widget.RecyclerView>
+                        android:id="@+id/rvTopPerformers"></androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
             </RelativeLayout>
         </ScrollView>

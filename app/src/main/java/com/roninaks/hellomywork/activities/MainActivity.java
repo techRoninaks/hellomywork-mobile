@@ -1,16 +1,11 @@
 package com.roninaks.hellomywork.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,16 +15,17 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.roninaks.hellomywork.R;
-import com.roninaks.hellomywork.fragment.CareersFragment;
+import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
-import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
-import com.roninaks.hellomywork.fragments.SearchResults;
+import com.roninaks.hellomywork.fragments.SearchLanding;
+import com.roninaks.hellomywork.fragments.UnionsFragment;
 
 import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationViewEx navigation;
+    private MenuItem PreviousMenuItem;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -37,26 +33,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             try {
+                if(PreviousMenuItem != null)
+                    setDefaultIcon(PreviousMenuItem);
+                PreviousMenuItem = item;
                 switch (item.getItemId()) {
                     //fragments are selected based on the item clicked
                     case R.id.navigation_dashboard: //dashboard fragment
                     {
-
+                        item.setIcon(R.drawable.ic_home_fill);
+                        HomeFragment homeFragment = HomeFragment.newInstance("","");
+                        initFragment(homeFragment);
                     }
                     return true;
                     case R.id.navigation_add_client://add customer fragment
                     {
-
+                        item.setIcon(R.drawable.ic_search_fill);
+                        SearchLanding searchLanding = SearchLanding.newInstance("", "");
+                        initFragment(searchLanding);
                     }
                     return true;
                     case R.id.navigation_users: //employee fragment
                     {
-
+                        item.setIcon(R.drawable.ic_unions_fill);
+                        UnionsFragment unionsFragment = UnionsFragment.newInstance("","");
+                        initFragment(unionsFragment);
                     }
                     return true;
                     case R.id.navigation_help: //help fragment
                     {
-
+                        item.setIcon(R.drawable.ic_bookmark_fill);
                     }
                     return true;
                     case R.id.navigation_careers: //help fragment
@@ -74,12 +79,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void initFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content, fragment, "FragmentName");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+//    private void initFragment(Fragment fragment) {
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.content, fragment, "FragmentName");
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,36 @@ public class MainActivity extends AppCompatActivity {
         initFragment(fragment, "");
     }
 
+    private void setDefaultIcon(MenuItem menuItem){
+        switch (menuItem.getItemId()){
+            case R.id.navigation_dashboard: //home fragment
+            {
+                menuItem.setIcon(R.drawable.ic_home);
+            }
+            break;
+            case R.id.navigation_add_client://movies fragment
+            {
+                menuItem.setIcon(R.drawable.ic_search);
+            }
+            break;
+            case R.id.navigation_users: //post status fragment
+            {
+                menuItem.setIcon(R.drawable.ic_unions);
+            }
+            break;
+            case R.id.navigation_careers: //favourites fragment
+            {
+                menuItem.setIcon(R.drawable.ic_careers_);
+            }
+            break;
+            case R.id.navigation_help: //profile fragment
+            {
+                menuItem.setIcon(R.drawable.ic_bookmark);
+            }
+            break;
+        }
+    }
+
     public void sendWhatsapp(String phone){
         PackageManager packageManager = this.getPackageManager();
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -141,5 +176,17 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, "Hellomywork: Service");
         intent.putExtra(Intent.EXTRA_TEXT, "Greetings from Hellomywork.");
         startActivity(Intent.createChooser(intent, "Send Email"));
+    }
+
+    public String isLoggedIn(){
+        boolean loggedIn = true;
+        String userId = "";
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("hwm", 0);
+        loggedIn = sharedPreferences.getBoolean("is_loggedin", false);
+        if(loggedIn)
+            userId = sharedPreferences.getString("user_id", "");
+        if(userId.isEmpty())
+            sharedPreferences.edit().putBoolean("is_loggedin", false).commit();
+        return userId;
     }
 }

@@ -1,4 +1,4 @@
-package com.roninaks.hellomywork.adpaters;
+package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
-import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapter.ViewHolder>{
         private Context context;

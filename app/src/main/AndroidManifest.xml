@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.VerifyOtpActivity"></activity>
+        <activity android:name=".activities.verifyOtpActivity"></activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.NoInternetActivity" />
         <activity android:name=".activities.MainActivity">
@@ -28,8 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.NoInternetActivity" />
+        <activity android:name=".activities.LoginActivity">
+        </activity>
         <activity android:name=".activities.ProfileImage"></activity>
     </application>
 

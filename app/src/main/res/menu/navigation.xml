@@ -9,21 +9,23 @@
 
     <item
         android:id="@+id/navigation_add_client"
-        android:icon="@drawable/ic_cross"
+        android:icon="@drawable/ic_search"
         android:title="@string/nav_add_client" />
 
 
     <item
         android:id="@+id/navigation_users"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/ic_unions"
         android:title="@string/nav_users" />
 
-    <item
-        android:id="@+id/navigation_help"
-        android:icon="@drawable/ic_help"
-        android:title="@string/nav_users" />
     <item
         android:id="@+id/navigation_careers"
         android:icon="@drawable/ic_careers_"
         android:title="@string/nav_careers" />
+
+    <item
+        android:id="@+id/navigation_help"
+        android:icon="@drawable/ic_bookmark"
+        android:title="@string/nav_users" />
+
 </menu>

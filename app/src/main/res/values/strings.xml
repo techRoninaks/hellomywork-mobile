@@ -3,8 +3,8 @@
 
     <!-- Generic -->
     <string name="response_error">Something went wrong. Please try again later</string>
-    <string name="response_success">successful</string>
-    <string name="response_failure">unsuccessful</string>
+    <!--<string name="response_success">successful</string>-->
+    Eda.. <string name="response_failure">unsuccessful</string>
     <string name="permission_camera_denied">Please allow camera permission to take photograph</string>
     <string name="view_more">View More</string>
     <string name="more">More</string>
@@ -36,7 +36,6 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logo_image">Logo Image</string>
     
     <!-- Careers Text -->
@@ -605,8 +604,7 @@
         <item>Yercaud</item>
         <item>Zanskar</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
     <!-- Search Results Page -->
     <string name="sr_service">Service</string>

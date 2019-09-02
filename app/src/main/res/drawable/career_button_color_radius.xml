@@ -8,7 +8,7 @@
     <!--android:color="#CC888888" >-->
     <!--</stroke>-->
 
-    <solid android:color="@color/colorNavigaionBarBkg" />
+    <solid android:color="@color/colorNavigationBarBkg" />
 
     <corners
         android:bottomLeftRadius="5dp"

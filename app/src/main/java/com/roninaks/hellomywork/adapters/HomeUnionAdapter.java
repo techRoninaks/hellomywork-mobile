@@ -1,10 +1,9 @@
 package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import androidx.core.app.Fragment;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+
+//import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.fragments.UnionsIndividualFragment;
-import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class HomeUnionAdapter extends RecyclerView.Adapter<HomeUnionAdapter.View
     private ArrayList<UnionModel> unionModels;
     private Context context;
     private View rootview;
-    private RequestOptions requestOptions;
+//    private RequestOptions requestOptions;
     private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
 
 
@@ -35,9 +36,9 @@ public class HomeUnionAdapter extends RecyclerView.Adapter<HomeUnionAdapter.View
         this.context = context;
         this.unionModels = unionModels;
         this.rootview = rootview;
-        requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.profile_default);
-        requestOptions.error(R.drawable.profile_default);
+//        requestOptions = new RequestOptions();
+//        requestOptions.placeholder(R.drawable.profile_default);
+//        requestOptions.error(R.drawable.profile_default);
     }
 
 

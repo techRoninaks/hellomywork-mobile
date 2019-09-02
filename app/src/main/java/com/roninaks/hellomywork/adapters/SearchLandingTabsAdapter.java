@@ -2,32 +2,30 @@ package com.roninaks.hellomywork.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+//import android.support.annotation.NonNull;
+//import androidx.core.app.Fragment;
+//import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.RequestOptions;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
-import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.fragments.SearchLanding;
-import com.roninaks.hellomywork.fragments.SearchResults;
-import com.roninaks.hellomywork.models.CategoryModel;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLandingTabsAdapter.ViewHolder>{
     private ArrayList<String> tabs;
     private SearchLanding fragment;
     private Context context;
     private View rootview;
-    private RequestOptions requestOptions;
+//    private RequestOptions requestOptions;
     private int currentPosition;
 
 
@@ -36,9 +34,9 @@ public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLanding
         this.fragment = fragment;
         this.tabs = tabs;
         this.rootview = rootview;
-        requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.profile_default);
-        requestOptions.error(R.drawable.profile_default);
+//        requestOptions = new RequestOptions();
+//        requestOptions.placeholder(R.drawable.profile_default);
+//        requestOptions.error(R.drawable.profile_default);
         currentPosition = 0;
     }
 

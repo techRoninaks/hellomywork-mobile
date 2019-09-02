@@ -11,31 +11,25 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.util.Base64;
-import android.util.Log;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+//import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.roninaks.hellomywork.GlideApp;
+//import com.roninaks.hellomywork.GlideApp;
+import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
 import com.roninaks.hellomywork.helpers.PermissionsHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
-import com.roninaks.hellomywork.helpers.StringHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 //TODO: Profile Image change from External not reloading
 public class ProfileImage extends Activity implements SqlDelegate {
@@ -70,18 +64,14 @@ public class ProfileImage extends Activity implements SqlDelegate {
             if(bundle != null)
                 image = bundle.getString("image").contains("assets/img/profile/userimage/") ? getString(R.string.master_url).concat(bundle.getString("image")) : bundle.getString("image");
             if(PremiumSignupFragment.bitmap == null) {
-                GlideApp.with(this)
+                Glide.with(this)
                         .asBitmap()
                         .load(Uri.parse(image))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
                         .into(imageView);
             }else{
-                GlideApp.with(this)
+                Glide.with(this)
                         .asBitmap()
                         .load(PremiumSignupFragment.bitmap)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
                         .into(imageView);
             }
             buttonExit.setOnClickListener(new View.OnClickListener() {
