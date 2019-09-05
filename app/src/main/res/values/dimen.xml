@@ -56,4 +56,6 @@
     <dimen name="profile_icons">50dp</dimen>
 
     <dimen name="icon_header_back">20dp</dimen>
+<!--    Bottom navigation-->
+    <dimen name="bottom_navigation_icon_size" tools:override="true">30dp</dimen>
 </resources>

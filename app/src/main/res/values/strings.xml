@@ -11,11 +11,11 @@
     <string name="more">More</string>
 
     <!--Navigation Menu -->
-    <string name="nav_dashboard">Dashboard</string>
-    <string name="nav_add_client">Add Client</string>
-    <string name="nav_users">Employees</string>
-    <string name="nav_help">Help</string>
-    <string name="nav_careers">Career</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_union">Union</string>
+    <string name="nav_career">Career</string>
+    <string name="nav_bookmark">Bookmark</string>
 
     <string name="options_login">Login</string>
     <string name="options_signup">Signup As Service Provider</string>
@@ -134,6 +134,47 @@
     <string name="ps_choose">Choose</string>
     <string name="ps_confirm">Confirm</string>
     <string name="ps_discard">Discard</string>
+    <string name="sr_service">Service</string>
+    <string name="sr_profile">Profiles</string>
+    <string name="sr_union">Unions</string>
+    <string name="sr_profile_premium">Premium Member</string>
+
+
+<!--    BookmarkFragment-->
+    <string name="bm_profiles">PROFILES</string>
+    <string name="bm_post">POSTS</string>
+
+
+    <!-- Search Results Page -->
+    <string name="sr_profile_nonpremium">Non Premium Member</string>
+    <string name="hp_searchHint">Search anything anywhere</string>
+    <string name="hp_popular_categories">Popular Catgories</string>
+    <string name="hp_sales">Sales</string>
+    <string name="hp_repairs">Repairs</string>
+
+    <!-- Search Landing Page -->
+    <string name="hp_service">Service</string>
+
+    <!-- Home Page -->
+    <string name="hp_movers">Movers</string>
+    <string name="hp_health">Health</string>
+    <string name="hp_personal">Personal</string>
+    <string name="hp_eats">Eats</string>
+    <string name="hp_rest">Rest</string>
+    <string name="hp_events">Events</string>
+    <string name="hp_business">Business</string>
+    <string name="hp_renovation">Renovation</string>
+    <string name="hp_major_directories">Major Directories</string>
+    <string name="hp_top_performers">Top Performers</string>
+    <string name="union_search">Search Unions</string>
+    <string name="about_content">Hellomywork was created with the purpose of enabling connectivity and ease of access to the various service providers around us. With the increase in demand for information and the technology boom in our country, Hellomywork aims to bridge the gap between the consumer and the Industry by acting as a platform where information can be exchanged readily and easily.
+<br></br><br></br>
+The primary focus at Hellomywork is to be an easy to use, elegant interface, which can benefit both the customer as well as the service Industry. Our easy to use interface provides a directory of various service industries at multiple locations across our country. Using this, our customers can gain access to information such as contact, offers and other events of these service providers. The users can download the information in a business card format which they can use for future references.
+<br></br><br></br>
+For the service providers, Hellomywork acts as a platform to advertise their offerings and gain access to a customer market geographically distributed across our country. It enables the service providers to expand their reach and market by penetrating areas which would have otherwise been difficult to scale to. The platform uses an algorithm to list the top performing service providers in each month thereby enabling them to gain free publicity and industry edge over their competitors.
+<br></br><br></br>
+Hellomywork is determinant to provide to our service providers the best possible outcomes of sales and profit. For this very purpose, we have designed a digital identity card which validates their membership with our website. What’s more, the ID card has been tailored with just enough information to act as a business card for our service providers which they can advertise and share digitally across the internet. Now spend less time on generating market plans and focus on delivering quality to your buyers.</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="org_array">
         <item>Organisation</item>
         <item>Private</item>
@@ -422,6 +463,8 @@
         <item>Uttar Pradesh</item>
         <item>West Bengal</item>
     </string-array>
+
+    <!-- About Us-->
     <string-array name="india_top_places">
         <item>Location</item>
         <item>Agartala</item>
@@ -613,15 +656,7 @@
         <item>Zanskar</item>
     </string-array>
 
-
-    <!-- Search Results Page -->
-    <string name="sr_service">Service</string>
-    <string name="sr_profile">Profiles</string>
-    <string name="sr_union">Unions</string>
-    <string name="sr_profile_premium">Premium Member</string>
-    <string name="sr_profile_nonpremium">Non Premium Member</string>
-
-    <!-- Search Landing Page -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="search_landing_tabs">
         <item>All</item>
         <item>Sales</item>

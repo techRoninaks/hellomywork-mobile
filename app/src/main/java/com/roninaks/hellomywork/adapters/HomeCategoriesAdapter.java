@@ -4,6 +4,7 @@ import android.content.Context;
 //import android.support.annotation.NonNull;
 //import androidx.core.app.Fragment;
 //import android.support.v7.widget.RecyclerView;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,11 +53,14 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
     @Override
     public void onBindViewHolder(@NonNull HomeCategoriesAdapter.ViewHolder holder, final int position)  {
         try {
-            Random rand = new Random();
-            int n = rand.nextInt(4);
-            holder.ivIcon.setImageDrawable(context.getDrawable(R.drawable.ic_white_photographers));
-            holder.ivIcon.setBackgroundColor(colorList[n]);
+            String imgString = categoryModels.get(position).getIcon().substring(22).replace("-min.png", "");
+            int imgResource = context.getResources().getIdentifier(imgString, "drawable",
+                    context.getPackageName());
+            holder.ivIcon.setImageDrawable(context.getDrawable(imgResource));
+            holder.llShape.setBackground(getDrawable());
+//            holder.ivIcon.setBackgroundColor(colorList[n]);
             holder.tvCategoryName.setText(categoryModels.get(position).getName());
+
             //holder.imgDefinitionImageType.setImageResource(categoryModels.get(position).getType() == null || categoryModels.get(position).getType().equalsIgnoreCase("director")? R.drawable.ic_director: R.drawable.ic_actor);
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,12 +87,46 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
 //        Typeface tfRegular = Typeface.createFromAsset(context.getAssets(), "fonts/myriadpro.otf");
         TextView tvCategoryName;
         ImageView ivIcon;
-        LinearLayout llMaster;
+        LinearLayout llMaster, llShape;
         public ViewHolder(View itemView) {
             super(itemView);
             tvCategoryName = itemView.findViewById(R.id.tvCategoryName);
             ivIcon = itemView.findViewById(R.id.ivCategoryIcon);
             llMaster = itemView.findViewById(R.id.containerMaster);
+            llShape = itemView.findViewById(R.id.containerIndividualRow);
         }
+    }
+
+    private Drawable getDrawable(){
+        Random rand = new Random();
+        int n = rand.nextInt(6);
+        Drawable drawable = null;
+        switch (n){
+            case 0:{
+                drawable = context.getDrawable(R.drawable.artboard_6);
+                break;
+            }
+            case 1:{
+                drawable = context.getDrawable(R.drawable.artboard_7);
+                break;
+            }
+            case 2:{
+                drawable = context.getDrawable(R.drawable.artboard_8);
+                break;
+            }
+            case 3:{
+                drawable = context.getDrawable(R.drawable.artboard_10);
+                break;
+            }
+            case 4:{
+                drawable = context.getDrawable(R.drawable.artboard_11);
+                break;
+            }
+            case 5:{
+                drawable = context.getDrawable(R.drawable.artboard_12);
+                break;
+            }
+        }
+        return drawable;
     }
 }

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SearchResults">
+
+    <LinearLayout
+        android:id="@+id/containerMaster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!-- Header -->
+        <LinearLayout
+            android:id="@+id/containerBookmark"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:layout_marginTop="@dimen/standard_gap_extra_small"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/standard_gap_large"
+            android:paddingBottom="@dimen/standard_gap_large"
+            android:weightSum="10">
+
+            <ImageView
+
+                android:layout_width="8dp"
+                android:layout_height="30dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/bmhead"
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_weight="8"
+                android:text="BOOKMARK"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/colorTextBlackPrimary"
+                android:textSize="@dimen/font_page_title"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imgOptions"
+                android:layout_width="8dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_options" />
+
+        </LinearLayout>
+        <!-- Tabs -->
+        <LinearLayout
+            android:id="@+id/containerTabs"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
+            <TextView
+                android:id="@+id/bmprofiles"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/bm_profiles"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/colorTextBlackSecondary"
+                android:textSize="@dimen/font_page_title"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/bmposts"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/bm_post"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/colorTextBlackSecondary"
+                android:textSize="@dimen/font_page_title"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:layout_weight="1">
+
+            </View>
+
+            <View
+                android:id="@+id/bmprofilenav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </View>
+
+
+            <View
+                android:id="@+id/bmpostnav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </View>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:layout_weight="1">
+
+            </View>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:background="@color/colorAccent">
+
+        </LinearLayout>
+
+        <!-- Profile Section -->
+        <LinearLayout
+            android:id="@+id/bmcontainerProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProfiles"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+        <!-- Posts Section-->
+        <LinearLayout
+            android:id="@+id/bmcontainerPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPosts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

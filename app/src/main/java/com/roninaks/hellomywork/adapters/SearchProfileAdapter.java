@@ -63,13 +63,18 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
 //                    .load(context.getDrawable(R.drawable.ic_help))
 //                    .into(holder.ivIcon);
             holder.tvName.setText(serviceProviderModels.get(position).getName());
-            holder.tvPremium.setText(serviceProviderModels.get(position).isPremium() ? context.getString(R.string.sr_profile_premium) : context.getString(R.string.sr_profile_nonpremium));
+//            holder.ivProfile.
+//            holder.tvPremium.setText(serviceProviderModels.get(position).isPremium() ? context.getString(R.string.sr_profile_premium) : context.getString(R.string.sr_profile_nonpremium));
             holder.tvRole.setText(serviceProviderModels.get(position).getRole());
+            holder.tvLocation.setText(serviceProviderModels.get(position).getSublocation());
             //holder.imgDefinitionImageType.setImageResource(serviceProviderModels.get(position).getType() == null || serviceProviderModels.get(position).getType().equalsIgnoreCase("director")? R.drawable.ic_director: R.drawable.ic_actor);
-            if(serviceProviderModels.get(position).getWhatsapp().isEmpty())
-                holder.ivWhatsapp.setVisibility(View.INVISIBLE);
-            if(serviceProviderModels.get(position).getEmail().isEmpty())
-                holder.ivEmail.setVisibility(View.INVISIBLE);
+
+//            if(serviceProviderModels.get(position).getWhatsapp().isEmpty())
+//                holder.ivWhatsapp.setVisibility(View.INVISIBLE);
+
+//            if(serviceProviderModels.get(position).getEmail().isEmpty())
+//                holder.ivEmail.setVisibility(View.INVISIBLE);
+
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -83,7 +88,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                 public void onClick(View v) {
                     switch (v.getId()){
                         case R.id.imgWhatsapp:{
-                            if(((MainActivity) context).isLoggedIn().isEmpty()){
+                            if(((MainActivity) context).isLoggedIn().isEmpty() && !serviceProviderModels.get(position).getWhatsapp().isEmpty()){
                                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -142,7 +147,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                             break;
                         }
                         case R.id.imgEmail:{
-                            if(((MainActivity) context).isLoggedIn().isEmpty()) {
+                            if(((MainActivity) context).isLoggedIn().isEmpty() && !serviceProviderModels.get(position).getEmail().isEmpty()) {
                                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -203,13 +208,14 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
             ivPhone = itemView.findViewById(R.id.imgPhone);
             ivEmail = itemView.findViewById(R.id.imgEmail);
             ivBookmark = itemView.findViewById(R.id.imgBookmark);
+            ivQr = itemView.findViewById(R.id.imgQr);
             tvPremium = itemView.findViewById(R.id.tvPremium);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvRole = itemView.findViewById(R.id.tvRole);
-            tvLocation = itemView.findViewById(R.id.tvLocation);
+            tvName = itemView.findViewById(R.id.tvname);
+            tvRole = itemView.findViewById(R.id.tvdesignation);
+            tvLocation = itemView.findViewById(R.id.tvaddress);
             tvRating = itemView.findViewById(R.id.tvRating);
             llMaster = itemView.findViewById(R.id.containerMaster);
-//            ivProfile = itemView.findViewById(R.id.imgProfile);
+            ivProfile = itemView.findViewById(R.id.imgProfile);
         }
     }
 }

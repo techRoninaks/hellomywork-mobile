@@ -4,86 +4,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.SearchLanding"
-    android:layout_marginBottom="58dp">
+    android:layout_marginBottom="0dp"
+    android:background="@color/colorTextWhitePrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/containerContent">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/containerRelative">
                 <!-- Banner Image Section -->
                 <LinearLayout
+                    android:id="@+id/containerBanner"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/sl_banner"
+                    android:layout_height="290dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:background="@drawable/curve_background"
-                    android:id="@+id/containerBanner"
+                    android:background="@drawable/banner_bg"
                     android:orientation="vertical">
+
+
                     <!-- Searchbar -->
                     <LinearLayout
                         android:id="@+id/containerSearchBar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="66dp"
                         android:layout_marginStart="@dimen/standard_gap_medium"
+                        android:layout_marginTop="@dimen/standard_gap_large"
                         android:layout_marginEnd="@dimen/standard_gap_medium"
-                        android:layout_marginTop="@dimen/standard_gap_extra_small"
                         android:background="@drawable/card_background_shape"
                         android:orientation="horizontal"
                         android:padding="@dimen/standard_gap_large"
                         android:weightSum="8">
 
                         <EditText
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:hint="@string/hp_searchHint"
-                            android:maxLines="1"
-                            android:ellipsize="end"
                             android:id="@+id/etSearch"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="6"
+                            android:background="@android:color/transparent"
+                            android:ellipsize="end"
+                            android:hint="@string/hp_searchHint"
                             android:inputType="text"
-                            android:background="@android:color/transparent"/>
+                            android:maxLines="1" />
+
                         <ImageView
+                            android:id="@+id/imgSearch"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_search_blue"
                             android:layout_weight="1"
-                            android:id="@+id/imgSearch"/>
+                            android:src="@drawable/ic_search_blue" />
+
                         <ImageView
+                            android:id="@+id/imgOptions"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_options"
                             android:layout_weight="1"
-                            android:id="@+id/imgOptions"/>
+                            android:src="@drawable/ic_options" />
                     </LinearLayout>
+
                     <!-- Tabs -->
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTabs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rvTabs">
+                        android:layout_marginTop="@dimen/standard_gap_medium">
 
                     </androidx.recyclerview.widget.RecyclerView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:orientation="vertical"
+                        android:background="@drawable/banner_bottom_clip"
+                        android:layout_marginTop="50dp">
+
+                    </LinearLayout>
                 </LinearLayout>
-                <!-- Content Section -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rvCategories"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="150dp"
-                    android:paddingStart="@dimen/standard_gap_large"
-                    android:paddingEnd="@dimen/standard_gap_large">
-                </androidx.recyclerview.widget.RecyclerView>
+                            <!-- Content Section -->
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/rvCategories"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_marginTop="150dp"
+                                android:paddingStart="@dimen/standard_gap_large"
+                                android:paddingEnd="@dimen/standard_gap_large"
+                                >
+                            </androidx.recyclerview.widget.RecyclerView>
             </RelativeLayout>
-        </ScrollView>
+
     </LinearLayout>
 
 </FrameLayout>

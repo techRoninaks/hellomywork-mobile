@@ -18,6 +18,7 @@ import com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.fragments.BookmarkFragment;
 import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.ContactFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
@@ -51,30 +52,32 @@ public class MainActivity extends AppCompatActivity {
                 PreviousMenuItem = item;
                 switch (item.getItemId()) {
                     //fragments are selected based on the item clicked
-                    case R.id.navigation_dashboard: //dashboard fragment
+                    case R.id.navigation_home: //dashboard fragment
                     {
                         item.setIcon(R.drawable.ic_home_fill);
                         HomeFragment homeFragment = HomeFragment.newInstance("","");
                         initFragment(homeFragment);
                     }
                     return true;
-                    case R.id.navigation_add_client://add customer fragment
+                    case R.id.navigation_search://add customer fragment
                     {
                         item.setIcon(R.drawable.ic_search_fill);
                         SearchLanding searchLanding = SearchLanding.newInstance("", "");
                         initFragment(searchLanding);
                     }
                     return true;
-                    case R.id.navigation_users: //employee fragment
+                    case R.id.navigation_union: //employee fragment
                     {
                         item.setIcon(R.drawable.ic_unions_fill);
                         UnionsFragment unionsFragment = UnionsFragment.newInstance("","");
                         initFragment(unionsFragment);
                     }
                     return true;
-                    case R.id.navigation_help: //help fragment
+                    case R.id.navigation_bookmark: //help fragment
                     {
                         item.setIcon(R.drawable.ic_bookmark_fill);
+                        BookmarkFragment bookmarkFragment = BookmarkFragment.newInstance("","");
+                        initFragment(bookmarkFragment);
                     }
                     return true;
                     case R.id.navigation_careers: //help fragment
@@ -155,27 +158,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDefaultIcon(MenuItem menuItem){
         switch (menuItem.getItemId()){
-            case R.id.navigation_dashboard: //home fragment
+            case R.id.navigation_home: //home fragment
             {
                 menuItem.setIcon(R.drawable.ic_home);
             }
             break;
-            case R.id.navigation_add_client://movies fragment
+            case R.id.navigation_search://search fragment
             {
                 menuItem.setIcon(R.drawable.ic_search);
             }
             break;
-            case R.id.navigation_users: //post status fragment
+            case R.id.navigation_union: //union fragment
             {
                 menuItem.setIcon(R.drawable.ic_unions);
             }
             break;
-            case R.id.navigation_careers: //favourites fragment
+            case R.id.navigation_careers: //careers fragment
             {
                 menuItem.setIcon(R.drawable.ic_careers_);
             }
             break;
-            case R.id.navigation_help: //profile fragment
+            case R.id.navigation_bookmark: //bookmark fragment
             {
                 menuItem.setIcon(R.drawable.ic_bookmark);
             }

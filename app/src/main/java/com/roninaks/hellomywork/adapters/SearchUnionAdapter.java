@@ -42,7 +42,7 @@ public class SearchUnionAdapter extends RecyclerView.Adapter<SearchUnionAdapter.
     @NonNull
     @Override
     public SearchUnionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.search_results_services,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.search_results_unions,parent,false);
         return new SearchUnionAdapter.ViewHolder(view);
     }
 
