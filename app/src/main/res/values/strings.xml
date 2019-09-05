@@ -4,7 +4,8 @@
     <!-- Generic -->
     <string name="response_error">Something went wrong. Please try again later</string>
     <!--<string name="response_success">successful</string>-->
-    Eda.. <string name="response_failure">unsuccessful</string>
+    Eda..
+    <string name="response_failure">unsuccessful</string>
     <string name="permission_camera_denied">Please allow camera permission to take photograph</string>
     <string name="view_more">View More</string>
     <string name="more">More</string>
@@ -636,6 +637,9 @@
         <item>Renovation</item>
         <item>More</item>
     </string-array>
+
+    <!-- Profile page -->
+    <string name="profileMasterCardIV">Profile Master Card</string>
 
     <!-- Home Page -->
     <string name="hp_searchHint">Search anything anywhere</string>

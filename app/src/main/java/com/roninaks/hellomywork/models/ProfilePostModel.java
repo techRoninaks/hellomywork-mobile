@@ -1,5 +1,7 @@
 package com.roninaks.hellomywork.models;
 
+import java.util.ArrayList;
+
 public class ProfilePostModel {
 
     private String name;
@@ -8,6 +10,52 @@ public class ProfilePostModel {
     private String date;
     private String time;
     private String imageUri;
+    private String id;
+    private String likeCount;
+    private String commentCount;
+    private String isBoomarked;
+
+    public String getIsBoomarked() {
+        return isBoomarked;
+    }
+
+    public void setIsBoomarked(String isBoomarked) {
+        this.isBoomarked = isBoomarked;
+    }
+
+    public String getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(String likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public String getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(String commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    private ArrayList<CommentsModel> commentsModels;
+
+    public ArrayList<CommentsModel> getCommentsModels() {
+        return commentsModels;
+    }
+
+    public void setCommentsModels(ArrayList<CommentsModel> commentsModels) {
+        this.commentsModels = commentsModels;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getImageUri() {
         return imageUri;

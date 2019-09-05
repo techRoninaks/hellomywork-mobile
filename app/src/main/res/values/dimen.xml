@@ -52,4 +52,8 @@
 
     <!-- Union Page -->
     <dimen name="union_title_text_margin">28dp</dimen>
+    <!-- Profile Page -->
+    <dimen name="profile_icons">50dp</dimen>
+
+    <dimen name="icon_header_back">20dp</dimen>
 </resources>

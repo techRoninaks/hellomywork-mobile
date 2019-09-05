@@ -4,15 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
@@ -47,6 +47,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     private RecyclerView recyclerView;
     private ArrayList<ProfilePostModel> profilePostModels;
     private Context context;
+    private TextView unionName;
     private ActivityFeedAdapter activityFeedAdapter;
     private View rootView;
 
@@ -90,6 +91,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         context = getContext();
         rootView = inflater.inflate(R.layout.fragment_unions_individual, container, false);
         profilePostModels = new ArrayList<>();
+        unionName = rootView.findViewById(R.id.union_indi_name);
 
         recyclerView = rootView.findViewById(R.id.unionPostRv);
         fetchProfilePostInfo(context, mParam1);
@@ -98,11 +100,21 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     }
 
     private void fetchProfilePostInfo(Context context, String fetch_id) {
+//        SqlHelper sqlHelper = new SqlHelper(context, UnionsIndividualFragment.this);
+//        sqlHelper.setExecutePath("getallpost.php");
+//        sqlHelper.setActionString("profilePosts");
+//        sqlHelper.setMethod("GET");
+//        sqlHelper.setParams(new ContentValues());
+//        sqlHelper.executeUrl(false);
+
         SqlHelper sqlHelper = new SqlHelper(context, UnionsIndividualFragment.this);
-        sqlHelper.setExecutePath("getallpost.php");
+        sqlHelper.setExecutePath("getserviceposts.php");
         sqlHelper.setActionString("profilePosts");
-        sqlHelper.setMethod("GET");
-        sqlHelper.setParams(new ContentValues());
+        sqlHelper.setMethod("POST");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id", mParam1);
+        contentValues.put("action", "userAction");
+        sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
     }
 
@@ -137,7 +149,8 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 JSONObject jsonObject = jsonArray.getJSONObject(1);
-                int length = Integer.parseInt(jsonArray.getJSONObject(0).getString("response"));
+                int length = (jsonArray.getJSONObject(1).length());
+                unionName.setText(jsonArray.getJSONObject(0).getString("unionName"));
                 inntRecyclerView(jsonArray, length);
             } catch (JSONException e) {
                 Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
