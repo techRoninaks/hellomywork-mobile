@@ -6,15 +6,19 @@
     <dimen name="logo_margin_top_bottom_careers">70dp</dimen>
     <dimen name="text_margin_career">30dp</dimen>
     <dimen name="career_margin_left_right">15dp</dimen>
-    
+
     <!-- Standard Gaps -->
+    <dimen name="standard_gap_ultra_large">18dp</dimen>
+    <dimen name="standard_gap_extra_large">18dp</dimen>
     <dimen name="standard_gap_large">16dp</dimen>
     <dimen name="standard_gap_medium">12dp</dimen>
     <dimen name="standard_gap_small">8dp</dimen>
     <dimen name="standard_gap_extra_small">4dp</dimen>
-    
+
+    <dimen name="fab_margin">16dp</dimen>
+
     <!-- Font Sizes -->
-    <dimen name="font_page_title">20sp</dimen>
+    <dimen name="font_page_title">18sp</dimen>
     <dimen name="font_page_title_emphasis">22sp</dimen>
     <dimen name="font_para">14sp</dimen>
     <dimen name="font_list_title">14sp</dimen>
@@ -22,6 +26,7 @@
     <dimen name="font_secondary_text">14sp</dimen>
     <dimen name="font_button">14sp</dimen>
     <dimen name="font_inputs">16sp</dimen>
+    <dimen name="font_home_major_category">12sp</dimen>
 
     <!-- Icon Sizes -->
     <dimen name="service_list_icon">32dp</dimen>
@@ -30,11 +35,21 @@
     <dimen name="home_banner">250dp</dimen>
     <dimen name="home_union">300dp</dimen>
     <dimen name="home_category_icon_width">48dp</dimen>
-    <dimen name="home_category_layout_width">65dp</dimen>
+    <dimen name="home_category_layout_width">90dp</dimen>
+    <dimen name="home_major_category_size">85dp</dimen>
+
 
     <!-- Search Landing Page-->
     <dimen name="sl_banner">180dp</dimen>
 
     <!-- About Page -->
     <dimen name="about_logo">48dp</dimen>
+
+    <!-- General -->
+    <dimen name="icon_header_back">20dp</dimen>
+    <dimen name="icon_contact">18dp</dimen>
+    <dimen name="logo_icon_header">45dp</dimen>
+
+    <!-- Union Page -->
+    <dimen name="union_title_text_margin">28dp</dimen>
 </resources>

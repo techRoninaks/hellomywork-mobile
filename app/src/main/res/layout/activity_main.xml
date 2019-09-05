@@ -53,5 +53,16 @@
         app:itemTextColor="@color/colorTextWhitePrimary"
         app:itemIconTint="@color/colorTextWhitePrimary"/>
 
-
+    <com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton
+        android:id="@+id/fab_post_ad"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_phone"
+        android:background="@drawable/artboard_6"
+        android:padding="@dimen/standard_gap_large" />
 </androidx.constraintlayout.widget.ConstraintLayout>
