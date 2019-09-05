@@ -2,30 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        android:title="@string/nav_dashboard"/>
+        android:title="@string/nav_home"/>
 
 
     <item
-        android:id="@+id/navigation_add_client"
+        android:id="@+id/navigation_search"
         android:icon="@drawable/ic_search"
-        android:title="@string/nav_add_client" />
+        android:title="@string/nav_search" />
 
 
     <item
-        android:id="@+id/navigation_users"
+        android:id="@+id/navigation_union"
         android:icon="@drawable/ic_unions"
-        android:title="@string/nav_users" />
+        android:title="@string/nav_union" />
 
     <item
         android:id="@+id/navigation_careers"
         android:icon="@drawable/ic_careers_"
-        android:title="@string/nav_careers" />
+        android:title="@string/nav_career" />
 
     <item
-        android:id="@+id/navigation_help"
+        android:id="@+id/navigation_bookmark"
         android:icon="@drawable/ic_bookmark"
-        android:title="@string/nav_users" />
+        android:title="@string/nav_bookmark" />
 
 </menu>

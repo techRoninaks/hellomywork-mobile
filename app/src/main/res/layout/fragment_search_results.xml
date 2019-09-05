@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.SearchResults">
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +14,7 @@
         <LinearLayout
             android:id="@+id/containerSearchBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginStart="@dimen/standard_gap_medium"
             android:layout_marginEnd="@dimen/standard_gap_medium"
             android:layout_marginTop="@dimen/standard_gap_extra_small"
@@ -28,16 +29,18 @@
                 android:src="@drawable/ic_search_blue"
                 android:layout_weight="1"
                 android:id="@+id/imgSearch"/>
+
             <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:hint="@string/hp_searchHint"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:id="@+id/etSearch"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="6"
+                android:background="@android:color/transparent"
+                android:ellipsize="end"
+                android:hint="@string/hp_searchHint"
+                android:textSize="19dp"
                 android:inputType="text"
-                android:background="@android:color/transparent"/>
+                android:maxLines="1" />
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -48,37 +51,85 @@
         <!-- Tabs -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:id="@+id/containerTabs"
             android:orientation="horizontal"
             android:weightSum="3">
+
+
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/tvTabService"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/sr_service"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/colorTextBlackSecondary"
-                android:id="@+id/tvTabService"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/tvTabProfiles"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/sr_profile"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/colorTextBlackSecondary"
-                android:id="@+id/tvTabProfiles"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/tvTabUnions"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/sr_union"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/colorTextBlackSecondary"
-                android:id="@+id/tvTabUnions"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!-- Underline -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:id="@+id/srServiceNav">
+
+            </View>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:id="@+id/srProfileNav">
+
+            </View>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:id="@+id/srUnionNav">
+
+            </View>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:background="@color/colorAccent">
+
         </LinearLayout>
         <!-- Service Section -->
         <LinearLayout
@@ -86,10 +137,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:id="@+id/containerService">
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvServices"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/rvServices">
+                android:layout_height="match_parent">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
@@ -103,7 +155,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/rvProfiles">
+                android:id="@+id/rvProfiles"
+                android:padding="@dimen/standard_gap_small">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>

@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.constraintlayout.solver.widgets.WidgetContainer;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,7 +69,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
     private Context context;
 
     //Private Members
-    View rootView;
+    View rootView,srServiceNav,srProfileNav,srUnionNav;
     TextView tvTabService, tvTabProfile, tvTabUnions;
     LinearLayout llContainerService, llContainerProfiles, llContainerUnions;
     RecyclerView rvServices, rvProfiles, rvUnions;
@@ -89,6 +91,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
      * @param param3 Category.
      * @return A new instance of fragment SearchResults.
      */
+
     // TODO: Rename and change types and number of parameters
     public static SearchResults newInstance(String param1, String param2, String param3) {
         SearchResults fragment = new SearchResults();
@@ -134,7 +137,8 @@ public class SearchResults extends Fragment implements SqlDelegate {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
         context = getActivity();
@@ -150,9 +154,15 @@ public class SearchResults extends Fragment implements SqlDelegate {
         etSearch = (EditText) rootView.findViewById(R.id.etSearch);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
-        //Defaults
+        srServiceNav = (View) rootView.findViewById(R.id.srServiceNav);
+        srProfileNav = (View) rootView.findViewById(R.id.srProfileNav);
+        srUnionNav = (View) rootView.findViewById(R.id.srUnionNav);
+
+        //Default Tabs
+
         toggleTabs(default_load == null || default_load.isEmpty() ? "services" : default_load);
         etSearch.setText(searchKey);
+
         //On click listeners
         View.OnClickListener toggleTabsListener = new View.OnClickListener() {
             @Override
@@ -160,6 +170,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
                 switch (v.getId()){
                     case R.id.tvTabProfiles:{
                         toggleTabs("profiles");
+
                         break;
                     }
                     case R.id.tvTabService:{
@@ -180,6 +191,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
                 ((MainActivity) context).initFragment(fragment);
             }
@@ -343,6 +355,14 @@ public class SearchResults extends Fragment implements SqlDelegate {
                 if(serviceProviderModels == null){
                     loadProfiles();
                 }
+                tvTabProfile.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+                tvTabService.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
+                tvTabUnions.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
+
+                srProfileNav.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                srServiceNav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
+                srUnionNav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
+
                 llContainerUnions.setVisibility(View.GONE);
                 llContainerService.setVisibility(View.GONE);
                 llContainerProfiles.setVisibility(View.VISIBLE);
@@ -352,6 +372,14 @@ public class SearchResults extends Fragment implements SqlDelegate {
                 if(categoryModels == null){
                     loadCategories();
                 }
+                tvTabService.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+                tvTabProfile.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
+                tvTabUnions.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
+
+                srServiceNav.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                srProfileNav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
+                srUnionNav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
+
                 llContainerProfiles.setVisibility(View.GONE);
                 llContainerUnions.setVisibility(View.GONE);
                 llContainerService.setVisibility(View.VISIBLE);
@@ -361,6 +389,14 @@ public class SearchResults extends Fragment implements SqlDelegate {
                 if(unionModels == null){
                     loadUnions();
                 }
+                tvTabUnions.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+                tvTabProfile.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
+                tvTabService.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
+
+                srUnionNav.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                srProfileNav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
+                srServiceNav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
+
                 llContainerProfiles.setVisibility(View.GONE);
                 llContainerService.setVisibility(View.GONE);
                 llContainerUnions.setVisibility(View.VISIBLE);

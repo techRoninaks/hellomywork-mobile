@@ -12,17 +12,21 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <ImageView
-            android:layout_width="0dp"
+            android:layout_width="1dp"
             android:layout_height="@dimen/service_list_icon"
             android:layout_weight="1"
             android:src="@drawable/profile_default"
             android:id="@+id/ivCategoryIcon"/>
+
         <TextView
+            android:id="@+id/tvCategoryName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:textColor="@color/colorTextBlackPrimary"
             android:text="@string/hp_service"
-            android:id="@+id/tvCategoryName"/>
+            android:textSize="15dp"
+            android:textStyle="bold" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"

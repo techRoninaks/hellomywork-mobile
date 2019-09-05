@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -52,16 +53,22 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
     @Override
     public void onBindViewHolder(@NonNull SearchServiceAdapter.ViewHolder holder, final int position)  {
         try {
-            Glide.with(context)
-                    .setDefaultRequestOptions(requestOptions)
-                    .asBitmap()
-                    .load(context.getDrawable(R.drawable.ic_help))
-                    .into(holder.ivIcon);
+//            Glide.with(context)
+//                    .setDefaultRequestOptions(requestOptions)
+//                    .asBitmap()
+//                    .load(context.getDrawable(R.drawable.ic_help))
+//                    .into(holder.ivIcon);
+
+
+            String imgString = categoryModels.get(position).getIcon().substring(22).replace("-min.png", "");
+            int imgResource = context.getResources().getIdentifier(imgString, "drawable",
+                    context.getPackageName());
+            holder.ivIcon.setImageDrawable(context.getDrawable(imgResource));
             holder.tvCategoryName.setText(categoryModels.get(position).getName());
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = SearchResults.newInstance("","",""+categoryModels.get(position).getId(),"");
+                    Fragment fragment = SearchResults.newInstance("","",""+categoryModels.get(position).getId(),"profiles");
                     ((MainActivity) context).initFragment(fragment);
                 }
             });
@@ -70,6 +77,7 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
         }catch (Exception e){
 //            EmailHelper emailHelper = new EmailHelper(context, EmailHelper.TECH_SUPPORT, "Error: ActorAdapter", StringHelper.convertStackTrace(e));
 //            emailHelper.sendEmail();
+           // Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }

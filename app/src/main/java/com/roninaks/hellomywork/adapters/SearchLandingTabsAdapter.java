@@ -17,14 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 //import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.SearchLanding;
+import com.roninaks.hellomywork.models.CategoryModel;
 
 import java.util.ArrayList;
 
 public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLandingTabsAdapter.ViewHolder>{
     private ArrayList<String> tabs;
+//    private ArrayList<CategoryModel> categoryModels;
     private SearchLanding fragment;
     private Context context;
     private View rootview;
+
 //    private RequestOptions requestOptions;
     private int currentPosition;
 
@@ -33,6 +36,7 @@ public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLanding
         this.context = context;
         this.fragment = fragment;
         this.tabs = tabs;
+//        this.categoryModels = categoryModels;
         this.rootview = rootview;
 //        requestOptions = new RequestOptions();
 //        requestOptions.placeholder(R.drawable.profile_default);
@@ -51,10 +55,20 @@ public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLanding
     @Override
     public void onBindViewHolder(@NonNull SearchLandingTabsAdapter.ViewHolder holder, final int position)  {
         try {
-            if(position == 0){
-                holder.tvTabName.setTypeface(holder.tvTabName.getTypeface(), Typeface.BOLD);
-            }
+//            if(position == 0){
+//                holder.tvTabName.setTypeface(holder.tvTabName.getTypeface(), Typeface.BOLD);
+//            }
+
             holder.tvTabName.setText(tabs.get(position));
+
+
+//            String imgString = categoryModels.get(position).getIcon().substring(22).replace("-min.png", "");
+//            int imgResource = context.getResources().getIdentifier(imgString, "drawable",
+//                    context.getPackageName());
+//            holder.ivIcon.setImageDrawable(context.getDrawable(imgResource));
+//            holder.tvTabName.setText(categoryModels.get(position).getName());
+
+
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -3,7 +3,9 @@ package com.roninaks.hellomywork.fragments;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 //import androidx.core.app.Fragment;
 //import android.support.v7.widget.GridLayoutManager;
@@ -16,8 +18,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -67,6 +72,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     private ArrayList<CategoryModel> categoryModels, alSales, alRepairs, alService, alMovers, alHealth, alPersonal, alEats, alRest, alEvents, alBusiness, alRenovation, alMore;
     private EditText etSearch;
     private ImageView ivSearch, ivOptions;
+    private LinearLayout llBanner;
 
     public SearchLanding() {
         // Required empty public constructor
@@ -135,12 +141,15 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.options_login:{
+
                                 break;
                             }
                             case R.id.options_signup:{
                                 break;
                             }
                             case R.id.options_careers:{
+                                Fragment fragment = CareersFragment.newInstance("", "");
+                                ((MainActivity) context).initFragment(fragment);
                                 break;
                             }
                             case R.id.options_about:{
@@ -158,6 +167,19 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                 popup.show();
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            rvCategories.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if(oldScrollY < 5 || scrollY < 5){
+
+                    } else{
+
+                    }
+                }
+            });
+        }
         return rootView;
     }
 
@@ -221,12 +243,16 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     }
 
     public void onTabClick(int position, ArrayList<String> tabs, int currentPosition){
-//        TextView tvCurrent = (TextView)rvTabs.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.tvTabName);
-//        tvCurrent.setTypeface(tvCurrent.getTypeface(), Typeface.BOLD);
+//        int y = rvTabs.getScrollY();
 //        TextView tvPrevious = (TextView)rvTabs.findViewHolderForLayoutPosition(currentPosition).itemView.findViewById(R.id.tvTabName);
 //        tvPrevious.setTypeface(tvPrevious.getTypeface(), Typeface.NORMAL);
         String tag = tabs.get(position).toLowerCase();
         showList(tag);
+//        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this,tabList, rootView);
+//        rvTabs.setAdapter(adapter);
+//        TextView tvCurrent = (TextView)rvTabs.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.tvTabName);
+//        tvCurrent.setTypeface(tvCurrent.getTypeface(), Typeface.BOLD);
+        rvTabs.getAdapter().notifyItemChanged(position);
     }
 
     //Private Functions
@@ -320,6 +346,10 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                 alBusiness.add(categoryModel);
                 ignored = false;
             }
+            if(tag.equals("rest")){
+                alRest.add(categoryModel);
+                ignored = false;
+            }
             if(tag.equals("renovation")){
                 alRenovation.add(categoryModel);
                 ignored = false;
@@ -352,6 +382,9 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         }
         if(tag.equals("eats")){
             adapter = new HomeCategoriesAdapter(context, alEats, rootView);
+        }
+        if(tag.equals("rest")){
+            adapter = new HomeCategoriesAdapter(context, alRest, rootView);
         }
         if(tag.equals("events")){
             adapter = new HomeCategoriesAdapter(context, alEvents, rootView);
