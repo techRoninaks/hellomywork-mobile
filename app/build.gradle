@@ -52,4 +52,6 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     //Floating Action Button
     implementation 'com.github.wangfeng19930909:DragFloatingActionButton:1.0.1'
+    //Justified Text
+    implementation 'com.codesgood:justifiedtextview:1.1.0'
 }

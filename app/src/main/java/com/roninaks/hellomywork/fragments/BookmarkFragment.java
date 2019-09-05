@@ -2,9 +2,12 @@ package com.roninaks.hellomywork.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,7 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.SearchProfileAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -113,7 +118,29 @@ public class BookmarkFragment extends Fragment implements SqlDelegate {
         context = getActivity();
         userId = ((MainActivity)context).isLoggedIn();
         if(userId.isEmpty()){
-            //TODO Redirect to home page
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            Intent myIntent = new Intent(context, LoginActivity.class);
+                            context.startActivity(myIntent);
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            Fragment fragment = HomeFragment.newInstance("", "");
+                            ((MainActivity) context).initFragment(fragment);
+                            break;
+                        default:
+                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Oho!, You are not Logged In");
+            builder.setMessage("You need to login to view this page").setPositiveButton("Go to login?", dialogClickListener)
+                    .setNegativeButton("Go Home", dialogClickListener).show();
         }
         bmhead = (TextView) rootView.findViewById(R.id.bmhead);
         bmprofiles = (TextView) rootView.findViewById(R.id.bmprofiles);
@@ -142,12 +169,26 @@ public class BookmarkFragment extends Fragment implements SqlDelegate {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.options_login:{
+                                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                    context.startActivity(new Intent(context, LoginActivity.class));
+                                }else{
+                                    Fragment fragment = ProfileFragment.newInstance(((MainActivity) context).isLoggedIn(), "");
+                                    ((MainActivity) context).initFragment(fragment);
+                                }
                                 break;
                             }
                             case R.id.options_signup:{
+                                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                    context.startActivity(new Intent(context, RegisterActivity.class));
+                                }else{
+                                    Fragment fragment = ProfileFragment.newInstance(((MainActivity) context).isLoggedIn(), "");
+                                    ((MainActivity) context).initFragment(fragment);
+                                }
                                 break;
                             }
                             case R.id.options_careers:{
+                                Fragment fragment = CareersFragment.newInstance("", "");
+                                ((MainActivity) context).initFragment(fragment);
                                 break;
                             }
                             case R.id.options_about:{
@@ -156,6 +197,8 @@ public class BookmarkFragment extends Fragment implements SqlDelegate {
                                 break;
                             }
                             case R.id.options_contact:{
+                                Fragment fragment = ContactFragment.newInstance("", "");
+                                ((MainActivity) context).initFragment(fragment);
                                 break;
                             }
                         }

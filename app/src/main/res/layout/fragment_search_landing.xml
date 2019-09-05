@@ -49,7 +49,8 @@
                             android:ellipsize="end"
                             android:hint="@string/hp_searchHint"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:imeOptions="actionSearch"/>
 
                         <ImageView
                             android:id="@+id/imgSearch"

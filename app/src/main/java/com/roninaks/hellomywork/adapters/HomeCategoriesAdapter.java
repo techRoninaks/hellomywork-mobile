@@ -53,7 +53,7 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
     @Override
     public void onBindViewHolder(@NonNull HomeCategoriesAdapter.ViewHolder holder, final int position)  {
         try {
-            String imgString = categoryModels.get(position).getIcon().substring(22).replace("-min.png", "");
+            String imgString = categoryModels.get(position).getIcon().substring(22).replace("-min.png", "_white").toLowerCase();
             int imgResource = context.getResources().getIdentifier(imgString, "drawable",
                     context.getPackageName());
             holder.ivIcon.setImageDrawable(context.getDrawable(imgResource));

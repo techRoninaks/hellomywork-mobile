@@ -59,8 +59,8 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
         tvSignUp = (TextView) findViewById(R.id.textView_SignUp);
         tvForgotPassword = (TextView) findViewById(R.id.textView_ForgotPassword);
         imgViewBack = (ImageView) findViewById(R.id.imageViewBackLogin);
-        editTextPhoneNumber.setText("7907961841");
-        editTextPassword.setText("brooklyn");
+//        editTextPhoneNumber.setText("7907961841");
+//        editTextPassword.setText("brooklyn0");
         textViewError = (TextView) findViewById(R.id.textViewIncorrect);
 
 
@@ -308,20 +308,22 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                     JSONObject jsonObject = sqlHelper.getJSONResponse();
                     String response = "";
                     try {
-                        response = jsonObject.getString("userName");
+                        response = jsonObject.getString("userId");
                     } catch (Exception e) {
                         response = "unsuccessful";
                     }
                     if (!(response.equals("unsuccessful"))) {
                         SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
                         Toasty.normal(LoginActivity.this, "Login success").show();
-                        sharedPreferences.edit().putString("user_id", response).commit();
+                        sharedPreferences.edit().putString("user_id", response)
+                                .commit();
+                        sharedPreferences.edit().putBoolean("is_loggedin",true).commit();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else if (response.equals("unsuccessful")) {
                         editTextPassword.setText("");
                         editTextPhoneNumber.setText("");
-                        textViewError.setVisibility(View.VISIBLE);
+//                        textViewError.setVisibility(View.VISIBLE);
                         if (errorCount % ERROR_THRESHOLD == 0) {
                             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                 @Override

@@ -2,6 +2,7 @@ package com.roninaks.hellomywork.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -12,12 +13,14 @@ import android.os.Bundle;
 //import android.support.v7.widget.LinearLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +34,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.HomeCategoriesAdapter;
 import com.roninaks.hellomywork.adapters.SearchLandingTabsAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
@@ -141,10 +146,21 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.options_login:{
-
+                                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                    context.startActivity(new Intent(context, LoginActivity.class));
+                                }else{
+                                    Fragment fragment = ProfileFragment.newInstance(((MainActivity) context).isLoggedIn(), "");
+                                    ((MainActivity) context).initFragment(fragment);
+                                }
                                 break;
                             }
                             case R.id.options_signup:{
+                                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                    context.startActivity(new Intent(context, RegisterActivity.class));
+                                }else{
+                                    Fragment fragment = ProfileFragment.newInstance(((MainActivity) context).isLoggedIn(), "");
+                                    ((MainActivity) context).initFragment(fragment);
+                                }
                                 break;
                             }
                             case R.id.options_careers:{
@@ -158,6 +174,8 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                                 break;
                             }
                             case R.id.options_contact:{
+                                Fragment fragment = ContactFragment.newInstance("", "");
+                                ((MainActivity) context).initFragment(fragment);
                                 break;
                             }
                         }
@@ -180,6 +198,17 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                 }
             });
         }
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    ((MainActivity) context).initFragment(fragment);
+                }
+                return true;
+            }
+        });
         return rootView;
     }
 

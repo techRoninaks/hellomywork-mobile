@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:height="50dp">
+        <shape>
+            <solid android:color="@color/colorNavigationBarBkg" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/banner_bg" >
+        <shape>
+            <corners android:bottomRightRadius="100dp"
+                android:bottomLeftRadius="100dp"/>
+        </shape>
+    </item>
+</layer-list>

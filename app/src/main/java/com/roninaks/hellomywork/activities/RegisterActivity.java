@@ -144,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
      */
     public static boolean isValidPhoneNumber(String phoneNumber){
         boolean isValid = false;
-        if(!Pattern.matches("[a-zA-Z]+", phoneNumber) && phoneNumber.length() <9)
+//        if(!Pattern.matches("[a-zA-Z]+", phoneNumber) && phoneNumber.length() <9)
             isValid = true;
         return isValid;
     }
@@ -216,9 +216,12 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
                 sharedPreferences.edit().putString("otp", String.valueOf(verifyOtp)).commit();
                 sharedPreferences.edit().putBoolean("change_pass",false).commit();
                 Intent intent = new Intent(RegisterActivity.this, verifyOtpActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("name", editTextNameRegister.getText().toString());
+                bundle.putString("phone", editTextPhoneNumberRegister.getText().toString());
+                intent.putExtra("bundle", bundle);
                 startActivity(intent);
                 finish();
-
 
             }
 

@@ -4,11 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,9 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import es.dmoral.toasty.Toasty;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -29,6 +35,7 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.ProfileImage;
+import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -71,7 +78,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     private final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 4;
     String imageBaseUri = "https://www.hellomywork.com/",telphone, sentToMail, whatsppNumber, profileName,profileCard;
     Context context;
-    ImageView masterProfilePster, ivProfileBackBtn;
+    ImageView masterProfilePster, ivProfileBackBtn, ivSettings;
     EditText postadDescrption,writeComments;
     private TextView profilePCName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
     ImageButton profileCallPhoneBTN, profileSentEmailBTN, profileUseWhatspp,profileShare,profileBookmark;
@@ -160,12 +167,8 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         buttonRequired=view.findViewById(R.id.Required_BTN);
         buttonRandom=view.findViewById(R.id.Random_BTN);
         buttonPost=view.findViewById(R.id.button_Post);
-
+        ivSettings=view.findViewById(R.id.profile_settings);
         writeComments=view.findViewById(R.id.editText_WriteComments);
-
-
-
-
         requestOptions = new RequestOptions();
 
         buttonEdit=view.findViewById(R.id.button_Edit);
@@ -175,12 +178,13 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         requestOptions.error(R.drawable.icon_image);
 
 
-
-
-
         profilePostModels = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.profileRecyclerView);
+
+        if(((MainActivity) context).isLoggedIn().isEmpty()){
+            ivSettings.setVisibility(View.GONE);
+        }
 
         buttonEdit.setVisibility(View.GONE);
         if(((MainActivity) context).isLoggedIn().equals(us_id)){
@@ -200,8 +204,12 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(postadDescrption.equals("")){
+                    Toast.makeText(context, "Descrpition is empty", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     saveInformation();
-
+                }
 
             }
         });
@@ -464,6 +472,30 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 }
             }
         });
+
+        ivSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(context, v);
+                Menu m = popup.getMenu();
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.settings_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.options_logout:{
+                                ((MainActivity) context).logout();
+                                break;
+                            }
+
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
         rootView = view;
         return view;
     }
@@ -526,7 +558,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 JSONObject jsonObject = jsonArray.getJSONObject(1);
                 populateProfileCardInfo(jsonObject);
             } catch (JSONException e) {
-                Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -537,7 +569,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 int length = (jsonArray.getJSONObject(1).length());
                 inntRecyclerView(jsonArray, length);
             } catch (JSONException e) {
-                Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }

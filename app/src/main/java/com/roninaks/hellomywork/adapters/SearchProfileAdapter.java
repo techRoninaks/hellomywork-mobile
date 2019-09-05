@@ -88,7 +88,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                 public void onClick(View v) {
                     switch (v.getId()){
                         case R.id.imgWhatsapp:{
-                            if(((MainActivity) context).isLoggedIn().isEmpty() && !serviceProviderModels.get(position).getWhatsapp().isEmpty()){
+                            if(((MainActivity) context).isLoggedIn().isEmpty()){
                                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -111,6 +111,8 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                                 builder.setTitle("Oho!, You are not Logged In");
                                 builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
                                         .setNegativeButton("No", dialogClickListener).show();
+                            }else if(serviceProviderModels.get(position).getWhatsapp().isEmpty()){
+                                Toast.makeText(context, "Sorry. No number available.", Toast.LENGTH_SHORT).show();
                             }else {
                                 ((MainActivity) context).sendWhatsapp("+91" + serviceProviderModels.get(position).getWhatsapp());
                             }
@@ -140,8 +142,9 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                                 builder.setTitle("Oho!, You are not Logged In");
                                 builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
                                         .setNegativeButton("No", dialogClickListener).show();
-                            }
-                            else {
+                            }else if(serviceProviderModels.get(position).getWhatsapp().isEmpty()){
+                                Toast.makeText(context, "Sorry. No number available.", Toast.LENGTH_SHORT).show();
+                            }else {
                                 ((MainActivity) context).callPhone("+91" + serviceProviderModels.get(position).getPhone());
                             }
                             break;
@@ -170,8 +173,9 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                                 builder.setTitle("Oho!, You are not Logged In");
                                 builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
                                         .setNegativeButton("No", dialogClickListener).show();
-                            }
-                            else {
+                            }else if(serviceProviderModels.get(position).getWhatsapp().isEmpty()){
+                                Toast.makeText(context, "Sorry. No information available.", Toast.LENGTH_SHORT).show();
+                            }else {
                                 ((MainActivity) context).sendMail(serviceProviderModels.get(position).getEmail());
                             }
                             break;
