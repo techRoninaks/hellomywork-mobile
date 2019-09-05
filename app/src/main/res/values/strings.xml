@@ -59,6 +59,11 @@
     <string name="new_user">New user?</string>
     <string name="new_user_prompt">If you are a new user, tap yes to register.</string>
     <string name="default_signin">default</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="save_password">Save</string>
+    <string name="password_error">Entered passwords are not same</string>
+    <string name="password_length_err">Password should have atleast 6 characters</string>
 
 
     <!-- Register Page-->
@@ -67,6 +72,8 @@
     <string name="register_send_otp">Send OTP</string>
     <string name="register_resend_otp">Resend OTP</string>
     <string name="register_enter_otp">Please enter the OTP</string>
+    <string name="existing_user">Already a user?</string>
+    <string name="existing_user_prompt">If you have already registered, tap yes to login.</string>
 
     <!-- Error Resource Strings -->
     <string name="required_field">This field is required</string>

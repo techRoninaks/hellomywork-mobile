@@ -21,18 +21,24 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.ContactFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
+
 import com.roninaks.hellomywork.fragments.PostAdFragment;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
 import com.roninaks.hellomywork.fragments.SearchLanding;
 import com.roninaks.hellomywork.fragments.UnionsFragment;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationViewEx navigation;
     private MenuItem PreviousMenuItem;
+    private String args[];
+    private Bundle bundle;
+
     private DragFloatActionButton floatActionButton;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -97,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            bundle = getIntent().getExtras().getBundle("bundle");
+        }catch (Exception e){}
+
         navigation = findViewById(R.id.navigation);
         floatActionButton = findViewById(R.id.fab_post_ad);
 
@@ -119,13 +129,14 @@ public class MainActivity extends AppCompatActivity {
         navigation.enableShiftingMode(false);
         navigation.enableItemShiftingMode(false);
         navigation.setTextVisibility(false);
-        navigation.setSelectedItemId(R.id.navigation_dashboard);
+        setFirstPage();
+//        navigation.setSelectedItemId(R.id.navigation_dashboard);
 //        navigation.setItemIconTintList(null);
 
-        Fragment fragment = HomeFragment.newInstance("ca", "1");
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content, fragment, "PremiumSignup");
-        fragmentTransaction.commit();
+//        Fragment fragment = HomeFragment.newInstance("ca", "1");
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.content, fragment, "PremiumSignup");
+//        fragmentTransaction.commit();
     }
 
     public void initFragment(Fragment fragment, String tag){
@@ -206,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     public String isLoggedIn(){
         boolean loggedIn = true;
         String userId = "";
-        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("hwm", 0);
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("hmw", 0);
         loggedIn = sharedPreferences.getBoolean("is_loggedin", false);
         if(loggedIn)
             userId = sharedPreferences.getString("user_id", "");
@@ -214,4 +225,28 @@ public class MainActivity extends AppCompatActivity {
             sharedPreferences.edit().putBoolean("is_loggedin", false).commit();
         return userId;
     }
+
+    private void setFirstPage(){
+        if(bundle != null){
+            int argumentSize = bundle.getInt("arg_count");
+            args = new String[argumentSize];
+            if(argumentSize > 0){
+                for(int i = 0; i < argumentSize; i++){
+                    args[i] = bundle.getString("param_" + i);
+                }
+                String path = bundle.getString("return_path");
+                switch (path){
+                    case "premium_signup":{
+                        Fragment fragment = PremiumSignupFragment.newInstance(args[0], args[1], args[2]);
+                        initFragment(fragment);
+                    }
+                }
+                return;
+            }
+        }
+        navigation.setSelectedItemId(R.id.navigation_dashboard);
+        Fragment fragment = HomeFragment.newInstance("", "");
+        initFragment(fragment);
+    }
+
 }
