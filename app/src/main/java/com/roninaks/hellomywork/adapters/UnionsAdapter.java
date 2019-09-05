@@ -8,10 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,13 +50,13 @@ public class UnionsAdapter extends RecyclerView.Adapter<UnionsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull UnionsAdapter.ViewHolder holder, final int position)  {
         try {
-            holder.ivIcon.setImageDrawable(context.getDrawable(R.drawable.ic_black_photographers));
+            holder.ivIcon.setImageDrawable(context.getDrawable(R.drawable.ic_unions_black));
             holder.tvUnionName.setText(unionModels.get(position).getName());
             //holder.imgDefinitionImageType.setImageResource(unionModels.get(position).getType() == null || unionModels.get(position).getType().equalsIgnoreCase("director")? R.drawable.ic_director: R.drawable.ic_actor);
-            holder.llMaster.setOnClickListener(new View.OnClickListener() {
+            holder.cvMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = UnionsIndividualFragment.newInstance("", "");
+                    Fragment fragment = UnionsIndividualFragment.newInstance("" + unionModels.get(position).getId(), "");
                     ((MainActivity) context).initFragment(fragment);
                 }
             });
@@ -78,12 +78,12 @@ public class UnionsAdapter extends RecyclerView.Adapter<UnionsAdapter.ViewHolder
 //        Typeface tfRegular = Typeface.createFromAsset(context.getAssets(), "fonts/myriadpro.otf");
         TextView tvUnionName;
         ImageView ivIcon;
-        LinearLayout llMaster;
+        CardView cvMaster;
         public ViewHolder(View itemView) {
             super(itemView);
             tvUnionName = itemView.findViewById(R.id.tvUnionName);
             ivIcon = itemView.findViewById(R.id.ivUnionIcon);
-            llMaster = itemView.findViewById(R.id.containerMaster);
+            cvMaster = itemView.findViewById(R.id.cvMaster);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.roninaks.hellomywork.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -10,12 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.LinearLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +42,7 @@ import com.roninaks.hellomywork.models.UnionModel;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,12 +67,14 @@ public class HomeFragment extends Fragment implements SqlDelegate {
     private LinearLayout llContainerSales, llContainerRepairs, llContainerService, llContainerMovers, llContainerHealth, llContainerPersonal, llContainerEats, llContainerRest, llContainerEvents, llContainerRenovation, llContainerBusiness, llContainerMore;
     private TextView tvCategoriesMore, tvUnionsMore, tvLocation;
     private EditText etSearch;
-    private ImageView ivNotification, ivProfile, ivSearch, ivOptions, ivBanner;
+    private ImageView ivNotification, ivProfile, ivSearch, ivOptions, ivBanner, ivLocationDropDown;
     private RecyclerView rvPopularCategories, rvUnions, rvTopPerformers;
+    private AutoCompleteTextView acLocation;
     private View rootView;
     private ArrayList<CategoryModel> categoryModels;
     private ArrayList<UnionModel> unionModels;
     private ArrayList<ServiceProviderModel> serviceProviderModels;
+    private ArrayList<String> locationList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -171,6 +179,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         context = getActivity();
+        locationList = new ArrayList<>();
         llContainerSales = (LinearLayout) rootView.findViewById(R.id.containerDirectorySales);
         llContainerRepairs = (LinearLayout) rootView.findViewById(R.id.containerDirectoryRepairs);
         llContainerService = (LinearLayout) rootView.findViewById(R.id.containerDirectoryService);
@@ -191,11 +200,18 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         ivProfile = (ImageView) rootView.findViewById(R.id.imgProfile);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
+        ivLocationDropDown = (ImageView) rootView.findViewById(R.id.imgLocationDropDown);
         rvPopularCategories = (RecyclerView) rootView.findViewById(R.id.rvPopularCategories);
         rvTopPerformers = (RecyclerView) rootView.findViewById(R.id.rvTopPerformers);
         rvUnions = (RecyclerView) rootView.findViewById(R.id.rvUnions);
+        acLocation = (AutoCompleteTextView) rootView.findViewById(R.id.acLocation);
 
         //Set Defaults
+        Resources res = context.getResources();
+        locationList.addAll(Arrays.asList(res.getStringArray(R.array.india_top_places)));
+        ArrayAdapter<String> adapterLocation = new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_item, locationList);
+        acLocation.setAdapter(adapterLocation);
         loadCategories();
         loadUnions();
         loadProfiles();
@@ -271,6 +287,35 @@ public class HomeFragment extends Fragment implements SqlDelegate {
             }
         });
 
+        View.OnClickListener locationDropDown = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvLocation.setVisibility(View.GONE);
+                acLocation.setVisibility(View.VISIBLE);
+            }
+        };
+        tvLocation.setOnClickListener(locationDropDown);
+        ivLocationDropDown.setOnClickListener(locationDropDown);
+        acLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    acLocation.setVisibility(View.GONE);
+                    tvLocation.setVisibility(View.GONE);
+                }
+                return true;
+            }
+        });
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    ((MainActivity) context).initFragment(fragment);
+                }
+                return true;
+            }
+        });
         return rootView;
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 //import android.support.annotation.NonNull;
 //import androidx.core.app.Fragment;
 //import android.support.v7.widget.RecyclerView;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +53,8 @@ public class HomeUnionAdapter extends RecyclerView.Adapter<HomeUnionAdapter.View
     @Override
     public void onBindViewHolder(@NonNull HomeUnionAdapter.ViewHolder holder, final int position)  {
         try {
-            Random rand = new Random();
-            int n = rand.nextInt(4);
-            holder.ivIcon.setImageDrawable(context.getDrawable(R.drawable.ic_unions_black));
-            holder.ivIcon.setBackgroundColor(colorList[n]);
+//            holder.ivIcon.setImageDrawable(context.getDrawable(R.drawable.ic_unions_black));
+            holder.ivIcon.setBackground(getDrawable(position%6));
             holder.tvUnionName.setText(unionModels.get(position).getName());
             //holder.imgDefinitionImageType.setImageResource(unionModels.get(position).getType() == null || unionModels.get(position).getType().equalsIgnoreCase("director")? R.drawable.ic_director: R.drawable.ic_actor);
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
@@ -91,4 +90,38 @@ public class HomeUnionAdapter extends RecyclerView.Adapter<HomeUnionAdapter.View
             llMaster = itemView.findViewById(R.id.containerMaster);
         }
     }
+
+    private Drawable getDrawable(int n){
+//        Random rand = new Random();
+//        int n = rand.nextInt(6);
+        Drawable drawable = null;
+        switch (n){
+            case 0:{
+                drawable = context.getDrawable(R.drawable.ic_union_home1);
+                break;
+            }
+            case 1:{
+                drawable = context.getDrawable(R.drawable.ic_union_home2);
+                break;
+            }
+            case 2:{
+                drawable = context.getDrawable(R.drawable.ic_union_home3);
+                break;
+            }
+            case 3:{
+                drawable = context.getDrawable(R.drawable.ic_union_home4);
+                break;
+            }
+            case 4:{
+                drawable = context.getDrawable(R.drawable.ic_union_home5);
+                break;
+            }
+            case 5:{
+                drawable = context.getDrawable(R.drawable.ic_union_home6);
+                break;
+            }
+        }
+        return drawable;
+    }
 }
+
