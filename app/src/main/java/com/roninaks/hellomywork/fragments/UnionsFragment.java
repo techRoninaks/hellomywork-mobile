@@ -2,6 +2,7 @@ package com.roninaks.hellomywork.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -11,18 +12,23 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.LinearLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.UnionsAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -125,12 +131,26 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.options_login:{
+                                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                    context.startActivity(new Intent(context, LoginActivity.class));
+                                }else{
+                                    Fragment fragment = ProfileFragment.newInstance(((MainActivity) context).isLoggedIn(), "");
+                                    ((MainActivity) context).initFragment(fragment);
+                                }
                                 break;
                             }
                             case R.id.options_signup:{
+                                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                    context.startActivity(new Intent(context, RegisterActivity.class));
+                                }else{
+                                    Fragment fragment = ProfileFragment.newInstance(((MainActivity) context).isLoggedIn(), "");
+                                    ((MainActivity) context).initFragment(fragment);
+                                }
                                 break;
                             }
                             case R.id.options_careers:{
+                                Fragment fragment = CareersFragment.newInstance("", "");
+                                ((MainActivity) context).initFragment(fragment);
                                 break;
                             }
                             case R.id.options_about:{
@@ -139,6 +159,8 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
                                 break;
                             }
                             case R.id.options_contact:{
+                                Fragment fragment = ContactFragment.newInstance("", "");
+                                ((MainActivity) context).initFragment(fragment);
                                 break;
                             }
                         }
@@ -146,6 +168,17 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
                     }
                 });
                 popup.show();
+            }
+        });
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    ((MainActivity) context).initFragment(fragment);
+                }
+                return true;
             }
         });
         return rootView;

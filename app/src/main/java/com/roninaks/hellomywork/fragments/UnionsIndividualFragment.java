@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -49,6 +51,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     private Context context;
     private TextView unionName;
     private ActivityFeedAdapter activityFeedAdapter;
+    private ImageView ivBack;
     private View rootView;
 
     private OnFragmentInteractionListener mListener;
@@ -85,17 +88,23 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = getContext();
         rootView = inflater.inflate(R.layout.fragment_unions_individual, container, false);
         profilePostModels = new ArrayList<>();
         unionName = rootView.findViewById(R.id.union_indi_name);
-
+        ivBack = rootView.findViewById(R.id.imgBack);
         recyclerView = rootView.findViewById(R.id.unionPostRv);
         fetchProfilePostInfo(context, mParam1);
 
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).onBackPressed();
+            }
+        });
         return rootView;
     }
 
@@ -113,7 +122,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", mParam1);
-        contentValues.put("action", "userAction");
+        contentValues.put("action", "queryAction");
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
     }
@@ -148,10 +157,17 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         if(sqlHelper.getActionString() =="profilePosts"){
             try {
                 JSONArray jsonArray = new JSONArray(response);
-                JSONObject jsonObject = jsonArray.getJSONObject(1);
-                int length = (jsonArray.getJSONObject(1).length());
-                unionName.setText(jsonArray.getJSONObject(0).getString("unionName"));
-                inntRecyclerView(jsonArray, length);
+                if(jsonArray.length()<2){
+                    unionName.setText(jsonArray.getJSONObject(0).getString("unionName"));
+                    Toast.makeText(context, "No posts in this union", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    JSONObject jsonObject = jsonArray.getJSONObject(1);
+                    int length = (jsonArray.getJSONObject(1).length());
+                    unionName.setText(jsonArray.getJSONObject(0).getString("unionName"));
+                    inntRecyclerView(jsonArray, length);
+                }
+
             } catch (JSONException e) {
                 Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();

@@ -40,7 +40,8 @@
                 android:hint="@string/hp_searchHint"
                 android:textSize="19dp"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:imeOptions="actionSearch"/>
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

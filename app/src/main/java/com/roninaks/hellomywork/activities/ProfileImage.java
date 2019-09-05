@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.fragments.PostAdFragment;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
 import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.helpers.PermissionsHelper;
@@ -78,6 +79,10 @@ public class ProfileImage extends Activity implements SqlDelegate {
                         bitmap = ProfileFragment.bitmap;
                         break;
                     }
+                    case "postad":{
+                        bitmap = PostAdFragment.bitmap;
+                        break;
+                    }
                 }
             }
             if(bitmap == null) {
@@ -102,6 +107,10 @@ public class ProfileImage extends Activity implements SqlDelegate {
                             }
                             case "profile":{
                                 ProfileFragment.imageUrl = bundle!= null ? bundle.getString("image") : "";
+                                break;
+                            }
+                            case "postad":{
+                                PostAdFragment.imageUrl = bundle!= null ? bundle.getString("image") : "";
                                 break;
                             }
                         }
@@ -172,6 +181,12 @@ public class ProfileImage extends Activity implements SqlDelegate {
                                             ProfileFragment.imageChanged = true;
                                             ProfileFragment.bitmap = bitmap;
                                             ProfileFragment.imageUrl = imageUri.toString();
+                                            break;
+                                        }
+                                        case "postad":{
+                                            PostAdFragment.imageChanged = true;
+                                            PostAdFragment.bitmap = bitmap;
+                                            PostAdFragment.imageUrl = imageUri.toString();
                                             break;
                                         }
                                     }

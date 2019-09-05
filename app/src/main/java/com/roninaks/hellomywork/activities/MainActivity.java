@@ -1,5 +1,6 @@
 package com.roninaks.hellomywork.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -7,8 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -30,6 +33,8 @@ import com.roninaks.hellomywork.fragments.UnionsFragment;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
+
+//TODO FAB show on Login
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,9 +80,34 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                     case R.id.navigation_bookmark: //help fragment
                     {
-                        item.setIcon(R.drawable.ic_bookmark_fill);
-                        BookmarkFragment bookmarkFragment = BookmarkFragment.newInstance("","");
-                        initFragment(bookmarkFragment);
+                        if(!isLoggedIn().isEmpty()) {
+                            item.setIcon(R.drawable.ic_bookmark_fill);
+                            BookmarkFragment bookmarkFragment = BookmarkFragment.newInstance("", "");
+                            initFragment(bookmarkFragment);
+                        }else{
+                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                                            startActivity(myIntent);
+                                            break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        default:
+                                            Toast.makeText(MainActivity.this, "Nothing", Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+                                }
+                            };
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setTitle("Oho!, You are not Logged In");
+                            builder.setMessage("You need to login to view this page").setPositiveButton("Go to login?", dialogClickListener)
+                                    .setNegativeButton("No", dialogClickListener).show();
+                        }
                     }
                     return true;
                     case R.id.navigation_careers: //help fragment
@@ -229,6 +259,16 @@ public class MainActivity extends AppCompatActivity {
         return userId;
     }
 
+    public void logout(){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
+        sharedPreferences.edit().putString("user_id", "")
+                .commit();
+        sharedPreferences.edit().putBoolean("is_loggedin",false).commit();
+        Fragment fragment = HomeFragment.newInstance("", "");
+        initFragment(fragment);
+        floatActionButton.setVisibility(View.GONE);
+    }
+
     private void setFirstPage(){
         if(bundle != null){
             int argumentSize = bundle.getInt("arg_count");
@@ -247,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        navigation.setSelectedItemId(R.id.navigation_dashboard);
+        navigation.setSelectedItemId(R.id.navigation_home);
         Fragment fragment = HomeFragment.newInstance("", "");
         initFragment(fragment);
     }

@@ -86,7 +86,7 @@
                     android:layout_height="@dimen/home_banner"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:background="@drawable/curve_background"
+                    android:background="@drawable/curve_background_home"
                     android:id="@+id/containerBanner">
 
                     <!-- Searchbar -->
