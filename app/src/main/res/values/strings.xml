@@ -4,7 +4,8 @@
     <!-- Generic -->
     <string name="response_error">Something went wrong. Please try again later</string>
     <!--<string name="response_success">successful</string>-->
-    Eda.. <string name="response_failure">unsuccessful</string>
+    Eda..
+    <string name="response_failure">unsuccessful</string>
     <string name="permission_camera_denied">Please allow camera permission to take photograph</string>
     <string name="view_more">View More</string>
     <string name="more">More</string>
@@ -37,7 +38,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="logo_image">Logo Image</string>
-    
+
     <!-- Careers Text -->
     <string name="careers_text_one">Would you like to be part of Hellomywork?</string>
     <string name="careers_text_two">If yes, then fill the form below, and upload your \nresume, and we will get in contact with you once \nthere is suitable vacancy</string>
@@ -630,6 +631,9 @@
         <item>More</item>
     </string-array>
 
+    <!-- Profile page -->
+    <string name="profileMasterCardIV">Profile Master Card</string>
+
     <!-- Home Page -->
     <string name="hp_searchHint">Search anything anywhere</string>
     <string name="hp_popular_categories">Popular Catgories</string>
@@ -658,5 +662,8 @@ The primary focus at Hellomywork is to be an easy to use, elegant interface, whi
 For the service providers, Hellomywork acts as a platform to advertise their offerings and gain access to a customer market geographically distributed across our country. It enables the service providers to expand their reach and market by penetrating areas which would have otherwise been difficult to scale to. The platform uses an algorithm to list the top performing service providers in each month thereby enabling them to gain free publicity and industry edge over their competitors.
 <br></br><br></br>
 Hellomywork is determinant to provide to our service providers the best possible outcomes of sales and profit. For this very purpose, we have designed a digital identity card which validates their membership with our website. What’s more, the ID card has been tailored with just enough information to act as a business card for our service providers which they can advertise and share digitally across the internet. Now spend less time on generating market plans and focus on delivering quality to your buyers.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

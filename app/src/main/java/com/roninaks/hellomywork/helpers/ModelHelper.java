@@ -2,14 +2,12 @@ package com.roninaks.hellomywork.helpers;
 
 import android.content.Context;
 
-import com.roninaks.hellomywork.models.ProfilePostModel;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.ProfilePostModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -36,6 +34,9 @@ public class ModelHelper {
             profilePostModel.setLocation(jsonObject.getString("location"));
             profilePostModel.setTime(jsonObject.getString("role"));
             profilePostModel.setImageUri(jsonObject.getString("postimage"));
+            profilePostModel.setId(jsonObject.getString("id"));
+            profilePostModel.setLikeCount(jsonObject.getString("likes"));
+            profilePostModel.setCommentCount(jsonObject.getString("commentnumber"));
             return profilePostModel;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -140,4 +141,8 @@ public class ModelHelper {
         return new UnionModel();
     }
 
+//    public CommentsModel buildComments(JSONObject jsonObject) {
+//        CommentsModel commentsModel = new CommentsModel();
+//        commentsModel.getComment()
+//    }
 }

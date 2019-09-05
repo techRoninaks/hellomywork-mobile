@@ -37,4 +37,9 @@
 
     <!-- About Page -->
     <dimen name="about_logo">48dp</dimen>
+
+    <!-- Profile Page -->
+    <dimen name="profile_icons">50dp</dimen>
+
+    <dimen name="icon_header_back">20dp</dimen>
 </resources>

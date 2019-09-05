@@ -7,13 +7,56 @@
     tools:context=".fragments.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/llContainerHeader"
+            android:paddingTop="@dimen/standard_gap_large"
+            android:paddingBottom="@dimen/standard_gap_large">
+            <ImageView
+                android:layout_width="@dimen/icon_header_back"
+                android:layout_height="@dimen/icon_header_back"
+                android:src="@drawable/ic_back_black"
+                android:id="@+id/imgBack"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="@dimen/standard_gap_large"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PROFILE"
+                android:textAllCaps="true"
+                android:textColor="@color/colorTextBlackPrimary"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_page_title"
+                android:textAlignment="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"/>
+
+            <ImageView
+                android:layout_width="@dimen/icon_header_back"
+                android:layout_height="@dimen/icon_header_back"
+                android:src="@drawable/hmw_profile_settings"
+                android:id="@+id/profile_settings"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="@dimen/standard_gap_large"/>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="0dp">
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,80 +77,111 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
+
+
                         <ImageView
+                            android:id="@+id/profileMasterCardIV"
                             android:layout_width="match_parent"
                             android:layout_height="250dp"
-                            android:id="@+id/profileMasterCardIV"
-                            app:srcCompat="@drawable/icon_image"
-                            />
+                            android:layout_marginTop="-5dp"
+                            android:contentDescription="@string/profileMasterCardIV"
+                            app:srcCompat="@drawable/icon_image" />
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="80dp"
-                            android:layout_margin="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
-                            <ImageButton
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:elevation="8dp"
-                                android:layout_weight=".2"
-                                android:id="@+id/prodile_card_whatsBTN"
-                                android:scaleType="centerCrop"
-                                app:srcCompat="@drawable/ic_whatsapp_green256_min"
-                                android:background="@drawable/circle_button_profile"
-                                android:padding="20dp"
-                                />
-                            <ImageButton
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight=".2">
+                                <ImageButton
+                                    android:id="@+id/prodile_card_whatsBTN"
+                                    android:layout_width="@dimen/profile_icons"
+                                    android:layout_height="@dimen/profile_icons"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/circle_button_profile"
+                                    android:elevation="2dp"
+                                    android:padding="10dp"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/ic_whatsapp_idcard" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:elevation="8dp"
-                                android:layout_weight=".2"
-                                android:id="@+id/prodile_card_phoneBTN"
-                                app:srcCompat="@drawable/ic_phone_green_min"
-                                android:background="@drawable/circle_button_profile"
-                                android:padding="20dp"
-                                android:scaleType="centerCrop"
-                                android:layout_margin="5dp"
-                                />
-                            <ImageButton
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight=".2">
+                                <ImageButton
+                                    android:id="@+id/prodile_card_phoneBTN"
+                                    android:layout_width="@dimen/profile_icons"
+                                    android:layout_height="@dimen/profile_icons"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/circle_button_profile"
+                                    android:elevation="2dp"
+                                    android:padding="10dp"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/ic_phone_idcard" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:elevation="8dp"
-                                android:layout_weight=".2"
-                                android:id="@+id/prodile_card_mailBTN"
-                                app:srcCompat="@drawable/ic_mail_green256_min"
-                                android:background="@drawable/circle_button_profile"
-                                android:padding="20dp"
-                                android:scaleType="centerCrop"
-                                android:layout_margin="5dp"
-                                />
-                            <ImageButton
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight=".2">
+                                <ImageButton
+                                    android:id="@+id/prodile_card_mailBTN"
+                                    android:layout_width="@dimen/profile_icons"
+                                    android:layout_height="@dimen/profile_icons"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/circle_button_profile"
+                                    android:elevation="2dp"
+                                    android:padding="10dp"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/ic_mail_idcard" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:elevation="8dp"
-                                android:layout_weight=".2"
-                                android:id="@+id/prodile_card_bookmarkBTN"
-                                app:srcCompat="@drawable/ic_bookmark_green256_min"
-                                android:background="@drawable/circle_button_profile"
-                                android:padding="25dp"
-                                android:scaleType="centerCrop"
-                                android:layout_margin="5dp"
-                                />
-                            <ImageButton
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight=".2">
+                                <ImageButton
+                                    android:id="@+id/profile_card_bookmarkBTN"
+                                    android:layout_width="@dimen/profile_icons"
+                                    android:layout_height="@dimen/profile_icons"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/circle_button_profile"
+                                    android:elevation="2dp"
+                                    android:padding="10dp"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/ic_bookmark_idcard" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:elevation="8dp"
-                                android:layout_weight=".2"
-                                android:text="share"
-                                android:id="@+id/prodile_card_shareBTN"
-                                app:srcCompat="@drawable/ic_share_post_min"
-                                android:background="@drawable/circle_button_profile"
-                                android:padding="20dp"
-                                android:scaleType="centerCrop"
-                                android:layout_margin="5dp"
-                                />
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight=".2">
+                                <ImageButton
+                                    android:id="@+id/profile_card_shareBTN"
+                                    android:layout_width="@dimen/profile_icons"
+                                    android:layout_height="@dimen/profile_icons"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/circle_button_profile"
+                                    android:elevation="2dp"
+                                    android:padding="10dp"
+                                    android:scaleType="centerCrop"
+                                    android:text="share"
+                                    app:srcCompat="@drawable/ic_share_idcard" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -149,11 +223,13 @@
                                 android:text="PERSON /COMPANY NAME:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#000000"
+                                android:lines="2"
                                 android:id="@+id/profileCard_textV_Name"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
@@ -162,11 +238,10 @@
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
 
                         <LinearLayout
@@ -184,11 +259,13 @@
                                 android:text="UNION:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="3"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#000000"
+                                android:lines="3"
                                 android:id="@+id/profileCard_textV_Union"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
@@ -197,11 +274,10 @@
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -218,6 +294,7 @@
                                 android:text="JOB TITLE / JOB ROLE:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -226,16 +303,16 @@
                                 android:id="@+id/profileCard_textV_Role"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -252,6 +329,7 @@
                                 android:text="WEBSITE:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -259,17 +337,17 @@
                                 android:textColor="#000000"
                                 android:id="@+id/profileCard_textV_Website"
                                 android:layout_marginLeft="15dp"
+                                android:lines="2"
                                 android:textSize="14sp"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -286,6 +364,7 @@
                                 android:text="LOCATION:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -294,16 +373,16 @@
                                 android:id="@+id/profileCard_textV_Location"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -320,6 +399,7 @@
                                 android:text="CONTACT NUMBER:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -328,16 +408,16 @@
                                 android:id="@+id/profileCard_textV_Contact"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -354,6 +434,7 @@
                                 android:text="WHATSAPP NUMBER:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -362,16 +443,16 @@
                                 android:id="@+id/profileCard_textV_Whatsapp"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -388,6 +469,7 @@
                                 android:text="EMAIL:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -396,16 +478,16 @@
                                 android:id="@+id/profileCard_textV_Email"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -422,6 +504,7 @@
                                 android:text="SUBLOCATION:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -430,16 +513,16 @@
                                 android:id="@+id/profileCard_textV_SubLocation"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -456,6 +539,7 @@
                                 android:text="ADDRESS:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="3"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -464,17 +548,17 @@
                                 android:id="@+id/profileCard_textV_Address"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="3"
                                 android:textStyle=""/>
 
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -491,6 +575,7 @@
                                 android:text="SKILLS:"
                                 android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
@@ -499,16 +584,16 @@
                                 android:id="@+id/profileCard_textV_Skills"
                                 android:layout_marginLeft="15dp"
                                 android:textSize="14sp"
+                                android:lines="2"
                                 android:textStyle=""/>
 
                         </LinearLayout>
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="#c0c0c0"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"/>
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"/>
 
 
                         <Button
@@ -516,8 +601,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Edit"
+                            android:id="@+id/button_Edit"
                             android:textColor="@color/colorTextWhitePrimary"
-                            android:layout_margin="30dp"
+                            android:layout_margin="10dp"
                             android:padding="5dp"
                             android:background="@drawable/career_button_color_radius"/>
 
@@ -546,125 +632,137 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="POST YOUR POST"
-                            android:textColor="@color/colorTextBlackPrimary"
                             android:layout_margin="20dp"
-                            android:textStyle="bold"
+                            android:layout_marginBottom="10dp"
+                            android:text="POST YOUR ADS"
+                            android:textColor="@color/colorTextBlackPrimary"
                             android:textSize="14sp"
-                            />
+                            android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/Post_ad_Description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
                             android:layout_marginLeft="20dp"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="-10dp"
+                            android:background="@drawable/career_edit_background"
                             android:hint="Post your ads"
-                            android:padding="10dp"
-                            android:background="@drawable/career_edit_background"/>
+                            android:textSize="14sp"
+                            android:padding="10dp" />
 
                         <HorizontalScrollView
                             android:layout_width="wrap_content"
+                            android:layout_marginRight="20dp"
                             android:layout_height="60dp"
-                            android:layout_margin="20dp"
+                            android:layout_margin="10dp"
+                            android:scrollbars="none"
                             >
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                >
+                                android:layout_marginRight="5dp"
+                                android:orientation="horizontal">
+
                                 <Button
+                                    android:id="@+id/Random_BTN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/profile_postfilter_color_purple"
                                     android:text="RANDOM"
-                                    android:padding="15dp"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_purple"/>
+                                    android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
+                                    android:id="@+id/ForSale_BTN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/profile_postfilter_color_blood"
                                     android:text="FOR SALE"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:padding="5dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_blood"/>
+                                    android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
+                                    android:id="@+id/Required_BTN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/profile_postfilter_color_mint"
                                     android:text="REQUIRED"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:padding="5dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_mint"/>
+                                    android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
+                                    android:id="@+id/Offers_BTN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/profile_postfilter_color_yellow"
                                     android:text="OFFERES"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:padding="5dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_yellow"/>
+                                    android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
+                                    android:id="@+id/Achievement_BTN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_marginRight="10dp"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
+                                    android:background="@drawable/profile_postfilter_color_black"
                                     android:text="ACHIEVEMENT"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:padding="5dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_black"/>
+                                    android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
+                                    android:id="@+id/Appreciation_BTN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="APPRECIATION"
-                                    android:padding="5dp"
-                                    android:layout_marginLeft="10dp"
+                                    android:layout_height="30dp"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
                                     android:layout_marginRight="10dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_green"/>
+                                    android:background="@drawable/profile_postfilter_color_green"
+                                    android:text="APPRECIATION"
+                                    android:textColor="@color/colorTextWhitePrimary" />
 
 
                             </LinearLayout>
                         </HorizontalScrollView>
-                        <LinearLayout
+
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            >
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Upload Image"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginBottom="20dp"
-                                />
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Post"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginBottom="20dp"
-                                android:layout_gravity="right"
-                                android:textColor="@color/colorTextWhitePrimary"
-                                android:background="@color/colorNavigationBarBkg"
-                                />
+                            android:layout_marginTop="-20dp">
 
-                        </LinearLayout>
+                            <Button
+                                android:id="@+id/button_ImageUpload"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="-5dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_marginBottom="20dp"
+                                android:text="Upload Image" />
+
+                            <Button
+                                android:id="@+id/button_Post"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginBottom="15dp"
+                                android:layout_alignParentEnd="true"
+                                android:background="@color/colorNavigationBarBkg"
+                                android:text="Post"
+                                android:textColor="@color/colorTextWhitePrimary" />
+
+                        </RelativeLayout>
 
 
                     </LinearLayout>
@@ -694,7 +792,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="ACTIVITY FEED"
-                            android:layout_margin="20dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
                             android:textColor="@color/colorTextBlackPrimary"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -703,59 +803,62 @@
                         <HorizontalScrollView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp">
+                            android:scrollbars="none">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="15dp"
                                 >
 
                                 <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
                                     android:text="RANDOM"
                                     android:layout_marginRight="10dp"
-                                    android:padding="15dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_purple"/>
 
                                 <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
                                     android:text="FOR SALE"
-                                    android:layout_marginLeft="10dp"
                                     android:layout_marginRight="10dp"
-                                    android:padding="15dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_blood"/>
 
                                 <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
                                     android:text="REQUIRED"
-                                    android:layout_marginLeft="10dp"
                                     android:layout_marginRight="10dp"
-                                    android:padding="15dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_mint"/>
 
                                 <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
                                     android:text="OFFERES"
-                                    android:layout_marginLeft="10dp"
                                     android:layout_marginRight="10dp"
-                                    android:padding="15dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_yellow"/>
 
                                 <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:text="APPRECIATION"
+                                    android:layout_marginRight="10dp"
+                                    android:textColor="@color/colorTextWhitePrimary"
+                                    android:background="@drawable/profile_postfilter_color_green"/>
+
+                                <Button
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
                                     android:text="ACHIEVEMENT"
                                     android:layout_marginLeft="10dp"
-                                    android:padding="15dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_black"/>
 
@@ -779,7 +882,7 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </ScrollView>

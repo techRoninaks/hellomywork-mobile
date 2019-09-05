@@ -1,41 +1,40 @@
 package com.roninaks.hellomywork.fragments;
 
-import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.ProfileImage;
-import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
+import com.roninaks.hellomywork.helpers.StringHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
+import com.roninaks.hellomywork.models.CommentsModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
 import org.json.JSONArray;
@@ -44,7 +43,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import es.dmoral.toasty.Toasty;
+//import es.dmoral.toasty.Toasty;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,21 +59,30 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static String imageUrl = "";
+    public static boolean imageChanged = false;
+    public static Bitmap bitmap;
+
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String userId;
     private String mParam2;
     private String us_id;
     View rootView;
     private final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 4;
-    String imageBaseUri = "https://www.hellomywork.com/",telphone, sentToMail, whatsppNumber, profileName;
+    String imageBaseUri = "https://www.hellomywork.com/",telphone, sentToMail, whatsppNumber, profileName,profileCard;
     Context context;
-    ImageView masterProfilePster;
-    TextView profilePCName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
-    ImageButton profileCallPhoneBTN, profileSentEmailBTN, profileUseWhatspp;
+    ImageView masterProfilePster, ivProfileBackBtn;
+    EditText postadDescrption,writeComments;
+    private TextView profilePCName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
+    ImageButton profileCallPhoneBTN, profileSentEmailBTN, profileUseWhatspp,profileShare,profileBookmark;
+    Button buttonEdit,buttonImageUpload,buttonForsale,buttonOffers,buttonRequired,buttonAppreciations,buttonAchievemnet,buttonRandom,buttonPost;
     private RequestOptions requestOptions;
     RecyclerView recyclerView;
     ArrayList <ProfilePostModel> profilePostModels;
     ActivityFeedAdapter activityFeedAdapter;
+    String tagButton, isBookMarked;
+    boolean filled;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,7 +94,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param param1 User ID.
      * @param param2 Parameter 2.
      * @return A new instance of fragment ProfileFragment.
      */
@@ -104,7 +112,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            userId = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -114,15 +122,18 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = getContext();
-        if (mParam1 == null){
-            us_id = "0007";
+        if (userId == ""){
+            us_id = ((MainActivity) context).isLoggedIn();
+//            us_id = "8664";
         }
         else {
-            us_id = mParam1;
+            us_id = userId;
         }
         fetchProfileCardInfo(context, us_id);
         detchProfilePostInfo(context, "fetch_id");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        JSONObject jsonObject;
 
         masterProfilePster = view.findViewById(R.id.profileMasterCardIV);
         profilePCName = view.findViewById(R.id.profileCard_textV_Name);
@@ -139,13 +150,133 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         profileCallPhoneBTN = view.findViewById(R.id.prodile_card_phoneBTN);
         profileSentEmailBTN = view.findViewById(R.id.prodile_card_mailBTN);
         profileUseWhatspp = view.findViewById(R.id.prodile_card_whatsBTN);
+        profileShare=view.findViewById(R.id.profile_card_shareBTN);
+        profileBookmark=view.findViewById(R.id.profile_card_bookmarkBTN);
+        postadDescrption=view.findViewById(R.id.Post_ad_Description);
+        buttonAchievemnet=view.findViewById(R.id.Achievement_BTN);
+        buttonAppreciations=view.findViewById(R.id.Appreciation_BTN);
+        buttonOffers=view.findViewById(R.id.Offers_BTN);
+        buttonForsale=view.findViewById(R.id.ForSale_BTN);
+        buttonRequired=view.findViewById(R.id.Required_BTN);
+        buttonRandom=view.findViewById(R.id.Random_BTN);
+        buttonPost=view.findViewById(R.id.button_Post);
+
+        writeComments=view.findViewById(R.id.editText_WriteComments);
+
+
+
+
         requestOptions = new RequestOptions();
+
+        buttonEdit=view.findViewById(R.id.button_Edit);
+        buttonImageUpload=view.findViewById(R.id.button_ImageUpload);
+        ivProfileBackBtn=view.findViewById(R.id.imgBack);
         requestOptions.placeholder(R.drawable.icon_image);
         requestOptions.error(R.drawable.icon_image);
+
+
+
+
 
         profilePostModels = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.profileRecyclerView);
+
+        buttonEdit.setVisibility(View.GONE);
+        if(((MainActivity) context).isLoggedIn().equals(us_id)){
+            buttonEdit.setVisibility(View.VISIBLE);
+            buttonEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = PremiumSignupFragment.newInstance("",userId, "");
+                    ((MainActivity) context).initFragment(fragment);
+
+                }
+            });
+        }
+
+
+
+        buttonPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    saveInformation();
+
+
+            }
+        });
+
+        ivProfileBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).onBackPressed();
+            }
+        });
+
+        buttonImageUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProfileImage.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("image", imageUrl);
+                bundle.putString("fragment", "profile");
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
+            }
+        });
+        buttonForsale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_ForSale-min.png";
+            }
+        });
+        buttonRandom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Random-min.png";
+            }
+        });
+        buttonRequired.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Required-min.png";
+            }
+        });
+        buttonAchievemnet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Achievement-min.png";
+            }
+        });
+        buttonAppreciations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Appreciations-min.png";
+            }
+        });
+        buttonOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Offers-min.png";
+            }
+        });
+
+
+
+//        ivComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                    if (writeComments.requestFocus()) {
+////                    }
+//            }
+//        });
+
+
+
+
+
+
 
 
         profileCallPhoneBTN.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +379,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Oho!, You are not Logged In");
-                    builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
+                    builder.setMessage("You need to login to make mails").setPositiveButton("Go to login?", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
                 }
                 else {
@@ -261,17 +392,94 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 }
             }
         });
+        profileShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+//                shareIntent.setType("*/*");
+                String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\n";
+                String imgUri = imageBaseUri+profileCard;
+                Uri imgpath = Uri.parse(imgUri);
+                String shareSub = "Hello my work Invitation";
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, imgpath);
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                shareIntent.setType("image/png");
+                startActivityForResult(Intent.createChooser(shareIntent, "Share using"), 0);
+
+            }
+        });
+        profileBookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!((MainActivity) context).isLoggedIn().isEmpty()){
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    Intent myIntent = new Intent(context,LoginActivity.class);
+                                    startActivity(myIntent);
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Oho!, You are not Logged In");
+                    builder.setMessage("You need to login to make bookmark").setPositiveButton("Go to login?", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
+                else
+                {
+
+                    if (filled) {
+                        profileBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
+                        Toast.makeText(context, "Bookmark have been removed", Toast.LENGTH_SHORT).show();
+                        filled = false;
+                    } else {
+                        profileBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmark_fill_green256_min));
+                        Toast.makeText(context, "Bookmark have been added", Toast.LENGTH_SHORT).show();
+                        filled = true;
+                    }
+
+                    SqlHelper sqlHelper = new SqlHelper(context, ProfileFragment.this);
+                    sqlHelper.setExecutePath("updatebookmarks.php");
+                    sqlHelper.setActionString("bookmark");
+                    sqlHelper.setMethod("POST");
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("userId", ((MainActivity) context).isLoggedIn());
+                    contentValues.put("type", "profiles");
+                    contentValues.put("mapping_id", us_id);
+                    contentValues.put("is_active", isBookMarked);
+                    sqlHelper.setParams(contentValues);
+                    sqlHelper.executeUrl(true);
+                }
+            }
+        });
         rootView = view;
         return view;
     }
 
+    private void initFragment(PremiumSignupFragment fragment) {
+    }
+
     private void detchProfilePostInfo(Context context, String fetch_id) {
         SqlHelper sqlHelper = new SqlHelper(context, ProfileFragment.this);
-        sqlHelper.setExecutePath("getallpost.php");
+        sqlHelper.setExecutePath("getprofilepost.php");
         sqlHelper.setActionString("profilePosts");
-        sqlHelper.setMethod("GET");
-        sqlHelper.setParams(new ContentValues());
-        sqlHelper.executeUrl(false);
+        sqlHelper.setMethod("POST");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id", us_id);
+        sqlHelper.setParams(contentValues);
+        sqlHelper.executeUrl(true);
     }
 
     private void fetchProfileCardInfo(Context context, String us_id) {
@@ -282,7 +490,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", us_id);
         sqlHelper.setParams(contentValues);
-        sqlHelper.executeUrl(false);
+        sqlHelper.executeUrl(true);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -326,11 +534,20 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 JSONObject jsonObject = jsonArray.getJSONObject(1);
-                int length = Integer.parseInt(jsonArray.getJSONObject(0).getString("response"));
+                int length = (jsonArray.getJSONObject(1).length());
                 inntRecyclerView(jsonArray, length);
             } catch (JSONException e) {
                 Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
+            }
+        }
+        else  if (sqlHelper.getActionString() == "bookmark"){
+            String responseFrom = sqlHelper.getStringResponse();
+            if(responseFrom.equals("0")){
+                Toast.makeText(context, "Booked removed", Toast.LENGTH_SHORT).show();
+            }
+            else if(responseFrom.equals("0")){
+                Toast.makeText(context, "Booked saved", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -342,6 +559,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
+                profilePostModel.setCommentsModels(getCommentList(jsonObject));
                 profilePostModels.add(profilePostModel);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -352,6 +570,30 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         recyclerView.setLayoutManager(layoutManager);
         activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView);
         recyclerView.setAdapter(activityFeedAdapter);
+    }
+
+    private ArrayList<CommentsModel> getCommentList(JSONObject jsonObject) {
+        JSONArray jsonArray;
+        ArrayList<CommentsModel> commentsModels = new ArrayList<>();
+        ModelHelper modelHelper = new ModelHelper(this.context);
+        try {
+            jsonArray = jsonObject.getJSONArray("comments");
+            for (int i= 0; i< jsonArray.length(); i++) {
+                CommentsModel commentsModel = new CommentsModel();
+                commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
+                commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
+                commentsModel.setCommentId(jsonArray.getJSONObject(i).getString("id"));
+                commentsModel.setCommentU_Id(jsonArray.getJSONObject(i).getString("u_id"));
+                commentsModel.setCommentP_Id(jsonArray.getJSONObject(i).getString("p_id"));
+                commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
+                commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                commentsModels.add(commentsModel);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return commentsModels;
     }
 
     private void populateProfileCardInfo(JSONObject jsonObject) {
@@ -370,6 +612,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             profileSublocation.setText(jsonObject.getString("sublocation"));
             profileAddress.setText(address+", "+jsonObject.getString("pincode"));
             profileSkills.setText(jsonObject.getString("skills"));
+            isBookMarked = jsonObject.getString("is_active");
             try {
                 telphone = jsonObject.getString("phone").split(",")[0];
             }
@@ -383,6 +626,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 telphone = jsonObject.getString("whatapp");
             }
             sentToMail = jsonObject.getString("email");
+            profileCard = jsonObject.getString("card");
 
             Glide.with(context)
                     .setDefaultRequestOptions(requestOptions
@@ -398,6 +642,22 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void saveInformation(){
+        SqlHelper sqlHelper = new SqlHelper(context, ProfileFragment.this);
+        sqlHelper.setExecutePath("postpost.php");
+        sqlHelper.setMethod("POST");
+        sqlHelper.setActionString("submit");
+        ContentValues params = new ContentValues();
+//        params.put("u_id", ((MainActivity) context).isLoggedIn());
+        params.put("u_id", us_id);
+        params.put("des", postadDescrption.getText().toString());
+        params.put("tag", tagButton);
+        params.put("image", imageChanged ? StringHelper.imageToString(bitmap) : "1");
+        params.put("mob", "1");
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(true);
     }
 
     /**

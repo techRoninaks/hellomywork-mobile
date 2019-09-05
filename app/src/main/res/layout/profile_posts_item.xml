@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
     >
 
     <LinearLayout
@@ -13,19 +14,21 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal">
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="3dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/post_item_name"
+                android:textColor="@color/colorTextBlackPrimary"
+                android:textStyle="bold"
                 android:text="Name"/>
 
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorTextWhitePrimary"
-                android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
                 android:id="@+id/post_item_shareBTN"
@@ -78,97 +81,133 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
                 >
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:elevation="8dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="20dp"
+                    android:elevation="8dp"
+
+                    android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/post_item_post_image"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:src="@drawable/icon_image"
                         android:layout_marginBottom="20dp"
-                        android:id="@+id/post_item_post_image"
-                        />
+                        android:src="@drawable/union_banner_photo" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="20dp">
+                        android:layout_marginBottom="30dp"
+                        android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/iv_LikeButton"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_weight=".2"
+                            android:padding="3dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_likepost" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="25"
+                            android:id="@+id/postLikeCount"
+                            android:layout_marginLeft="-20dp"
+                            />
+
+                        <ImageView
+                            android:id="@+id/iv_Comment"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight=".2"
-                            android:src="@drawable/ic_like_min"/>
+                            android:padding="3dp"
+                            android:src="@drawable/ic_commentpost" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="25"
+                            android:id="@+id/postCommentCount"
+                            android:layout_marginLeft="-20dp"
+                            />
+
                         <ImageView
+                            android:id="@+id/iv_Share"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight=".2"
-                            android:src="@drawable/ic_comment_min"/>
+                            android:padding="3dp"
+                            android:src="@drawable/ic_sharepost" />
+
                         <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight=".2"
-                            android:src="@drawable/ic_share_card_min"/>
-                        <ImageView
+                            android:id="@+id/iv_Share1"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight=".2"
-                            android:src="@drawable/ic_like_min"/>
+                            android:padding="3dp"
+                            android:src="@drawable/ic_sharepost" />
+
+
                         <ImageView
+                            android:id="@+id/iv_Bookmark"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight=".2"
-                            android:src="@drawable/ic_bookmark_green256_min"/>
+                            android:padding="3dp"
+                            android:src="@drawable/ic_bookmarkpost" />
 
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="-23dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="COMMENTS"
-                            android:textColor="@color/colorTextBlackPrimary"
                             android:padding="5dp"
-                            />
+                            android:text="COMMENTS"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorTextBlackPrimary" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="VIEW ALL COMMENTS"
                             android:layout_alignParentRight="true"
-                            />
+                            android:textSize="11sp"
+                            android:layout_marginTop="7dp"
+                            android:text="VIEW ALL COMMENTS" />
                     </RelativeLayout>
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:id="@+id/postItemCommentsRV">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="NAME"
-                            android:layout_marginRight="20dp"
-                            android:textColor="@color/colorTextBlackPrimary"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="comments here"/>
-                    </LinearLayout>
+                    </androidx.recyclerview.widget.RecyclerView>
+
 
                     <EditText
+                        android:id="@+id/editText_WriteComments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/career_edit_background"/>
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:padding="10dp"
+                        android:background="@drawable/career_edit_background"
+                        android:inputType="text"
+                        android:imeOptions="actionSend"
+                        android:hint="Write comment"
+                        android:textSize="14sp"
+                        />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
