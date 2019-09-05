@@ -48,4 +48,8 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.4.2'
     //OTP View library
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.0.3'
+    //Image Cropping
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    //Floating Action Button
+    implementation 'com.github.wangfeng19930909:DragFloatingActionButton:1.0.1'
 }

@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.HomeFragment"
-    android:id="@+id/containerMaster"
-    android:layout_marginBottom="58dp">
+    android:id="@+id/containerMaster">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +17,10 @@
             android:layout_height="wrap_content"
             android:background="@color/colorTextBlackPrimary"
             android:orientation="horizontal"
-            android:padding="@dimen/standard_gap_small"
+            android:paddingLeft="@dimen/standard_gap_small"
+            android:paddingRight="@dimen/standard_gap_small"
+            android:paddingTop="@dimen/standard_gap_large"
+            android:paddingBottom="@dimen/standard_gap_large"
             android:weightSum="9">
 
             <ImageView
@@ -37,12 +40,23 @@
                 android:textColor="@color/colorTextWhiteSecondary"
                 android:id="@+id/tvLocation"/>
 
+            <AutoCompleteTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:maxLines="1"
+                android:textColor="@color/colorTextWhiteSecondary"
+                android:id="@+id/acLocation"
+                android:visibility="gone"
+                android:imeOptions="actionDone"
+                android:background="@android:color/transparent"/>
+
             <ImageView
                 android:id="@+id/imgLocationDropDown"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@drawable/ic_dropdown" />
+                android:src="@drawable/ic_dropdown"/>
 
             <ImageView
                 android:id="@+id/imgNotification"
@@ -74,6 +88,7 @@
                     android:layout_alignParentTop="true"
                     android:background="@drawable/curve_background"
                     android:id="@+id/containerBanner">
+
                     <!-- Searchbar -->
                     <LinearLayout
                         android:id="@+id/containerSearchBar"
@@ -81,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/standard_gap_medium"
                         android:layout_marginEnd="@dimen/standard_gap_medium"
-                        android:layout_marginTop="@dimen/standard_gap_extra_small"
+                        android:layout_marginTop="@dimen/standard_gap_small"
                         android:background="@drawable/card_background_shape"
                         android:orientation="horizontal"
                         android:padding="@dimen/standard_gap_large"
@@ -101,7 +116,8 @@
                             android:ellipsize="end"
                             android:id="@+id/etSearch"
                             android:background="@android:color/transparent"
-                            android:inputType="text"/>
+                            android:inputType="text"
+                            android:imeOptions="actionSearch"/>
                         <ImageView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -117,48 +133,56 @@
                     </LinearLayout>
                 </LinearLayout>
                 <!-- Popular Categories Section -->
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/containerPopularCategories"
-                    android:orientation="vertical"
+                    app:cardBackgroundColor="@color/colorTextWhitePrimary"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="8dp"
+                    android:layout_marginLeft="@dimen/standard_gap_small"
+                    android:layout_marginRight="@dimen/standard_gap_small"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginTop="220dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="220dp"
-                    android:background="@drawable/card_background_shape"
-                    android:layout_marginEnd="@dimen/standard_gap_extra_small"
-                    android:layout_marginStart="@dimen/standard_gap_extra_small">
-                    <TextView
-                        android:layout_width="wrap_content"
+                    android:id="@+id/cardContainerPopularCategories">
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/view_more"
-                        android:layout_gravity="end"
-                        android:textColor="@color/colorTextBlackSecondary"
-                        android:textSize="@dimen/font_secondary_text"
-                        android:layout_marginEnd="@dimen/standard_gap_medium"
-                        android:layout_marginTop="@dimen/standard_gap_medium"
-                        android:id="@+id/tvCategoriesMore"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/hp_popular_categories"
-                        android:textSize="@dimen/font_list_title"
-                        android:layout_marginStart="@dimen/standard_gap_medium"
-                        android:id="@+id/tvPopularCategories"
-                        android:textColor="@color/colorTextBlackPrimary"
-                        android:textStyle="bold"
-                        android:textAllCaps="true"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rvPopularCategories">
-                    </androidx.recyclerview.widget.RecyclerView>
-                </LinearLayout>
+                        android:id="@+id/containerPopularCategories"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_more"
+                            android:layout_gravity="end"
+                            android:textColor="@color/colorTextBlackSecondary"
+                            android:textSize="@dimen/font_secondary_text"
+                            android:layout_marginEnd="@dimen/standard_gap_medium"
+                            android:layout_marginTop="@dimen/standard_gap_medium"
+                            android:id="@+id/tvCategoriesMore"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="@string/hp_popular_categories"
+                            android:textSize="@dimen/font_list_title"
+                            android:layout_marginStart="@dimen/standard_gap_medium"
+                            android:id="@+id/tvPopularCategories"
+                            android:textColor="@color/colorTextBlackPrimary"
+                            android:textStyle="bold"
+                            android:textAllCaps="true"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rvPopularCategories">
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
                 <!-- Major Categories Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/containerPopularCategories"
+                    android:layout_below="@id/cardContainerPopularCategories"
                     android:id="@+id/containerMajorCategories"
                     android:orientation="vertical"
                     android:padding="@dimen/standard_gap_large">
@@ -178,86 +202,112 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/containerMajorCategoriesRow1"
                         android:orientation="horizontal"
-                        android:weightSum="4">
+                        android:weightSum="4"
+                        android:paddingBottom="@dimen/standard_gap_medium"
+                        android:paddingTop="@dimen/standard_gap_extra_small">
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectorySales">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_sales"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_sales"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true" />
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectorySales">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_sales"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_sales"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true" />
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryRepairs">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_repairs"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_repairs"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryRepairs">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_repairs"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_repairs"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryService">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_services"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_service"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryService">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_services"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_service"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryMovers">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_movers"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_movers"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryMovers">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_movers"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_movers"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                     <!-- Major Categories Row 2 -->
@@ -266,309 +316,283 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/containerMajorCategoriesRow2"
                         android:orientation="horizontal"
-                        android:weightSum="4">
+                        android:weightSum="4"
+                        android:paddingBottom="@dimen/standard_gap_medium">
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryHealth">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_health"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_health"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryHealth">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_health"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_health"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryPersonal">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_personal"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_personal"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryPersonal">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_personal"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_personal"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryEats">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_eats"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_eats"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryEats">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_eats"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_eats"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryRest">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_rest"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_rest"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryRest">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_rest"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_rest"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                     <!-- Major Categories Row 3 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/containerMajorCategoriesRow3"
-                        android:orientation="horizontal"
-                        android:weightSum="4">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_sales"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_sales"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_sales"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_sales"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_sales"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_sales"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_sales"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_sales"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <!-- Major Categories Row 4 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:id="@+id/containerMajorCategoriesRow4"
                         android:orientation="horizontal"
-                        android:weightSum="4">
+                        android:weightSum="4"
+                        android:paddingBottom="@dimen/standard_gap_medium">
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryEvents">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_events"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_events"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryEvents">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_events"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_events"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryBusiness">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_business"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_business"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryBusiness">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_business"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="70dp"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_business"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryRenovation">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_renovation"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/hp_renovation"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_secondary_text"
-                                android:textAllCaps="true"
-                                android:maxLines="1"
-                                android:autoSizeTextType="uniform"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryRenovation">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_renovation"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/hp_renovation"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"
+                                    android:maxLines="1"
+                                    android:autoSizeTextType="uniform"/>
+                            </LinearLayout>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@drawable/card_background_shape"
-                            android:id="@+id/containerDirectoryMore">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/service_list_icon"
-                                android:src="@drawable/ic_more"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="@string/more"
-                                android:textColor="@color/colorTextBlackPrimary"
-                                android:textSize="@dimen/font_button"
-                                android:textAllCaps="true"/>
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="@dimen/home_major_category_size"
+                                android:layout_height="@dimen/home_major_category_size"
+                                android:orientation="vertical"
+                                android:background="@drawable/ic_directories_background"
+                                android:id="@+id/containerDirectoryMore">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/service_list_icon"
+                                    android:src="@drawable/ic_more"
+                                    android:layout_marginTop="@dimen/standard_gap_large"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="@string/more"
+                                    android:textColor="@color/colorTextBlackPrimary"
+                                    android:textSize="@dimen/font_home_major_category"
+                                    android:textAllCaps="true"/>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
                 <!-- Unions Section -->
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/home_union"
-                    android:id="@+id/containerUnions"
-                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/colorTextWhitePrimary"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="8dp"
+                    android:layout_marginLeft="@dimen/standard_gap_small"
+                    android:layout_marginRight="@dimen/standard_gap_small"
+                    app:cardUseCompatPadding="true"
                     android:layout_below="@id/containerMajorCategories"
-                    android:background="@drawable/card_background_shape"
-                    android:layout_marginStart="@dimen/standard_gap_extra_small"
-                    android:layout_marginEnd="@dimen/standard_gap_extra_small"
-                    android:padding="@dimen/standard_gap_large">
+                    android:id="@+id/cardContainerUnions">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-                        <TextView
-                            android:layout_width="0dp"
+                        android:layout_height="@dimen/home_union"
+                        android:id="@+id/containerUnions"
+                        android:orientation="vertical"
+                        android:padding="@dimen/standard_gap_large">
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/font_list_title"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorTextBlackPrimary"
-                            android:text="@string/sr_union"
-                            android:layout_weight="1"
-                            android:textAlignment="textStart"
-                            android:textAllCaps="true"/>
-                        <TextView
-                            android:layout_width="0dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/font_list_title"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorTextBlackPrimary"
+                                android:text="@string/sr_union"
+                                android:layout_weight="1"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="true"/>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/font_secondary_text"
+                                android:textColor="@color/colorTextBlackSecondary"
+                                android:text="@string/view_more"
+                                android:layout_weight="1"
+                                android:textAlignment="textEnd"
+                                android:id="@+id/tvUnionsMore"/>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorTextBlackSeperators"
+                            android:layout_marginTop="@dimen/standard_gap_medium"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/font_secondary_text"
-                            android:textColor="@color/colorTextBlackSecondary"
-                            android:text="@string/view_more"
-                            android:layout_weight="1"
-                            android:textAlignment="textEnd"
-                            android:id="@+id/tvUnionsMore"/>
+                            android:id="@+id/rvUnions"></androidx.recyclerview.widget.RecyclerView>
                     </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorTextBlackSeperators"
-                        android:layout_marginTop="@dimen/standard_gap_medium"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rvUnions"></androidx.recyclerview.widget.RecyclerView>
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
                 <!-- Top Performers Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -576,7 +600,7 @@
                     android:orientation="vertical"
                     android:id="@+id/containerTopPerformers"
                     android:padding="@dimen/standard_gap_large"
-                    android:layout_below="@id/containerUnions">
+                    android:layout_below="@+id/cardContainerUnions">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

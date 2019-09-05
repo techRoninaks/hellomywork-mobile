@@ -6,17 +6,23 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.CareersFragment;
+import com.roninaks.hellomywork.fragments.ContactFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
+
+import com.roninaks.hellomywork.fragments.PostAdFragment;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
 import com.roninaks.hellomywork.fragments.SearchLanding;
 import com.roninaks.hellomywork.fragments.UnionsFragment;
@@ -30,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem PreviousMenuItem;
     private String args[];
     private Bundle bundle;
+
+    private DragFloatActionButton floatActionButton;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -99,7 +108,21 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){}
 
         navigation = findViewById(R.id.navigation);
+        floatActionButton = findViewById(R.id.fab_post_ad);
 
+        //Set Defaults
+        if(isLoggedIn().equals("")){
+            floatActionButton.setVisibility(View.GONE);
+        }
+
+        //Floating Action Button Onclick
+        floatActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment fragment = PostAdFragment.newInstance("", "");
+                initFragment(fragment);
+            }
+        });
         //Set Bottom navigation properties
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.enableAnimation(false);
@@ -124,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void initFragment(Fragment fragment){
         initFragment(fragment, "");
+    }
+
+    public void initFragment(DialogFragment fragment){
+        fragment.show(getSupportFragmentManager(), "PostAdsFragment");
     }
 
     private void setDefaultIcon(MenuItem menuItem){

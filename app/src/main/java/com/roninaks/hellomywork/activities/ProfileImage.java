@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.view.View;
 import android.widget.Button;
@@ -19,18 +18,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.bumptech.glide.Glide;
-//import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-//import com.roninaks.hellomywork.GlideApp;
 import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
+import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.helpers.PermissionsHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.InputStream;
+
+//import com.bumptech.glide.load.engine.DiskCacheStrategy;
+//import com.roninaks.hellomywork.GlideApp;
 
 //TODO: Profile Image change from External not reloading
 public class ProfileImage extends Activity implements SqlDelegate {
@@ -39,8 +42,9 @@ public class ProfileImage extends Activity implements SqlDelegate {
     Button btnGallery, btnCamera, btnConfirm, btnDiscard;
     LinearLayout llMainButton, llConfirmButton;
     Uri imageUri;
-    String imagePath, image, uploadUrl;
+    String imagePath, image, uploadUrl, fragment;
     Bitmap bitmap;
+    Boolean imageChanged = false;
 
     RequestOptions requestOptions;
     @Override
@@ -62,9 +66,21 @@ public class ProfileImage extends Activity implements SqlDelegate {
             llConfirmButton = findViewById(R.id.containerConfirmButtons);
             final Intent intent = getIntent();
             final Bundle bundle = intent.getBundleExtra("bundle");
-            if(bundle != null)
+            if(bundle != null) {
                 image = bundle.getString("image").contains("assets/img/profile/userimage/") ? getString(R.string.master_url).concat(bundle.getString("image")) : bundle.getString("image");
-            if(PremiumSignupFragment.bitmap == null) {
+                fragment = bundle.getString("fragment");
+                switch (fragment){
+                    case "premiumsignup":{
+                        bitmap = PremiumSignupFragment.bitmap;
+                        break;
+                    }
+                    case "profile":{
+                        bitmap = ProfileFragment.bitmap;
+                        break;
+                    }
+                }
+            }
+            if(bitmap == null) {
                 Glide.with(this)
                         .asBitmap()
                         .load(Uri.parse(image))
@@ -72,14 +88,23 @@ public class ProfileImage extends Activity implements SqlDelegate {
             }else{
                 Glide.with(this)
                         .asBitmap()
-                        .load(PremiumSignupFragment.bitmap)
+                        .load(bitmap)
                         .into(imageView);
             }
             buttonExit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!PremiumSignupFragment.imageChanged){
-                        PremiumSignupFragment.imageUrl = bundle!= null ? bundle.getString("image") : "";
+                    if(imageChanged){
+                        switch (fragment){
+                            case "premiumsignup":{
+                                PremiumSignupFragment.imageUrl = bundle!= null ? bundle.getString("image") : "";
+                                break;
+                            }
+                            case "profile":{
+                                ProfileFragment.imageUrl = bundle!= null ? bundle.getString("image") : "";
+                                break;
+                            }
+                        }
                     }
                     finish();
                 }
@@ -136,8 +161,20 @@ public class ProfileImage extends Activity implements SqlDelegate {
 //
 //                                    RequestQueue requestQueue = Volley.newRequestQueue(ProfileImage.this);
 //                                    requestQueue.add(stringRequest);
-                                    PremiumSignupFragment.imageChanged = true;
-                                    PremiumSignupFragment.bitmap = bitmap;
+                                    switch (fragment){
+                                        case "premiumsignup":{
+                                            PremiumSignupFragment.imageChanged = true;
+                                            PremiumSignupFragment.bitmap = bitmap;
+                                            PremiumSignupFragment.imageUrl = imageUri.toString();
+                                            break;
+                                        }
+                                        case "profile":{
+                                            ProfileFragment.imageChanged = true;
+                                            ProfileFragment.bitmap = bitmap;
+                                            ProfileFragment.imageUrl = imageUri.toString();
+                                            break;
+                                        }
+                                    }
                                     finish();
                                     break;
                                 }
@@ -229,34 +266,62 @@ public class ProfileImage extends Activity implements SqlDelegate {
         try {
             if (requestCode == PermissionsHelper.REQUEST_IMAGE_CAPTURE) {
                 if (resultCode == RESULT_OK) {
-                    Glide.with(this)
-                            .setDefaultRequestOptions(requestOptions)
-                            .asBitmap()
-                            .load(getRealPathFromURI(imageUri))
-                            .into(imageView);
-                    llMainButton.setVisibility(View.GONE);
-                    llConfirmButton.setVisibility(View.VISIBLE);
-                    PremiumSignupFragment.imageUrl = imageUri.toString();
-                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                    bitmap = BitmapFactory.decodeStream(inputStream);
+                    if(fragment.equals("premiumsignup")){
+                        CropImage.activity(imageUri)
+                                .start(this);
+                    }else {
+                        Glide.with(this)
+                                .setDefaultRequestOptions(requestOptions)
+                                .asBitmap()
+                                .load(getRealPathFromURI(imageUri))
+                                .into(imageView);
+                        llMainButton.setVisibility(View.GONE);
+                        llConfirmButton.setVisibility(View.VISIBLE);
+                        PremiumSignupFragment.imageUrl = imageUri.toString();
+                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                        bitmap = BitmapFactory.decodeStream(inputStream);
+                    }
                 } else {
                     Toast.makeText(ProfileImage.this, getString(R.string.response_error), Toast.LENGTH_SHORT).show();
                 }
             } else if (requestCode == PermissionsHelper.REQUEST_READ_EXTERNAL_STORAGE || requestCode == PermissionsHelper.REQUEST_WRITE_EXTERNAL_STORAGE && resultCode == RESULT_OK) {
                 if (resultCode == RESULT_OK) {
                     Uri fullPhotoUri = data.getData();
+                    imageUri = fullPhotoUri;
+                    if(fragment.equals("premiumsignup")){
+                        CropImage.activity(imageUri)
+                                .start(this);
+                    }else {
+                        Glide.with(this)
+                                .setDefaultRequestOptions(requestOptions)
+                                .asBitmap()
+                                .load(fullPhotoUri)
+                                .into(imageView);
+                        llMainButton.setVisibility(View.GONE);
+                        llConfirmButton.setVisibility(View.VISIBLE);
+                        PremiumSignupFragment.imageUrl = fullPhotoUri.toString();
+                        InputStream inputStream = getContentResolver().openInputStream(fullPhotoUri);
+                        bitmap = BitmapFactory.decodeStream(inputStream);
+                    }
+                } else {
+                    Toast.makeText(ProfileImage.this, getString(R.string.response_error), Toast.LENGTH_SHORT).show();
+                }
+            } else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    imageUri = result.getUri();
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .asBitmap()
-                            .load(fullPhotoUri)
+                            .load(imageUri)
                             .into(imageView);
                     llMainButton.setVisibility(View.GONE);
                     llConfirmButton.setVisibility(View.VISIBLE);
-                    PremiumSignupFragment.imageUrl = fullPhotoUri.toString();
-                    InputStream inputStream = getContentResolver().openInputStream(fullPhotoUri);
+                    PremiumSignupFragment.imageUrl = imageUri.toString();
+                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
                     bitmap = BitmapFactory.decodeStream(inputStream);
-                } else {
-                    Toast.makeText(ProfileImage.this, getString(R.string.response_error), Toast.LENGTH_SHORT).show();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
             }
         }catch (Exception e){
@@ -264,6 +329,7 @@ public class ProfileImage extends Activity implements SqlDelegate {
 //            emailHelper.sendEmail();
         }
     }
+
 
 
 

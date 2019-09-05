@@ -18,12 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 //import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.ProfileImage;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -45,6 +47,8 @@ import java.util.Arrays;
  * Use the {@link PremiumSignupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+//TODO Add Bubble
 public class PremiumSignupFragment extends Fragment implements SqlDelegate {
     //Constant Declaration
     private static final String ARG_PARAM1 = "type";
@@ -78,6 +82,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
     private CheckBox cbProspect;
     private Button btnUploadImage, btnSave, btnSubmit;
     private SwitchCompat switchPrivacy;
+    private ImageView ivBack;
 
     public PremiumSignupFragment() {
         // Required empty public constructor
@@ -113,7 +118,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_premium_signup, container, false);
@@ -146,6 +151,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         spOrgType = (Spinner) v.findViewById(R.id.spinner_org_type);
         spCategory = (Spinner) v.findViewById(R.id.spinner_category);
         switchPrivacy = (SwitchCompat) v.findViewById(R.id.switch_Privacy);
+        ivBack = (ImageView) v.findViewById(R.id.imgBack);
 
         //Setting defaults
         if(userId != null){
@@ -201,6 +207,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 Intent intent = new Intent(context, ProfileImage.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("image", imageUrl);
+                bundle.putString("fragment", "premiumsignup");
                 intent.putExtra("bundle", bundle);
                 startActivity(intent);
             }
@@ -215,6 +222,12 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).onBackPressed();
             }
         });
         return  v;
