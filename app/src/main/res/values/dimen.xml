@@ -32,7 +32,7 @@
     <dimen name="service_list_icon">32dp</dimen>
 
     <!-- Home Page -->
-    <dimen name="home_banner">250dp</dimen>
+    <dimen name="home_banner">275dp</dimen>
     <dimen name="home_union">300dp</dimen>
     <dimen name="home_category_icon_width">48dp</dimen>
     <dimen name="home_category_layout_width">90dp</dimen>

@@ -676,7 +676,7 @@ Hellomywork is determinant to provide to our service providers the best possible
 
     <!-- Home Page -->
     <string name="hp_searchHint">Search anything anywhere</string>
-    <string name="hp_popular_categories">Popular Catgories</string>
+    <string name="hp_popular_categories">Popular Categories</string>
     <string name="hp_sales">Sales</string>
     <string name="hp_repairs">Repairs</string>
 
