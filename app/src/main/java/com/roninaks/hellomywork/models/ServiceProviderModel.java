@@ -29,10 +29,9 @@ public class ServiceProviderModel {
     private boolean IsActive;
     private boolean IsProspect;
     private boolean IsPremium;
+    private boolean IsBookmarked;
 
     //Getters
-
-
 
     public int getReview() {
         return Review;
@@ -146,8 +145,11 @@ public class ServiceProviderModel {
         return IsPremium;
     }
 
-    //Setters
+    public boolean isBookmarked(){
+        return IsBookmarked;
+    }
 
+    //Setters
 
     public void setUnionName(String unionName) {
         UnionName = unionName;
@@ -259,5 +261,9 @@ public class ServiceProviderModel {
 
     public void setPremium(boolean premium) {
         IsPremium = premium;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        IsBookmarked = bookmarked;
     }
 }

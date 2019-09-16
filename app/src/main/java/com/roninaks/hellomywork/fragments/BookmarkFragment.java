@@ -6,13 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +33,12 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -48,11 +47,12 @@ import java.util.ArrayList;
  * Use the {@link BookmarkFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookmarkFragment extends Fragment implements SqlDelegate {
+public class BookmarkFragment extends Fragment implements SqlDelegate{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String BOOKMARK = "bookmark";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -330,6 +330,8 @@ public class BookmarkFragment extends Fragment implements SqlDelegate {
 //        params.put("locType", location);
 //        params.put("catType", category);
         params.put("pageNo", "1");
+        params.put("mob", "1");
+        params.put("userId", ((MainActivity) context).isLoggedIn());
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }

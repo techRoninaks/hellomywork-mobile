@@ -4,15 +4,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 //import androidx.core.app.Fragment;
 //import android.support.v7.widget.GridLayoutManager;
 //import android.support.v7.widget.LinearLayoutManager;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,8 +23,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,11 +43,13 @@ import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.HomeCategoriesAdapter;
+import com.roninaks.hellomywork.adapters.SearchAdapter;
 import com.roninaks.hellomywork.adapters.SearchLandingTabsAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 
 import org.json.JSONArray;
 
@@ -75,10 +82,11 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     private RecyclerView rvTabs, rvCategories;
     private ArrayList<String> tabList;
     private ArrayList<CategoryModel> categoryModels, alSales, alRepairs, alService, alMovers, alHealth, alPersonal, alEats, alRest, alEvents, alBusiness, alRenovation, alMore;
-    private EditText etSearch;
+    private AutoCompleteTextView acSearch;
     private ImageView ivSearch, ivOptions;
     private LinearLayout llBanner;
 
+    private ArrayList<SearchSuggestionsModel> searchSuggestionsModels;
     public SearchLanding() {
         // Required empty public constructor
     }
@@ -118,7 +126,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         context = getActivity();
         rvTabs = (RecyclerView) rootView.findViewById(R.id.rvTabs);
         rvCategories = (RecyclerView) rootView.findViewById(R.id.rvCategories);
-        etSearch = (EditText) rootView.findViewById(R.id.etSearch);
+        acSearch = (AutoCompleteTextView) rootView.findViewById(R.id.etSearch);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
 
@@ -130,7 +138,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                 ((MainActivity) context).initFragment(fragment);
             }
         });
@@ -186,27 +194,41 @@ public class SearchLanding extends Fragment implements SqlDelegate {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            rvCategories.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if(oldScrollY < 5 || scrollY < 5){
-
-                    } else{
-
-                    }
-                }
-            });
-        }
-
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        acSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                     ((MainActivity) context).initFragment(fragment);
                 }
                 return true;
+            }
+        });
+
+        acSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchKey = s.toString();
+                if(searchKey.length() == 3){
+                    loadSearchList(searchKey);
+                }
+            }
+        });
+        acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
+                ((MainActivity) context).initFragment(fragment);
             }
         });
         return rootView;
@@ -250,6 +272,13 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                     }
                     break;
                 }
+                case "search":{
+                    JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
+                    if(jsonArray.length() >= 1){
+                        buildSearchList(jsonArray);
+                    }
+                    break;
+                }
             }
         }catch (Exception e){
 
@@ -272,7 +301,11 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     }
 
     public void onTabClick(int position, ArrayList<String> tabs, int currentPosition){
-//        int y = rvTabs.getScrollY();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((MainActivity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels/2;
+        int widthFocused = rvTabs.getFocusedChild().getWidth();
+        //        int y = rvTabs.getScrollY();
 //        TextView tvPrevious = (TextView)rvTabs.findViewHolderForLayoutPosition(currentPosition).itemView.findViewById(R.id.tvTabName);
 //        tvPrevious.setTypeface(tvPrevious.getTypeface(), Typeface.NORMAL);
         String tag = tabs.get(position).toLowerCase();
@@ -281,10 +314,26 @@ public class SearchLanding extends Fragment implements SqlDelegate {
 //        rvTabs.setAdapter(adapter);
 //        TextView tvCurrent = (TextView)rvTabs.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.tvTabName);
 //        tvCurrent.setTypeface(tvCurrent.getTypeface(), Typeface.BOLD);
-        rvTabs.getAdapter().notifyItemChanged(position);
+//        rvTabs.getAdapter().notifyItemChanged(position);
+//        rvTabs.getX();
+//        rvTabs.scrollBy(30, 0);
+        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this, tabList, rootView, tag);
+        rvTabs.setAdapter(adapter);
+        rvTabs.scrollToPosition(position);
+        rvTabs.scrollBy(-width + widthFocused, 0);
     }
 
     //Private Functions
+    private void loadSearchList(String key){
+        SqlHelper sqlHelper = new SqlHelper(context, SearchLanding.this);
+        sqlHelper.setExecutePath("searchAuto.php");
+        sqlHelper.setMethod("POST");
+        sqlHelper.setActionString("search");
+        ContentValues params = new ContentValues();
+        params.put("search", key);
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(false);
+    }
 
     private void loadCategories(){
         SqlHelper sqlHelper = new SqlHelper(context, SearchLanding.this);
@@ -300,7 +349,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         tabList = new ArrayList<>();
         Resources res = context.getResources();
         tabList.addAll(Arrays.asList(res.getStringArray(R.array.search_landing_tabs)));
-        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this, tabList, rootView);
+        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this, tabList, rootView, directory.toLowerCase());
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rvTabs.setLayoutManager(layoutManager);
         rvTabs.setAdapter(adapter);
@@ -390,7 +439,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     }
 
     private void showList(String tag){
-        HomeCategoriesAdapter adapter = new HomeCategoriesAdapter(context, categoryModels, rootView);;
+        HomeCategoriesAdapter adapter = new HomeCategoriesAdapter(context, categoryModels, rootView);
         if(tag.equals("sales")){
             adapter = new HomeCategoriesAdapter(context, alSales, rootView);
         }
@@ -429,4 +478,19 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         }
         rvCategories.setAdapter(adapter);
     }
+
+    private void buildSearchList(JSONArray jsonArray){
+        try{
+            searchSuggestionsModels = new ArrayList<>();
+            for(int i=0; i < jsonArray.length(); i++){
+                SearchSuggestionsModel searchSuggestionsModel = new ModelHelper().buildSearchSuggestionsModel(jsonArray.getString(i), "Home");
+                searchSuggestionsModels.add(searchSuggestionsModel);
+            }
+            SearchAdapter adapter = new SearchAdapter(context, acSearch.getId(), searchSuggestionsModels, SearchLanding.this);
+            acSearch.setAdapter(adapter);
+        }catch (Exception e){
+
+        }
+    }
+
 }

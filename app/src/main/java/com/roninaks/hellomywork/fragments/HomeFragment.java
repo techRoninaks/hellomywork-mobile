@@ -2,16 +2,21 @@ package com.roninaks.hellomywork.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.LinearLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,9 +25,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,10 +40,12 @@ import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.HomeCategoriesAdapter;
 import com.roninaks.hellomywork.adapters.HomeTopPerformersAdapter;
 import com.roninaks.hellomywork.adapters.HomeUnionAdapter;
+import com.roninaks.hellomywork.adapters.SearchAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
@@ -69,15 +76,15 @@ public class HomeFragment extends Fragment implements SqlDelegate {
     private Context context;
     private LinearLayout llContainerSales, llContainerRepairs, llContainerService, llContainerMovers, llContainerHealth, llContainerPersonal, llContainerEats, llContainerRest, llContainerEvents, llContainerRenovation, llContainerBusiness, llContainerMore;
     private TextView tvCategoriesMore, tvUnionsMore, tvLocation;
-    private EditText etSearch;
     private ImageView ivNotification, ivProfile, ivSearch, ivOptions, ivBanner, ivLocationDropDown;
     private RecyclerView rvPopularCategories, rvUnions, rvTopPerformers;
-    private AutoCompleteTextView acLocation;
+    private AutoCompleteTextView acLocation, acSearch;
     private View rootView;
     private ArrayList<CategoryModel> categoryModels;
     private ArrayList<UnionModel> unionModels;
     private ArrayList<ServiceProviderModel> serviceProviderModels;
     private ArrayList<String> locationList;
+    private ArrayList<SearchSuggestionsModel> searchSuggestionsModels;
 
     private OnFragmentInteractionListener mListener;
 
@@ -198,7 +205,6 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         tvCategoriesMore = (TextView) rootView.findViewById(R.id.tvCategoriesMore);
         tvUnionsMore = (TextView) rootView.findViewById(R.id.tvUnionsMore);
         tvLocation = (TextView) rootView.findViewById(R.id.tvLocation);
-        etSearch = (EditText) rootView.findViewById(R.id.etSearch);
         ivNotification = (ImageView) rootView.findViewById(R.id.imgNotification);
         ivProfile = (ImageView) rootView.findViewById(R.id.imgProfile);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
@@ -208,6 +214,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         rvTopPerformers = (RecyclerView) rootView.findViewById(R.id.rvTopPerformers);
         rvUnions = (RecyclerView) rootView.findViewById(R.id.rvUnions);
         acLocation = (AutoCompleteTextView) rootView.findViewById(R.id.acLocation);
+        acSearch = (AutoCompleteTextView) rootView.findViewById(R.id.etSearch);
 
         //Set Defaults
         Resources res = context.getResources();
@@ -241,7 +248,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                 ((MainActivity) context).initFragment(fragment);
             }
         });
@@ -320,6 +327,37 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         };
         tvLocation.setOnClickListener(locationDropDown);
         ivLocationDropDown.setOnClickListener(locationDropDown);
+        ivNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    Intent myIntent = new Intent(context, LoginActivity.class);
+                                    context.startActivity(myIntent);
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Oho!, You are not Logged In");
+                    builder.setMessage("Login to view your Union").setPositiveButton("Go to login?", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }else {
+                    getUserUnionAndRedirect();
+                }
+            }
+        });
         acLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -330,14 +368,40 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                 return true;
             }
         });
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        acSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                     ((MainActivity) context).initFragment(fragment);
                 }
                 return true;
+            }
+        });
+        acSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchKey = s.toString();
+                if(searchKey.length() == 3){
+                    loadSearchList(searchKey);
+                }
+            }
+        });
+        acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
+                ((MainActivity) context).initFragment(fragment);
             }
         });
         return rootView;
@@ -399,6 +463,24 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                     }else{
                         Toast.makeText(context, "Sorry. No results", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                }
+                case "search":{
+                    JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
+                    if(jsonArray.length() >= 1){
+                        buildSearchList(jsonArray);
+                    }
+                    break;
+                }
+                case "unions_id":{
+                    JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
+                    if(jsonArray.length() > 0){
+                        if(jsonArray.getJSONObject(0).getString("response").equals(context.getString(R.string.response_success))){
+                            Fragment fragment = UnionsIndividualFragment.newInstance("" + jsonArray.getJSONObject(1).getString("union_id"),"");
+                            ((MainActivity) context).initFragment(fragment);
+                        }
+                    }
+                    break;
                 }
             }
         }catch (Exception e){
@@ -422,6 +504,16 @@ public class HomeFragment extends Fragment implements SqlDelegate {
     }
 
     //private functions
+    private void loadSearchList(String key){
+        SqlHelper sqlHelper = new SqlHelper(context, HomeFragment.this);
+        sqlHelper.setExecutePath("searchAuto.php");
+        sqlHelper.setMethod("POST");
+        sqlHelper.setActionString("search");
+        ContentValues params = new ContentValues();
+        params.put("search", key);
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(false);
+    }
 
     private void loadCategories(){
         SqlHelper sqlHelper = new SqlHelper(context, HomeFragment.this);
@@ -449,6 +541,17 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         sqlHelper.setMethod("GET");
         sqlHelper.setActionString("profiles");
         ContentValues params = new ContentValues();
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(true);
+    }
+
+    private void getUserUnionAndRedirect(){
+        SqlHelper sqlHelper = new SqlHelper(context, HomeFragment.this);
+        sqlHelper.setExecutePath("getunionid.php");
+        sqlHelper.setMethod("GET");
+        sqlHelper.setActionString("unions_id");
+        ContentValues params = new ContentValues();
+        params.put("user_id", ((MainActivity) context).isLoggedIn());
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }
@@ -498,6 +601,20 @@ public class HomeFragment extends Fragment implements SqlDelegate {
             rvTopPerformers.setAdapter(adapter);
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void buildSearchList(JSONArray jsonArray){
+        try{
+            searchSuggestionsModels = new ArrayList<>();
+            for(int i=0; i < jsonArray.length(); i++){
+                SearchSuggestionsModel searchSuggestionsModel = new ModelHelper().buildSearchSuggestionsModel(jsonArray.getString(i), "Home");
+                searchSuggestionsModels.add(searchSuggestionsModel);
+            }
+            SearchAdapter adapter = new SearchAdapter(context, acSearch.getId(), searchSuggestionsModels, HomeFragment.this);
+            acSearch.setAdapter(adapter);
+        }catch (Exception e){
+
         }
     }
 }
