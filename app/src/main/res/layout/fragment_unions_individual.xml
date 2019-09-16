@@ -16,15 +16,16 @@
             android:id="@+id/llContainerHeader"
             android:paddingTop="@dimen/standard_gap_large"
             android:paddingBottom="@dimen/standard_gap_large">
+
             <ImageView
-                android:layout_width="@dimen/icon_header_back"
-                android:layout_height="@dimen/icon_header_back"
-                android:src="@drawable/ic_back_black"
                 android:id="@+id/imgBack"
-                android:layout_centerHorizontal="true"
+                android:layout_width="11dp"
+                android:layout_height="13dp"
                 android:layout_alignParentStart="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/standard_gap_large"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="@dimen/standard_gap_large"/>
+                android:src="@drawable/ic_back_black" />
             <!--<ImageView-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="match_parent"-->
