@@ -13,7 +13,25 @@ public class ProfilePostModel {
     private String id;
     private String likeCount;
     private String commentCount;
-    private String isBoomarked;
+    private String isBoomarked = "0";
+    private String isLiked ;
+    private String imageLabel;
+
+    public String getImageLabel() {
+        return imageLabel;
+    }
+
+    public void setImageLabel(String imageLabel) {
+        this.imageLabel = imageLabel;
+    }
+
+    public String getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(String isLiked) {
+        this.isLiked = isLiked;
+    }
 
     public String getIsBoomarked() {
         return isBoomarked;

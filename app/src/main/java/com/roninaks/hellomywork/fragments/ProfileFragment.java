@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +27,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import es.dmoral.toasty.Toasty;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,7 +34,6 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.ProfileImage;
-import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -80,10 +78,11 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     Context context;
     ImageView masterProfilePster, ivProfileBackBtn, ivSettings;
     EditText postadDescrption,writeComments;
-    private TextView profilePCName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
+    private TextView profilePCName,profileMainName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
     ImageButton profileCallPhoneBTN, profileSentEmailBTN, profileUseWhatspp,profileShare,profileBookmark;
     Button buttonEdit,buttonImageUpload,buttonForsale,buttonOffers,buttonRequired,buttonAppreciations,buttonAchievemnet,buttonRandom,buttonPost;
     private RequestOptions requestOptions;
+    private LinearLayout llpostMaster;
     RecyclerView recyclerView;
     ArrayList <ProfilePostModel> profilePostModels;
     ActivityFeedAdapter activityFeedAdapter;
@@ -137,7 +136,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             us_id = userId;
         }
         fetchProfileCardInfo(context, us_id);
-        detchProfilePostInfo(context, "fetch_id");
+        fetchProfilePostInfo(context, "fetch_id");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         JSONObject jsonObject;
@@ -169,13 +168,15 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         buttonPost=view.findViewById(R.id.button_Post);
         ivSettings=view.findViewById(R.id.profile_settings);
         writeComments=view.findViewById(R.id.editText_WriteComments);
+        profileMainName = view.findViewById(R.id.profileMainName);
+        llpostMaster = view.findViewById(R.id.llpostMaster);
         requestOptions = new RequestOptions();
 
         buttonEdit=view.findViewById(R.id.button_Edit);
         buttonImageUpload=view.findViewById(R.id.button_ImageUpload);
         ivProfileBackBtn=view.findViewById(R.id.imgBack);
-        requestOptions.placeholder(R.drawable.icon_image);
-        requestOptions.error(R.drawable.icon_image);
+//        requestOptions.placeholder(R.drawable.icon_image);
+//        requestOptions.error(R.drawable.icon_image);
 
 
         profilePostModels = new ArrayList<>();
@@ -184,6 +185,9 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
         if(((MainActivity) context).isLoggedIn().isEmpty()){
             ivSettings.setVisibility(View.GONE);
+        }
+        if(userId != ((MainActivity) context).isLoggedIn()){
+            llpostMaster.setVisibility(View.GONE);
         }
 
         buttonEdit.setVisibility(View.GONE);
@@ -290,7 +294,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         profileCallPhoneBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!((MainActivity) context).isLoggedIn().isEmpty()){
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -319,7 +323,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                         Toast.makeText(context, "No number saved by" + profileName, Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        ((MainActivity) context).callPhone("+91" + whatsppNumber);
+                        ((MainActivity) context).callPhone("+91" + telphone);
                     }
                 }
             }
@@ -366,7 +370,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         profileSentEmailBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!((MainActivity) context).isLoggedIn().isEmpty()){
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -422,7 +426,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         profileBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!((MainActivity) context).isLoggedIn().isEmpty()){
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -453,7 +457,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                         Toast.makeText(context, "Bookmark have been removed", Toast.LENGTH_SHORT).show();
                         filled = false;
                     } else {
-                        profileBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmark_fill_green256_min));
+                        profileBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
                         Toast.makeText(context, "Bookmark have been added", Toast.LENGTH_SHORT).show();
                         filled = true;
                     }
@@ -466,7 +470,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                     contentValues.put("userId", ((MainActivity) context).isLoggedIn());
                     contentValues.put("type", "profiles");
                     contentValues.put("mapping_id", us_id);
-                    contentValues.put("is_active", isBookMarked);
+                    contentValues.put("isActive", isBookMarked);
                     sqlHelper.setParams(contentValues);
                     sqlHelper.executeUrl(true);
                 }
@@ -503,13 +507,14 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     private void initFragment(PremiumSignupFragment fragment) {
     }
 
-    private void detchProfilePostInfo(Context context, String fetch_id) {
+    private void fetchProfilePostInfo(Context context, String fetch_id) {
         SqlHelper sqlHelper = new SqlHelper(context, ProfileFragment.this);
         sqlHelper.setExecutePath("getprofilepost.php");
         sqlHelper.setActionString("profilePosts");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", us_id);
+        contentValues.put("userid", ((MainActivity) context).isLoggedIn());
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(true);
     }
@@ -600,7 +605,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
-        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView);
+        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
         recyclerView.setAdapter(activityFeedAdapter);
     }
 
@@ -633,6 +638,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             String address = jsonObject.getString("address");
             address = address.replace("&#32;", " ");
             profilePCName.setText(jsonObject.getString("name"));
+            profileMainName.setText(jsonObject.getString("name"));
             profileName = jsonObject.getString("name");
             profileUnion.setText(jsonObject.getString("union"));
             profileJTRole.setText(jsonObject.getString("role"));
@@ -644,7 +650,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             profileSublocation.setText(jsonObject.getString("sublocation"));
             profileAddress.setText(address+", "+jsonObject.getString("pincode"));
             profileSkills.setText(jsonObject.getString("skills"));
-            isBookMarked = jsonObject.getString("is_active");
+            isBookMarked = jsonObject.getString("isActive");
             try {
                 telphone = jsonObject.getString("phone").split(",")[0];
             }
@@ -655,15 +661,15 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 whatsppNumber = jsonObject.getString("whatapp").split(",")[0];
             }
             catch (Exception e){
-                telphone = jsonObject.getString("whatapp");
+                whatsppNumber = jsonObject.getString("whatapp");
             }
             sentToMail = jsonObject.getString("email");
             profileCard = jsonObject.getString("card");
 
             Glide.with(context)
                     .setDefaultRequestOptions(requestOptions
-                            .placeholder(R.drawable.icon_image)
-                            .error(R.drawable.icon_image)
+//                            .placeholder(R.drawable.icon_image)
+//                            .error(R.drawable.icon_image)
                             .fitCenter()
                     )
                     .asBitmap()

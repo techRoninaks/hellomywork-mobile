@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
@@ -57,6 +58,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
     Bitmap bitmap;
     private EditText careerNameET, careerAddressET, careerPrimaryPhoneET, careerWhatsappOneET, careerEmailET, careerSecondaryPhoneET, careerWhatsappTwoET;
     private Button careerUploadResumeBTN, careerSubmitBTN;
+    private ImageView careersBackBTN;
     Context context = getContext();
     private static final int READ_REQUEST_CODE = 42;
     boolean resumeUploaded = false;
@@ -110,6 +112,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         careerWhatsappTwoET = view.findViewById(R.id.careerWhatsappTwoET);
         careerUploadResumeBTN = view.findViewById(R.id.careerUploadBTN);
         careerSubmitBTN = view.findViewById(R.id.careerSubmitBTN);
+        careersBackBTN = view.findViewById(R.id.imgBack);
 
 
         careerUploadResumeBTN.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +126,13 @@ public class CareersFragment extends Fragment implements SqlDelegate {
             @Override
             public void onClick(View v) {
                 validateCareerForms();
+            }
+        });
+
+        careersBackBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).onBackPressed();
             }
         });
         return view;

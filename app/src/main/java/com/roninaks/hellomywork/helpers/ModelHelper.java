@@ -37,6 +37,8 @@ public class ModelHelper {
             profilePostModel.setId(jsonObject.getString("id"));
             profilePostModel.setLikeCount(jsonObject.getString("likes"));
             profilePostModel.setCommentCount(jsonObject.getString("commentnumber"));
+            profilePostModel.setIsLiked(jsonObject.getString("isLiked"));
+            profilePostModel.setImageLabel(jsonObject.getString("offer"));
             return profilePostModel;
         } catch (JSONException e) {
             e.printStackTrace();

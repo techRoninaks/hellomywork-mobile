@@ -1,5 +1,6 @@
 package com.roninaks.hellomywork.adapters;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.helpers.SqlHelper;
+import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CommentsModel;
 
 import java.util.ArrayList;
 
-public class CommetsAdapter extends RecyclerView.Adapter<CommetsAdapter.ViewHolder> {
+public class CommetsAdapter extends RecyclerView.Adapter<CommetsAdapter.ViewHolder> implements SqlDelegate {
 
     Context context;
     ArrayList<CommentsModel> commentsModels;
@@ -35,21 +39,48 @@ public class CommetsAdapter extends RecyclerView.Adapter<CommetsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CommetsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CommetsAdapter.ViewHolder holder, final int position) {
         holder.postCommnetName.setText(commentsModels.get(position).getCommentName());
         holder.postComment.setText(commentsModels.get(position).getComment());
         holder.postCommentReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.commentMaster.setVisibility(View.GONE);
-                Toast.makeText(context, "Comment have been reported", Toast.LENGTH_SHORT).show();
+                reportComment();
+                //                holder.commentMaster.setVisibility(View.GONE);
+                commentsModels.remove(position);
+                notifyDataSetChanged();
+            }
+
+            private void reportComment() {
+                SqlHelper sqlHelper = new SqlHelper(context, CommetsAdapter.this);
+                sqlHelper.setExecutePath("postreportedpost.php");
+                sqlHelper.setActionString("commentReport");
+                sqlHelper.setMethod("POST");
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("id", commentsModels.get(position).getCommentId());
+                sqlHelper.setParams(contentValues);
+                sqlHelper.executeUrl(false);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return commentsModels.size();
+    }
+
+    @Override
+    public void onResponse(SqlHelper sqlHelper) {
+        String respone = sqlHelper.getStringResponse();
+        if (sqlHelper.getActionString().equals("commentReport")){
+            if(respone.equals("success")){
+
+            }
+            else {
+
+            }
+        }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

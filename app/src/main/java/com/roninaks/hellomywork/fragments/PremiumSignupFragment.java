@@ -433,7 +433,9 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         params.put("role", etRole.getText().toString());
         params.put("country", "IN");
         params.put("type", spOrgType.getSelectedItem().toString());
-        params.put("address", etAddress.getText().toString());
+        String address = etAddress.getText().toString();
+        address = address.replace(" ", "&#32;");
+        params.put("address", address);
         params.put("state", spState.getSelectedItem().toString());
         params.put("location", spLocation.getSelectedItem().toString());
         params.put("sublocation", etSublocation.getText().toString());
@@ -479,7 +481,9 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         try{
             serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(1), "premiumsignup");
             etName.setText(serviceProviderModel.getName());
-            etAddress.setText(serviceProviderModel.getAddress());
+            String address = serviceProviderModel.getAddress();
+            address = address.replace("&#32;", " ");
+            etAddress.setText(address);
             etPincode.setText(serviceProviderModel.getPincode());
             etEmail.setText(serviceProviderModel.getEmail());
             etPrimaryPhone.setText(serviceProviderModel.getPhone());
