@@ -1,5 +1,7 @@
 package com.roninaks.hellomywork.adapters;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 //import android.support.annotation.NonNull;
 import androidx.annotation.NonNull;
@@ -22,15 +24,20 @@ import android.widget.Toast;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.fragments.HomeFragment;
 import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.fragments.UnionsIndividualFragment;
+import com.roninaks.hellomywork.helpers.SqlHelper;
+import com.roninaks.hellomywork.interfaces.CallbackDelegate;
+import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import es.dmoral.toasty.Toasty;
 
-public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdapter.ViewHolder>{
+public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdapter.ViewHolder> implements SqlDelegate {
     private ArrayList<ServiceProviderModel> serviceProviderModels;
     private Context context;
     private View rootview;
@@ -67,18 +74,11 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
 //            holder.tvPremium.setText(serviceProviderModels.get(position).isPremium() ? context.getString(R.string.sr_profile_premium) : context.getString(R.string.sr_profile_nonpremium));
             holder.tvRole.setText(serviceProviderModels.get(position).getRole());
             holder.tvLocation.setText(serviceProviderModels.get(position).getSublocation());
-            //holder.imgDefinitionImageType.setImageResource(serviceProviderModels.get(position).getType() == null || serviceProviderModels.get(position).getType().equalsIgnoreCase("director")? R.drawable.ic_director: R.drawable.ic_actor);
-
-//            if(serviceProviderModels.get(position).getWhatsapp().isEmpty())
-//                holder.ivWhatsapp.setVisibility(View.INVISIBLE);
-
-//            if(serviceProviderModels.get(position).getEmail().isEmpty())
-//                holder.ivEmail.setVisibility(View.INVISIBLE);
-
+            holder.ivBookmark.setImageDrawable(serviceProviderModels.get(position).isBookmarked() ?
+                    context.getDrawable(R.drawable.ic_bookmarkfill_idcard) : context.getDrawable(R.drawable.ic_bookmarkpost));
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: On Clicklistener
                     Fragment fragment = ProfileFragment.newInstance(""+serviceProviderModels.get(position).getId(),"");
                     ((MainActivity) context).initFragment(fragment);
                 }
@@ -109,7 +109,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                 builder.setTitle("Oho!, You are not Logged In");
-                                builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
+                                builder.setMessage("You need to login to send whatsapp messages").setPositiveButton("Go to login?", dialogClickListener)
                                         .setNegativeButton("No", dialogClickListener).show();
                             }else if(serviceProviderModels.get(position).getWhatsapp().isEmpty()){
                                 Toast.makeText(context, "Sorry. No number available.", Toast.LENGTH_SHORT).show();
@@ -142,7 +142,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
                                 builder.setTitle("Oho!, You are not Logged In");
                                 builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
                                         .setNegativeButton("No", dialogClickListener).show();
-                            }else if(serviceProviderModels.get(position).getWhatsapp().isEmpty()){
+                            }else if(serviceProviderModels.get(position).getPhone().isEmpty()){
                                 Toast.makeText(context, "Sorry. No number available.", Toast.LENGTH_SHORT).show();
                             }else {
                                 ((MainActivity) context).callPhone("+91" + serviceProviderModels.get(position).getPhone());
@@ -171,12 +171,41 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                 builder.setTitle("Oho!, You are not Logged In");
-                                builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
+                                builder.setMessage("You need to login to send emails").setPositiveButton("Go to login?", dialogClickListener)
                                         .setNegativeButton("No", dialogClickListener).show();
-                            }else if(serviceProviderModels.get(position).getWhatsapp().isEmpty()){
+                            }else if(serviceProviderModels.get(position).getEmail().isEmpty()){
                                 Toast.makeText(context, "Sorry. No information available.", Toast.LENGTH_SHORT).show();
                             }else {
                                 ((MainActivity) context).sendMail(serviceProviderModels.get(position).getEmail());
+                            }
+                            break;
+                        }
+                        case R.id.imgBookmark:{
+                            if(((MainActivity) context).isLoggedIn().isEmpty()) {
+                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which){
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                Intent myIntent = new Intent(context, LoginActivity.class);
+                                                context.startActivity(myIntent);
+                                                break;
+                                            case DialogInterface.BUTTON_NEGATIVE:
+                                                Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                                break;
+                                            default:
+                                                Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                };
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setTitle("Oho!, You are not Logged In");
+                                builder.setMessage("You need to login to bookmark a profile").setPositiveButton("Go to login?", dialogClickListener)
+                                        .setNegativeButton("No", dialogClickListener).show();
+                            }else {
+                                updateBookmarks(position);
                             }
                             break;
                         }
@@ -190,6 +219,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
         }catch (Exception e){
 //            EmailHelper emailHelper = new EmailHelper(context, EmailHelper.TECH_SUPPORT, "Error: ActorAdapter", StringHelper.convertStackTrace(e));
 //            emailHelper.sendEmail();
+            Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -198,6 +228,23 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
     @Override
     public int getItemCount() {
         return serviceProviderModels.size();
+    }
+
+    @Override
+    public void onResponse(SqlHelper sqlHelper) {
+        try {
+            switch (sqlHelper.getActionString()) {
+                case "bookmark": {
+                    if(sqlHelper.getStringResponse().equals("0")){
+                        Toast.makeText(context, context.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
+                        updateProfile(Integer.parseInt(sqlHelper.getExtras().get("position")));
+                    }
+                    break;
+                }
+            }
+        }catch (Exception e){
+            Toast.makeText(context, context.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -221,5 +268,29 @@ public class SearchProfileAdapter extends RecyclerView.Adapter<SearchProfileAdap
             llMaster = itemView.findViewById(R.id.containerMaster);
             ivProfile = itemView.findViewById(R.id.imgProfile);
         }
+    }
+
+    private void updateBookmarks(int position){
+        SqlHelper sqlHelper = new SqlHelper(context, SearchProfileAdapter.this);
+        sqlHelper.setExecutePath("updatebookmarks.php");
+        sqlHelper.setMethod("POST");
+        sqlHelper.setActionString("bookmark");
+        ContentValues params = new ContentValues();
+        params.put("userId", ((MainActivity) context).isLoggedIn());
+        params.put("type", "profiles");
+        params.put("mapping_id", "" + serviceProviderModels.get(position).getId());
+        params.put("is_active", serviceProviderModels.get(position).isBookmarked() ? "1" : "0");
+        sqlHelper.setParams(params);
+        HashMap<String, String> extras = new HashMap<>();
+        extras.put("position", "" + position);
+        sqlHelper.setExtras(extras);
+        sqlHelper.executeUrl(false);
+        updateProfile(position);
+    }
+
+    private void updateProfile(int position){
+        ServiceProviderModel serviceProviderModel = serviceProviderModels.get(position);
+        serviceProviderModel.setBookmarked(!serviceProviderModel.isBookmarked());
+        notifyItemChanged(position);
     }
 }

@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.roninaks.hellomywork.R;
 
 public class TransparentProgressDialog extends Dialog {
@@ -29,14 +30,10 @@ public class TransparentProgressDialog extends Dialog {
         setOnCancelListener(null);
 
         View layout = getLayoutInflater().inflate(R.layout.transparent_progress_dialog, null);
-//        iv = layout.findViewById(R.id.imageView);
-//                Glide.with(context)
-//                .applyDefaultRequestOptions(new RequestOptions()
-//                        .placeholder(android.R.drawable.pro)
-//                        .error(android.R.drawable.)
-//                )
-//                .load(R.raw.main_logo_spinner_white)
-//                .into(iv);
+        iv = layout.findViewById(R.id.imageView);
+                Glide.with(context)
+                .load(R.raw.logo_spinner)
+                .into(iv);
         addContentView(layout, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 

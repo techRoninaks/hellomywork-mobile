@@ -44,6 +44,11 @@
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
+        <!-- Razorpay-->
+        <!--<meta-data-->
+            <!--android:name="com.razorpay.ApiKey"-->
+            <!--android:value="YOUR_KEY_ID"-->
+            <!--/>-->
 
     </application>
 

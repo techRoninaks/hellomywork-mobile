@@ -5,17 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.constraintlayout.solver.widgets.WidgetContainer;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-//import android.support.v7.widget.GridLayoutManager;
-//import android.support.v7.widget.LinearLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
-//import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +27,7 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.RegisterActivity;
+import com.roninaks.hellomywork.adapters.SearchAdapter;
 import com.roninaks.hellomywork.adapters.SearchProfileAdapter;
 import com.roninaks.hellomywork.adapters.SearchServiceAdapter;
 import com.roninaks.hellomywork.adapters.SearchUnionAdapter;
@@ -41,12 +35,24 @@ import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+//import android.support.v7.widget.GridLayoutManager;
+//import android.support.v7.widget.LinearLayoutManager;
+//import android.support.v7.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +62,7 @@ import java.util.ArrayList;
  * Use the {@link SearchResults#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchResults extends Fragment implements SqlDelegate {
+public class SearchResults extends Fragment implements SqlDelegate{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "search_key";
     private static final String ARG_PARAM2 = "location";
@@ -70,15 +76,17 @@ public class SearchResults extends Fragment implements SqlDelegate {
     private String default_load;
     private ArrayList<CategoryModel> categoryModels;
     private ArrayList<UnionModel> unionModels;
-    private ArrayList<ServiceProviderModel> serviceProviderModels;
+    private ArrayList<ServiceProviderModel> serviceProviderModels, serviceProviderModelsFiltered;
+    private ArrayList<SearchSuggestionsModel> searchSuggestionsModels;
     private Context context;
+    private SwitchCompat switchPremium;
 
     //Private Members
     View rootView,srServiceNav,srProfileNav,srUnionNav;
     TextView tvTabService, tvTabProfile, tvTabUnions;
     LinearLayout llContainerService, llContainerProfiles, llContainerUnions;
     RecyclerView rvServices, rvProfiles, rvUnions;
-    private EditText etSearch;
+    private AutoCompleteTextView acSearch;
     private ImageView ivSearch, ivOptions;
     private OnFragmentInteractionListener mListener;
 
@@ -156,17 +164,18 @@ public class SearchResults extends Fragment implements SqlDelegate {
         rvProfiles = (RecyclerView) rootView.findViewById(R.id.rvProfiles);
         rvServices = (RecyclerView) rootView.findViewById(R.id.rvServices);
         rvUnions = (RecyclerView) rootView.findViewById(R.id.rvUnions);
-        etSearch = (EditText) rootView.findViewById(R.id.etSearch);
+        acSearch = (AutoCompleteTextView) rootView.findViewById(R.id.etSearch);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
         srServiceNav = (View) rootView.findViewById(R.id.srServiceNav);
         srProfileNav = (View) rootView.findViewById(R.id.srProfileNav);
         srUnionNav = (View) rootView.findViewById(R.id.srUnionNav);
+        switchPremium = (SwitchCompat) rootView.findViewById(R.id.switch_Premium);
 
         //Default Tabs
 
         toggleTabs(default_load == null || default_load.isEmpty() ? "services" : default_load);
-        etSearch.setText(searchKey);
+        acSearch.setText(searchKey);
 
         //On click listeners
         View.OnClickListener toggleTabsListener = new View.OnClickListener() {
@@ -197,7 +206,7 @@ public class SearchResults extends Fragment implements SqlDelegate {
             @Override
             public void onClick(View v) {
 
-                Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                 ((MainActivity) context).initFragment(fragment);
             }
         });
@@ -253,14 +262,46 @@ public class SearchResults extends Fragment implements SqlDelegate {
             }
         });
 
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        acSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                     ((MainActivity) context).initFragment(fragment);
                 }
                 return true;
+            }
+        });
+        acSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchKey = s.toString();
+                if(searchKey.length() == 3){
+                    loadSearchList(searchKey);
+                }
+            }
+        });
+        acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
+                ((MainActivity) context).initFragment(fragment);
+            }
+        });
+        switchPremium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterList(isChecked);
             }
         });
         return rootView;
@@ -322,6 +363,13 @@ public class SearchResults extends Fragment implements SqlDelegate {
                         buildProfiles(jsonArray);
                     }
                 }
+                case "search":{
+                    JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
+                    if(jsonArray.length() >= 1){
+                        buildSearchList(jsonArray);
+                    }
+                    break;
+                }
             }
         }catch (Exception e){
 
@@ -376,8 +424,21 @@ public class SearchResults extends Fragment implements SqlDelegate {
         params.put("locType", location);
         params.put("catType", category);
         params.put("pageNo", "1");
+        params.put("mob", "1");
+        params.put("userId", ((MainActivity) context).isLoggedIn());
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
+    }
+
+    private void loadSearchList(String key){
+        SqlHelper sqlHelper = new SqlHelper(context, SearchResults.this);
+        sqlHelper.setExecutePath("searchAuto.php");
+        sqlHelper.setMethod("POST");
+        sqlHelper.setActionString("search");
+        ContentValues params = new ContentValues();
+        params.put("search", key);
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(false);
     }
 
     //Private Functions
@@ -472,16 +533,42 @@ public class SearchResults extends Fragment implements SqlDelegate {
     private void buildProfiles(JSONArray jsonArray){
         try{
             serviceProviderModels = new ArrayList<>();
+            serviceProviderModelsFiltered = new ArrayList<>();
             for(int i = 1; i < jsonArray.length(); i++){
                 ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
                 serviceProviderModels.add(serviceProviderModel);
+                if(serviceProviderModel.isPremium())
+                    serviceProviderModelsFiltered.add(serviceProviderModel);
             }
-            GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
-            SearchProfileAdapter adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView);
-            rvProfiles.setLayoutManager(layoutManager);
-            rvProfiles.setAdapter(adapter);
+            filterList(false);
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void buildSearchList(JSONArray jsonArray){
+        try{
+            searchSuggestionsModels = new ArrayList<>();
+            for(int i=0; i < jsonArray.length(); i++){
+                SearchSuggestionsModel searchSuggestionsModel = new ModelHelper().buildSearchSuggestionsModel(jsonArray.getString(i), "Home");
+                searchSuggestionsModels.add(searchSuggestionsModel);
+            }
+            SearchAdapter adapter = new SearchAdapter(context, acSearch.getId(), searchSuggestionsModels, SearchResults.this);
+            acSearch.setAdapter(adapter);
+        }catch (Exception e){
+
+        }
+    }
+
+    private void filterList(boolean isChecked){
+        SearchProfileAdapter adapter;
+        if(isChecked){
+            adapter = new SearchProfileAdapter(context, serviceProviderModelsFiltered, rootView);
+        }else{
+            adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView);
+        }
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
+        rvProfiles.setLayoutManager(layoutManager);
+        rvProfiles.setAdapter(adapter);
     }
 }

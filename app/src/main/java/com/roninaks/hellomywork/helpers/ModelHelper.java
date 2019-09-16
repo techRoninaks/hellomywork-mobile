@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
+import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
@@ -118,6 +119,7 @@ public class ModelHelper {
                     serviceProviderModel.setReview(Integer.parseInt(jsonObject.getString("review")));
                     serviceProviderModel.setCardUrl(jsonObject.getString("card"));
                     serviceProviderModel.setPremium(jsonObject.getString("premium").equals("1"));
+                    serviceProviderModel.setBookmarked(jsonObject.getString("is_bookmarked").equals("1"));
                 }
             }
             return serviceProviderModel;
@@ -139,6 +141,19 @@ public class ModelHelper {
 
         }
         return new UnionModel();
+    }
+
+    public SearchSuggestionsModel buildSearchSuggestionsModel(String master, String type){
+        SearchSuggestionsModel searchSuggestionsModel = new SearchSuggestionsModel();
+        try{
+            String splitString[] = master.split("~");
+            searchSuggestionsModel.setCategoryName(splitString[0]);
+            searchSuggestionsModel.setCategoryId(Integer.parseInt(splitString[1]));
+            searchSuggestionsModel.setLocationId(Integer.parseInt(splitString[2]));
+        }catch (Exception e){
+            return new SearchSuggestionsModel();
+        }
+        return searchSuggestionsModel;
     }
 
 //    public CommentsModel buildComments(JSONObject jsonObject) {

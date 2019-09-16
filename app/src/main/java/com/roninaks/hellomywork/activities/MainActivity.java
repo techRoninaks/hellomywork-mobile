@@ -1,5 +1,6 @@
 package com.roninaks.hellomywork.activities;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,10 +27,12 @@ import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.ContactFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
 
+import com.roninaks.hellomywork.fragments.PlansFragment;
 import com.roninaks.hellomywork.fragments.PostAdFragment;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
 import com.roninaks.hellomywork.fragments.SearchLanding;
 import com.roninaks.hellomywork.fragments.UnionsFragment;
+import com.roninaks.hellomywork.helpers.SqlHelper;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -166,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
 //        navigation.setSelectedItemId(R.id.navigation_dashboard);
 //        navigation.setItemIconTintList(null);
 
-//        Fragment fragment = HomeFragment.newInstance("ca", "1");
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        Fragment fragment = PlansFragment.newInstance("ca", "1");
+//        initFragment(fragment);
 //        fragmentTransaction.replace(R.id.content, fragment, "PremiumSignup");
 //        fragmentTransaction.commit();
     }
@@ -216,6 +219,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /***
+     * This function allows direct messaging to the whatsapp number
+     * @param phone - The whatsapp number to send message to
+     */
     public void sendWhatsapp(String phone){
         PackageManager packageManager = this.getPackageManager();
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -232,12 +239,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /***
+     * This function opens up the dial pad with the number filled in
+     * @param phone - The phone number to call
+     */
     public void callPhone(String phone){
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         startActivity(intent);
 
     }
 
+    /***
+     * This function allows sending email to the desingated email id
+     * @param email - Email id to send mails to
+     */
     public void sendMail(String email){
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setType("text/plain");
