@@ -52,6 +52,7 @@
     <string name="careers_whatsapp_two_hint">Whatsapp number</string>
     <string name="careers_upload_text">Upload resume</string>
     <string name="careers_submit_text">Submit</string>
+    <string name="Careers_main_title">Careers</string>
 
     <!-- Login Page-->
     <string name="login_text">login</string>
@@ -692,7 +693,11 @@ HELLOmywork is determinant to provide to our service providers the best possible
     <string name="contact_address_2">via-ponnani, dist-malappuram, Pin: 679567</string>
     <string name="contact_phone">Telephone: +91 90724 76701</string>
     <string name="contact_email">Email: support@hellomywork.com</string>
-    <string name="contact_success">Thank you for contacting HELLOmywork. We will get back to you shortly</string>
+    <string name="contact_success">Thank you for contacting Hellomywork. We will get back to you shortly</string>
+
+    <!-- Post Options Menu -->
+    <string name="post_option_report">Report</string>
+    <string name="post_option_delete">Delete</string>
 
     <!-- Plans -->
     <string name="plans_heading">Membership Plans</string>

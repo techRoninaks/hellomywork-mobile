@@ -2,8 +2,13 @@ package com.roninaks.hellomywork.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -11,17 +16,26 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
+import com.roninaks.hellomywork.activities.RegisterActivity;
+import com.roninaks.hellomywork.fragments.AboutFragment;
+import com.roninaks.hellomywork.fragments.CareersFragment;
+import com.roninaks.hellomywork.fragments.ContactFragment;
+import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CommentsModel;
@@ -37,6 +51,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         private String baseImagePostUrl;
         RecyclerView commnetsRecyclerView;
         CommetsAdapter commetsAdapter;
+        private String user_id;
 //        private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
 
 
@@ -45,6 +60,18 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             this.profilePostModels = profilePostModels;
             this.rootview = rootview;
             baseImagePostUrl = "https://www.hellomywork.com/";
+            baseImagePostUrl = "http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/";
+            requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.icon_image);
+            requestOptions.error(R.drawable.icon_image);
+        }
+        public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview, String user_id) {
+            this.context = context;
+            this.profilePostModels = profilePostModels;
+            this.rootview = rootview;
+            this.user_id = user_id;
+            baseImagePostUrl = "https://www.hellomywork.com/";
+            baseImagePostUrl = "http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/";
             requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.icon_image);
             requestOptions.error(R.drawable.icon_image);
@@ -66,7 +93,9 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 holder.tvPostProfileDes.setText(profilePostModels.get(position).getDescription());
                 holder.tvPostProfileLocation.setText(profilePostModels.get(position).getLocation());
                 String date = profilePostModels.get(position).getDate();
-                holder.tvPostProfileDate.setText(date.split(String.valueOf(' '))[0]);
+                date = date.split(String.valueOf(' '))[0];
+                String [] datepost = date.split("-");//Converting date to standard form.
+                holder.tvPostProfileDate.setText(datepost[2]+"-"+datepost[1]+"-"+datepost[0]);
                 holder.tvPostProfileTime.setText(profilePostModels.get(position).getTime());
                 holder.tvPostLikeCount.setText(profilePostModels.get(position).getLikeCount());
                 holder.tvPostCommentCount.setText(profilePostModels.get(position).getCommentCount());
@@ -78,18 +107,161 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         .load(baseImagePostUrl + profilePostModels.get(position).getImageUri())
                         .into(holder.ivPostProfileImage);
 
+                if(profilePostModels.get(position).getIsLiked().equals("0")){
+                    holder.filled = false;
+                    holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
+                }
+                else if(profilePostModels.get(position).getIsLiked().equals("1")){
+                    holder.filled = true;
+                    holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
+                }
+                String label = profilePostModels.get(position).getImageLabel();
+
+                holder.btnProfilePostOptions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PopupMenu popupMenu = new PopupMenu(context, v);
+                        Menu m = popupMenu.getMenu();
+                        MenuInflater inflater = popupMenu.getMenuInflater();
+                        inflater.inflate(R.menu.post_option_menu, popupMenu.getMenu());
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch (menuItem.getItemId()){
+                                    case R.id.post_option_report:{
+                                        if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                            context.startActivity(new Intent(context, LoginActivity.class));
+                                        }else{
+                                            reportPost(profilePostModels.get(position).getId());
+                                            profilePostModels.remove(position);
+                                            notifyDataSetChanged();
+                                        }
+                                        break;
+                                    }
+                                    case R.id.post_option_delete:{
+                                        if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                            context.startActivity(new Intent(context, RegisterActivity.class));
+                                        }else{
+                                            if(user_id != ((MainActivity) context).isLoggedIn()){
+                                                Toast.makeText(context, "You can't delete this post", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else {
+                                                deletePost(profilePostModels.get(position).getId());
+                                                profilePostModels.remove(position);
+                                                notifyDataSetChanged();
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                                return true;
+                            }
+                        });
+                        popupMenu.show();
+                    }
+
+                    private void reportPost(String id) {
+                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                        sqlHelper.setExecutePath("postReport.php");
+                        sqlHelper.setActionString("postReport");
+                        sqlHelper.setMethod("POST");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("postid", id);
+                        sqlHelper.setParams(contentValues);
+                        sqlHelper.executeUrl(false);
+                    }
+
+                    private void deletePost(String id) {
+                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                        sqlHelper.setExecutePath("deletePost.php");
+                        sqlHelper.setActionString("postDelete");
+                        sqlHelper.setMethod("POST");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("postid", id);
+                        sqlHelper.setParams(contentValues);
+                        sqlHelper.executeUrl(false);
+                    }
+                });
+
+                switch (label){
+                    case "assets/img/icon/ic_Random-min.png":
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
+                        break;
+                    case "assets/img/icon/ic_ForSale-min.png":
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_for_sale_min));
+                        break;
+                    case "assets/img/icon/ic_Required-min.png":
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_required_min));
+                        break;
+                    case "assets/img/icon/ic_Achievement-min.png":
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_achievement_min));
+                        break;
+                    case "assets/img/icon/ic_Appreciations-min.png":
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_appreciation_min));
+                        break;
+                    case "assets/img/icon/ic_Offers-min.png":
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_offers_min));
+                        break;
+                    default:
+                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
+                        break;
+                }
                 holder.ivLike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (holder.filled) {
-                            holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
-                            holder.filled = false;
+                        if(((MainActivity) context).isLoggedIn().isEmpty()){
+                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Intent myIntent = new Intent(context, LoginActivity.class);
+                                            context.startActivity(myIntent);
+                                            break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        default:
+                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+                                }
+                            };
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle("Oho!, You are not Logged In");
+                            builder.setMessage("You need to login to make bookmark").setPositiveButton("Go to login?", dialogClickListener)
+                                    .setNegativeButton("No", dialogClickListener).show();
                         }
                         else {
-                            holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
-                            holder.filled=true;
-
+                            if (holder.filled) {
+                                holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
+                                holder.filled = false;
+                                int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
+                                likeCount = likeCount - 1;
+                                holder.tvPostLikeCount.setText(Integer.toString(likeCount));
+                                updateLike("delete");
+                            } else {
+                                holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
+                                holder.filled = true;
+                                int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
+                                likeCount =likeCount + 1;
+                                holder.tvPostLikeCount.setText(Integer.toString(likeCount));
+                                updateLike("add");
+                            }
                         }
+                    }
+
+                    private void updateLike(String action) {
+                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                        sqlHelper.setExecutePath("updatelike.php");
+                        sqlHelper.setActionString("like");
+                        sqlHelper.setMethod("POST");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("userid", ((MainActivity) context).isLoggedIn());
+                        contentValues.put("action", action);
+                        contentValues.put("postid", profilePostModels.get(position).getId());
+                        sqlHelper.setParams(contentValues);
+                        sqlHelper.executeUrl(false);
                     }
                 });
                 holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +270,10 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         if(holder.filled) {
                             holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
                             Toast.makeText(context, "Post have been removed from bookmark", Toast.LENGTH_SHORT).show();
-
                             holder.filled= false;
                         }
                         else {
-                            holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmark_fill_green256_min));
+                            holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
                             Toast.makeText(context, "Post have been added to bookmark", Toast.LENGTH_SHORT).show();
                             holder.filled= true;
                         }
@@ -193,14 +364,31 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     @Override
     public void onResponse(SqlHelper sqlHelper) {
         String response = sqlHelper.getStringResponse();
-        if (response.equals("Success "))
-            Toast.makeText(context, "Comments Added", Toast.LENGTH_SHORT).show();
+        if(sqlHelper.getActionString() == "commentPost"){
+            if (response.equals("Success "))
+                Toast.makeText(context, "Comments Added", Toast.LENGTH_SHORT).show();
+        }
+        else if(sqlHelper.getActionString() == "bookmark"){
+//            if(response.equals("1"))
+//                Toast.makeText(context, "bookmarked", Toast.LENGTH_SHORT).show();
+//            else
+//                Toast.makeText(context, "bookmark removed", Toast.LENGTH_SHORT).show();
+        }
+        else if(sqlHelper.getActionString() == "like"){
+//            Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+        }
+        else if(sqlHelper.getActionString() == "postDelete"){
+//            Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+        }
+        else if(sqlHelper.getActionString() == "postReport"){
+//            Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
             TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount;
-            ImageView ivPostProfileImage;
-            ImageButton btnProfilePostShare;
+            ImageView ivPostProfileImage,ivPostImageLabel;
+            ImageButton btnProfilePostOptions;
             EditText writeComments;
             boolean filled= false;
             RecyclerView commentrecyclerView;
@@ -213,7 +401,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 tvPostProfileDate = itemView.findViewById(R.id.post_item_date);
                 tvPostProfileTime = itemView.findViewById(R.id.post_item_time);
                 ivPostProfileImage = itemView.findViewById(R.id.post_item_post_image);
-                btnProfilePostShare = itemView.findViewById(R.id.post_item_shareBTN);
+                btnProfilePostOptions = itemView.findViewById(R.id.post_item_shareBTN);
                 ivLike=itemView.findViewById(R.id.iv_LikeButton);
                 ivComment=itemView.findViewById(R.id.iv_Comment);
                 ivShare=itemView.findViewById(R.id.iv_Share);
@@ -222,6 +410,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 commentrecyclerView = itemView.findViewById(R.id.postItemCommentsRV);
                 tvPostCommentCount = itemView.findViewById(R.id.postCommentCount);
                 tvPostLikeCount = itemView.findViewById(R.id.postLikeCount);
+                ivPostImageLabel = itemView.findViewById(R.id.post_item_image_label);
             }
         }
     }
