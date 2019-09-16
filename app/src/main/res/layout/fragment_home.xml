@@ -74,7 +74,7 @@
                 android:layout_weight="1"
                 android:src="@drawable/ic_notifications"
                 android:paddingTop="@dimen/standard_gap_extra_small"
-                android:paddingBottom="@dimen/standard_gap_extra_small"/>
+                android:paddingBottom="@dimen/standard_gap_extra_small" />
 
             <ImageView
                 android:id="@+id/imgProfile"
@@ -125,7 +125,7 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_logo"
                             android:layout_weight="1"/>
-                        <EditText
+                        <AutoCompleteTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="6"

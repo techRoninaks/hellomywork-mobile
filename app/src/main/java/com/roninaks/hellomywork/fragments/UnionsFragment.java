@@ -20,7 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +66,7 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
     private Context context;
     private RecyclerView rvUnions;
     private ArrayList<UnionModel> unionModels;
-    private EditText etSearch;
+    private AutoCompleteTextView acSearch;
     private ImageView ivSearch, ivOptions;
 
     public UnionsFragment() {
@@ -105,7 +107,7 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
         rootView = inflater.inflate(R.layout.fragment_unions, container, false);
         context = getActivity();
         rvUnions = rootView.findViewById(R.id.rvUnions);
-        etSearch = (EditText) rootView.findViewById(R.id.etSearch);
+        acSearch = (AutoCompleteTextView) rootView.findViewById(R.id.etSearch);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
         //Load Defaults
@@ -115,7 +117,7 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "", "unions");
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "", "unions");
                 ((MainActivity) context).initFragment(fragment);
             }
         });
@@ -171,14 +173,21 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
             }
         });
 
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        acSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    Fragment fragment = SearchResults.newInstance(etSearch.getText().toString(), "1", "");
+                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
                     ((MainActivity) context).initFragment(fragment);
                 }
                 return true;
+            }
+        });
+        acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = UnionsIndividualFragment.newInstance("" + getUnionIdByName(parent.getItemAtPosition(position).toString()), "");
+                ((MainActivity) context).initFragment(fragment);
             }
         });
         return rootView;
@@ -258,16 +267,34 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
     private void buildUnions(JSONArray jsonArray){
         try{
             unionModels = new ArrayList<>();
+            ArrayList<String> searchList = new ArrayList<>();
             for(int i = 1; i < jsonArray.length(); i++){
                 UnionModel unionModel = new ModelHelper().buildUnionModel(jsonArray.getJSONObject(i));
+                searchList.add(unionModel.getName());
                 unionModels.add(unionModel);
             }
+            //Set Unions List
             UnionsAdapter adapter = new UnionsAdapter(context, unionModels, rootView);
             LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
             rvUnions.setLayoutManager(layoutManager);
             rvUnions.setAdapter(adapter);
+
+            //Set Search bar Autocomplete
+            ArrayAdapter<String> adapterSearch = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item, searchList);
+            adapterSearch.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            acSearch.setAdapter(adapterSearch);
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private int getUnionIdByName(String unionName){
+        for(int i = 0; i < unionModels.size(); i++){
+            if(unionName.toLowerCase().equals(unionModels.get(i).getName().toLowerCase())){
+                return unionModels.get(i).getId();
+            }
+        }
+        return -1;
     }
 }

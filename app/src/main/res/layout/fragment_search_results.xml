@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:id="@+id/imgSearch"/>
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/etSearch"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
@@ -153,6 +153,33 @@
             android:orientation="vertical"
             android:id="@+id/containerProfile"
             android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:paddingEnd="@dimen/standard_gap_large"
+                android:paddingStart="@dimen/standard_gap_large"
+                android:paddingTop="@dimen/standard_gap_large">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end">
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sr_premium"
+                        android:textColor="@color/colorTextBlackPrimary"
+                        android:backgroundTint="@color/colorNavigationBarBkg"
+                        android:id="@+id/switch_Premium"/>
+                </LinearLayout>
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

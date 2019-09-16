@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="821dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
             <RelativeLayout
@@ -38,8 +38,8 @@
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="586dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
@@ -55,11 +55,12 @@
 
                     <com.codesgood.views.JustifiedTextView
                         android:id="@+id/tvAbout"
-                        android:layout_width="353dp"
-                        android:layout_height="776dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/about_content"
                         android:textColor="@color/colorTextBlackPrimary"
-                        android:textSize="@dimen/font_para" />
+                        android:textSize="@dimen/font_para"
+                        android:justificationMode="inter_word" />
                 </LinearLayout>
             </RelativeLayout>
 

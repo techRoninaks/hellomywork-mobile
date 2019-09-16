@@ -27,6 +27,7 @@
     <dimen name="font_button">14sp</dimen>
     <dimen name="font_inputs">16sp</dimen>
     <dimen name="font_home_major_category">12sp</dimen>
+    <dimen name="font_plans_secondary">12sp</dimen>
 
     <!-- Icon Sizes -->
     <dimen name="service_list_icon">32dp</dimen>
@@ -57,4 +58,9 @@
 
 <!--    Bottom navigation-->
     <dimen name="bottom_navigation_icon_size" tools:override="true">30dp</dimen>
+
+    <!-- Plan Page -->
+    <dimen name="plan_side_margin">30dp</dimen>
+    <dimen name="plan_free_price_top_margin">64dp</dimen>
+    <dimen name="plan_details_icon">16dp</dimen>
 </resources>
