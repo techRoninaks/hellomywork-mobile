@@ -19,7 +19,7 @@
                     android:layout_height="@dimen/sl_banner"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:background="@drawable/curve_background"
+                    android:background="@drawable/banner_bg"
                     android:id="@+id/containerBanner"
                     android:orientation="vertical">
                     <!-- Searchbar -->
@@ -70,6 +70,15 @@
                         android:layout_marginTop="@dimen/union_title_text_margin"
                         android:textAllCaps="true"
                         android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/banner_bottom_clip"
+                    android:layout_marginTop="155dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true">
                 </LinearLayout>
                 <!-- Content Section -->
                 <androidx.recyclerview.widget.RecyclerView

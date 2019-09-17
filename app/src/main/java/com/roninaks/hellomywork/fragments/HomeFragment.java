@@ -571,7 +571,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                 CategoryModel categoryModel = new ModelHelper().buildCategoryModel(jsonArray.getJSONObject(i));
                 categoryModels.add(categoryModel);
             }
-            HomeCategoriesAdapter adapter = new HomeCategoriesAdapter(context, categoryModels, rootView);
+            HomeCategoriesAdapter adapter = new HomeCategoriesAdapter(context, categoryModels, rootView, "home");
             LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             rvPopularCategories.setLayoutManager(layoutManager);
             rvPopularCategories.setAdapter(adapter);

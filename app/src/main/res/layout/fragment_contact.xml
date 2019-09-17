@@ -24,6 +24,7 @@
                 android:id="@+id/imgBack"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentStart="true"
+                android:layout_marginTop="3dp"
                 android:layout_marginLeft="@dimen/standard_gap_large"/>
             <TextView
                 android:layout_width="match_parent"
@@ -61,7 +62,8 @@
                         android:layout_height="@dimen/logo_icon_header"
                         android:src="@drawable/logo_white_about_page"
                         android:layout_marginTop="55dp"
-                        android:layout_marginBottom="@dimen/standard_gap_extra_large"/>
+                        android:layout_marginBottom="@dimen/standard_gap_extra_large"
+                        />
                     <!-- Location Section -->
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -71,13 +73,16 @@
                         <ImageView
                             android:layout_width="@dimen/icon_contact"
                             android:layout_height="@dimen/icon_contact"
+                            android:layout_marginTop="6dp"
                             android:src="@drawable/ic_location_pin"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/contact_address_1"
                             android:textColor="@color/colorTextWhitePrimary"
-                            android:layout_marginStart="@dimen/standard_gap_small"/>
+                            android:layout_marginStart="@dimen/standard_gap_small"
+                            android:layout_marginTop="6dp"
+                            />
                     </LinearLayout>
                     <TextView
                         android:layout_width="wrap_content"
@@ -93,13 +98,16 @@
                         <ImageView
                             android:layout_width="@dimen/icon_contact"
                             android:layout_height="@dimen/icon_contact"
+                            android:layout_marginTop="4dp"
                             android:src="@drawable/ic_phone"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/contact_phone"
                             android:textColor="@color/colorTextWhitePrimary"
-                            android:layout_marginStart="@dimen/standard_gap_small"/>
+                            android:layout_marginStart="@dimen/standard_gap_small"
+                            android:layout_marginTop="4dp"
+                            />
                     </LinearLayout>
                     <!-- Email Section -->
                     <LinearLayout
@@ -110,13 +118,16 @@
                         <ImageView
                             android:layout_width="@dimen/icon_contact"
                             android:layout_height="@dimen/icon_contact"
+                            android:layout_marginTop="2dp"
                             android:src="@drawable/ic_mail"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/contact_email"
                             android:textColor="@color/colorTextWhitePrimary"
-                            android:layout_marginStart="@dimen/standard_gap_small"/>
+                            android:layout_marginStart="@dimen/standard_gap_small"
+                            android:layout_marginTop="2dp"
+                            />
                     </LinearLayout>
                 </LinearLayout>
                 <!-- Form -->
