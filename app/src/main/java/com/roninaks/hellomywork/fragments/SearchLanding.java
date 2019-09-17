@@ -435,42 +435,42 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     }
 
     private void showList(String tag){
-        HomeCategoriesAdapter adapter = new HomeCategoriesAdapter(context, categoryModels, rootView);
+        HomeCategoriesAdapter adapter = new HomeCategoriesAdapter(context, categoryModels, rootView, "search");
         if(tag.equals("sales")){
-            adapter = new HomeCategoriesAdapter(context, alSales, rootView);
+            adapter = new HomeCategoriesAdapter(context, alSales, rootView, "search");
         }
         if(tag.equals("repairs")){
-            adapter = new HomeCategoriesAdapter(context, alRepairs, rootView);
+            adapter = new HomeCategoriesAdapter(context, alRepairs, rootView, "search");
         }
         if(tag.equals("service")){
-            adapter = new HomeCategoriesAdapter(context, alService, rootView);
+            adapter = new HomeCategoriesAdapter(context, alService, rootView, "search");
         }
         if(tag.equals("movers")){
-            adapter = new HomeCategoriesAdapter(context, alMovers, rootView);
+            adapter = new HomeCategoriesAdapter(context, alMovers, rootView, "search");
         }
         if(tag.equals("health")){
-            adapter = new HomeCategoriesAdapter(context, alHealth, rootView);
+            adapter = new HomeCategoriesAdapter(context, alHealth, rootView, "search");
         }
         if(tag.equals("personal")){
-            adapter = new HomeCategoriesAdapter(context, alPersonal, rootView);
+            adapter = new HomeCategoriesAdapter(context, alPersonal, rootView, "search");
         }
         if(tag.equals("eats")){
-            adapter = new HomeCategoriesAdapter(context, alEats, rootView);
+            adapter = new HomeCategoriesAdapter(context, alEats, rootView, "search");
         }
         if(tag.equals("rest")){
-            adapter = new HomeCategoriesAdapter(context, alRest, rootView);
+            adapter = new HomeCategoriesAdapter(context, alRest, rootView, "search");
         }
         if(tag.equals("events")){
-            adapter = new HomeCategoriesAdapter(context, alEvents, rootView);
+            adapter = new HomeCategoriesAdapter(context, alEvents, rootView, "search");
         }
         if(tag.equals("business")){
-            adapter = new HomeCategoriesAdapter(context, alBusiness, rootView);
+            adapter = new HomeCategoriesAdapter(context, alBusiness, rootView, "search");
         }
         if(tag.equals("renovation")){
-            adapter = new HomeCategoriesAdapter(context, alRenovation, rootView);
+            adapter = new HomeCategoriesAdapter(context, alRenovation, rootView, "search");
         }
         if(tag.equals("more")){
-            adapter = new HomeCategoriesAdapter(context, alMore, rootView);
+            adapter = new HomeCategoriesAdapter(context, alMore, rootView, "search");
         }
         rvCategories.setAdapter(adapter);
     }

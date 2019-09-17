@@ -29,14 +29,16 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
     private ArrayList<CategoryModel> categoryModels;
     private Context context;
     private View rootview;
+    private String fragment;
 //    private RequestOptions requestOptions;
     private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
 
 
-    public HomeCategoriesAdapter(Context context, ArrayList<CategoryModel> categoryModels, View rootview) {
+    public HomeCategoriesAdapter(Context context, ArrayList<CategoryModel> categoryModels, View rootview, String fragment) {
         this.context = context;
         this.categoryModels = categoryModels;
         this.rootview = rootview;
+        this.fragment = fragment;
 //        requestOptions = new RequestOptions();
 //        requestOptions.placeholder(R.drawable.profile_default);
 //        requestOptions.error(R.drawable.profile_default);
@@ -46,7 +48,7 @@ public class HomeCategoriesAdapter extends RecyclerView.Adapter<HomeCategoriesAd
     @NonNull
     @Override
     public HomeCategoriesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.home_categories_individual_listitem,parent,false);
+        View view = LayoutInflater.from(context).inflate(fragment.equals("home")? R.layout.home_categories_individual_listitem : R.layout.search_category_individual_listitem,parent,false);
         return new HomeCategoriesAdapter.ViewHolder(view);
     }
 
