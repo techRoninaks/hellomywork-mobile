@@ -68,6 +68,7 @@
     <string name="save_password">Save</string>
     <string name="password_error">Entered passwords are not same</string>
     <string name="password_length_err">Password should have atleast 6 characters</string>
+    <string name="goBackToLogin">Go to login page</string>
 
 
     <!-- Register Page-->
