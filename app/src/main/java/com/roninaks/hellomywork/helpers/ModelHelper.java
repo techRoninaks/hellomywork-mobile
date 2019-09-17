@@ -40,6 +40,7 @@ public class ModelHelper {
             profilePostModel.setCommentCount(jsonObject.getString("commentnumber"));
             profilePostModel.setIsLiked(jsonObject.getString("isLiked"));
             profilePostModel.setImageLabel(jsonObject.getString("offer"));
+            profilePostModel.setIsBoomarked(jsonObject.getString("IsBookmarked"));
             return profilePostModel;
         } catch (JSONException e) {
             e.printStackTrace();

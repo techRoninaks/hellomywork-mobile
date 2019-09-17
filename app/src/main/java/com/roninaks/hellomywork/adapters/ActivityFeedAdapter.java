@@ -115,6 +115,14 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                     holder.filled = true;
                     holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
                 }
+                if(profilePostModels.get(position).getIsBoomarked().equals("0")){
+                    holder.bookmarkFilled = false;
+                    holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
+                }
+                else if(profilePostModels.get(position).getIsBoomarked().equals("1")){
+                    holder.bookmarkFilled = true;
+                    holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
+                }
                 String label = profilePostModels.get(position).getImageLabel();
 
                 holder.btnProfilePostOptions.setOnClickListener(new View.OnClickListener() {
@@ -264,18 +272,20 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         sqlHelper.executeUrl(false);
                     }
                 });
+
+
                 holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(holder.filled) {
+                        if(holder.bookmarkFilled) {
                             holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
                             Toast.makeText(context, "Post have been removed from bookmark", Toast.LENGTH_SHORT).show();
-                            holder.filled= false;
+                            holder.bookmarkFilled= false;
                         }
                         else {
                             holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
                             Toast.makeText(context, "Post have been added to bookmark", Toast.LENGTH_SHORT).show();
-                            holder.filled= true;
+                            holder.bookmarkFilled= true;
                         }
                         bookmark();
                     }
@@ -288,7 +298,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         sqlHelper.setMethod("POST");
                         ContentValues contentValues = new ContentValues();
                         contentValues.put("userId", ((MainActivity) context).isLoggedIn());
-                        contentValues.put("type", "profiles");
+                        contentValues.put("type", "posts");
                         contentValues.put("mapping_id", profilePostModels.get(position).getId());
                         contentValues.put("is_active", profilePostModels.get(position).getIsBoomarked());
                         sqlHelper.setParams(contentValues);
@@ -391,6 +401,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             ImageButton btnProfilePostOptions;
             EditText writeComments;
             boolean filled= false;
+            boolean bookmarkFilled= false;
             RecyclerView commentrecyclerView;
             private ImageView ivLike,ivComment,ivShare,ivBookmark;
             public ViewHolder(View itemView) {
