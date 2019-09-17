@@ -127,82 +127,103 @@ public class ProfileImage extends Activity implements SqlDelegate {
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE: {
-//                                SqlHelper sqlHelper = new SqlHelper(ProfileImage.this, ProfileImage.this);
-//                                sqlHelper.setActionString("upload_profile_image");
-//                                sqlHelper.setExecutePath("upload.php");
-//                                sqlHelper.setMethod("POST");
-//                                sqlHelper.setUploadFilePath(imagePath);
-//                                ArrayList<NameValuePair> params = new ArrayList<>();
-//                                params.add(new BasicNameValuePair("u_id", MainActivity.currentUserModel.getUserId()));
-//                                sqlHelper.setParams(params);
-//                                sqlHelper.uploadFile(true);
-//                                    StringRequest stringRequest = new StringRequest(Request.Method.POST, uploadUrl, new Response.Listener<String>() {
-//                                        @Override
-//                                        public void onResponse(String response) {
-//                                            Toast.makeText(ProfileImage.this, "Your profile image has been saved", Toast.LENGTH_SHORT).show();
-//                                            Bundle bundle = new ModelHelper(ProfileImage.this).buildUserModelBundle(MainActivity.currentUserModel, "ProfileFragment");
-//                                            bundle.putString("return_path", "ProfileFragment");
-//                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                                            intent.putExtra("bundle", bundle);
-//                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                            startActivity(intent);
+//                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            switch (which) {
+//                                case DialogInterface.BUTTON_POSITIVE: {
+////                                SqlHelper sqlHelper = new SqlHelper(ProfileImage.this, ProfileImage.this);
+////                                sqlHelper.setActionString("upload_profile_image");
+////                                sqlHelper.setExecutePath("upload.php");
+////                                sqlHelper.setMethod("POST");
+////                                sqlHelper.setUploadFilePath(imagePath);
+////                                ArrayList<NameValuePair> params = new ArrayList<>();
+////                                params.add(new BasicNameValuePair("u_id", MainActivity.currentUserModel.getUserId()));
+////                                sqlHelper.setParams(params);
+////                                sqlHelper.uploadFile(true);
+////                                    StringRequest stringRequest = new StringRequest(Request.Method.POST, uploadUrl, new Response.Listener<String>() {
+////                                        @Override
+////                                        public void onResponse(String response) {
+////                                            Toast.makeText(ProfileImage.this, "Your profile image has been saved", Toast.LENGTH_SHORT).show();
+////                                            Bundle bundle = new ModelHelper(ProfileImage.this).buildUserModelBundle(MainActivity.currentUserModel, "ProfileFragment");
+////                                            bundle.putString("return_path", "ProfileFragment");
+////                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+////                                            intent.putExtra("bundle", bundle);
+////                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////                                            startActivity(intent);
+////                                        }
+////                                    }, new Response.ErrorListener() {
+////                                        @Override
+////                                        public void onErrorResponse(VolleyError error) {
+////                                            Toast.makeText(ProfileImage.this, ProfileImage.this.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
+////                                        }
+////                                    }) {
+////                                        @Override
+////                                        protected Map<String, String> getParams() throws AuthFailureError {
+////                                            String imageData = imageToString(bitmap);
+////                                            Map<String, String> params = new HashMap<>();
+////                                            params.put("image", imageData);
+////                                            params.put("u_id", MainActivity.currentUserModel.getUserId());
+////                                            return params;
+////                                        }
+////                                    };
+////
+////                                    RequestQueue requestQueue = Volley.newRequestQueue(ProfileImage.this);
+////                                    requestQueue.add(stringRequest);
+//                                    switch (fragment){
+//                                        case "premiumsignup":{
+//                                            PremiumSignupFragment.imageChanged = true;
+//                                            PremiumSignupFragment.bitmap = bitmap;
+//                                            PremiumSignupFragment.imageUrl = imageUri.toString();
+//                                            break;
 //                                        }
-//                                    }, new Response.ErrorListener() {
-//                                        @Override
-//                                        public void onErrorResponse(VolleyError error) {
-//                                            Toast.makeText(ProfileImage.this, ProfileImage.this.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
+//                                        case "profile":{
+//                                            ProfileFragment.imageChanged = true;
+//                                            ProfileFragment.bitmap = bitmap;
+//                                            ProfileFragment.imageUrl = imageUri.toString();
+//                                            break;
 //                                        }
-//                                    }) {
-//                                        @Override
-//                                        protected Map<String, String> getParams() throws AuthFailureError {
-//                                            String imageData = imageToString(bitmap);
-//                                            Map<String, String> params = new HashMap<>();
-//                                            params.put("image", imageData);
-//                                            params.put("u_id", MainActivity.currentUserModel.getUserId());
-//                                            return params;
+//                                        case "postad":{
+//                                            PostAdFragment.imageChanged = true;
+//                                            PostAdFragment.bitmap = bitmap;
+//                                            PostAdFragment.imageUrl = imageUri.toString();
+//                                            break;
 //                                        }
-//                                    };
-//
-//                                    RequestQueue requestQueue = Volley.newRequestQueue(ProfileImage.this);
-//                                    requestQueue.add(stringRequest);
-                                    switch (fragment){
-                                        case "premiumsignup":{
-                                            PremiumSignupFragment.imageChanged = true;
-                                            PremiumSignupFragment.bitmap = bitmap;
-                                            PremiumSignupFragment.imageUrl = imageUri.toString();
-                                            break;
-                                        }
-                                        case "profile":{
-                                            ProfileFragment.imageChanged = true;
-                                            ProfileFragment.bitmap = bitmap;
-                                            ProfileFragment.imageUrl = imageUri.toString();
-                                            break;
-                                        }
-                                        case "postad":{
-                                            PostAdFragment.imageChanged = true;
-                                            PostAdFragment.bitmap = bitmap;
-                                            PostAdFragment.imageUrl = imageUri.toString();
-                                            break;
-                                        }
-                                    }
-                                    finish();
-                                    break;
-                                }
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    //No button clicked
-                                    break;
-                            }
+//                                    }
+//                                    finish();
+//                                    break;
+//                                }
+//                                case DialogInterface.BUTTON_NEGATIVE:
+//                                    //No button clicked
+//                                    break;
+//                            }
+//                        }
+//                    };
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileImage.this);
+//                    builder.setTitle("Upload Image");
+//                    builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+//                            .setNegativeButton("No", dialogClickListener).show();
+                    switch (fragment){
+                        case "premiumsignup":{
+                            PremiumSignupFragment.imageChanged = true;
+                            PremiumSignupFragment.bitmap = bitmap;
+                            PremiumSignupFragment.imageUrl = imageUri.toString();
+                            break;
                         }
-                    };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileImage.this);
-                    builder.setTitle("Upload Image");
-                    builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
+                        case "profile":{
+                            ProfileFragment.imageChanged = true;
+                            ProfileFragment.bitmap = bitmap;
+                            ProfileFragment.imageUrl = imageUri.toString();
+                            break;
+                        }
+                        case "postad":{
+                            PostAdFragment.imageChanged = true;
+                            PostAdFragment.bitmap = bitmap;
+                            PostAdFragment.imageUrl = imageUri.toString();
+                            break;
+                        }
+                    }
+                    finish();
                 }
             });
             btnDiscard.setOnClickListener(new View.OnClickListener() {

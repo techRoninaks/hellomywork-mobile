@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 //import android.support.annotation.NonNull;
 //import androidx.core.app.Fragment;
 //import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,18 +52,19 @@ public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLanding
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchLandingTabsAdapter.ViewHolder holder, final int position)  {
+    public void onBindViewHolder(@NonNull final SearchLandingTabsAdapter.ViewHolder holder, final int position)  {
         try {
             holder.tvTabName.setText(tabs.get(position));
-            if(tabs.get(position).toLowerCase().equals(tag)){
+            if(tabs.get(position).toLowerCase().equals(tag) || (tabs.get(position).toLowerCase().equals("all") && tag.isEmpty())){
+//                float myTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12F, context.getResources().getDisplayMetrics());
                 holder.tvTabName.setTypeface(holder.tvTabName.getTypeface(), Typeface.BOLD);
-            }else if(tabs.get(position).toLowerCase().equals("all") && tag.isEmpty()){
-                holder.tvTabName.setTypeface(holder.tvTabName.getTypeface(), Typeface.BOLD);
+                holder.tvTabName.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.font_page_title_emphasis));
+                fragment.scrollToPosition(position, holder.llMaster.getWidth());
             }
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.onTabClick(position, tabs, currentPosition);
+                    fragment.onTabClick(position, tabs, currentPosition, holder.llMaster.getWidth());
                     currentPosition = position;
 
                 }

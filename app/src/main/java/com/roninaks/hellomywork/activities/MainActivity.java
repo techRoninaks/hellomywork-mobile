@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -282,6 +283,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = HomeFragment.newInstance("", "");
         initFragment(fragment);
         floatActionButton.setVisibility(View.GONE);
+    }
+
+    public Geocoder getLocation(){
+        return new Geocoder(MainActivity.this);
     }
 
     private void setFirstPage(){

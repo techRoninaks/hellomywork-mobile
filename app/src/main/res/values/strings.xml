@@ -134,7 +134,7 @@
     <string name="ps_error_password_mismatch">Passwords do not match</string>
     <string name="ps_change_profile_image">Upload/Change Profile Image</string>
     <string name="ps_camera">Camera</string>
-    <string name="ps_choose">Choose</string>
+    <string name="ps_choose">Gallery</string>
     <string name="ps_confirm">Confirm</string>
     <string name="ps_discard">Discard</string>
     <string name="sr_service">Service</string>
