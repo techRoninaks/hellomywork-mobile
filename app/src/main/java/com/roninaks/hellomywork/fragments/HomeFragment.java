@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
     private Context context;
     private LinearLayout llContainerSales, llContainerRepairs, llContainerService, llContainerMovers, llContainerHealth, llContainerPersonal, llContainerEats, llContainerRest, llContainerEvents, llContainerRenovation, llContainerBusiness, llContainerMore;
     private TextView tvCategoriesMore, tvUnionsMore, tvLocation;
-    private ImageView ivNotification, ivProfile, ivSearch, ivOptions, ivBanner, ivLocationDropDown;
+    private ImageView ivNotification, ivProfile, ivSearch, ivOptions, ivBanner, ivLocationDropDown, ivLocation;
     private RecyclerView rvPopularCategories, rvUnions, rvTopPerformers;
     private AutoCompleteTextView acLocation, acSearch;
     private View rootView;
@@ -210,6 +210,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
         ivLocationDropDown = (ImageView) rootView.findViewById(R.id.imgLocationDropDown);
+        ivLocation = (ImageView) rootView.findViewById(R.id.imgLocation);
         rvPopularCategories = (RecyclerView) rootView.findViewById(R.id.rvPopularCategories);
         rvTopPerformers = (RecyclerView) rootView.findViewById(R.id.rvTopPerformers);
         rvUnions = (RecyclerView) rootView.findViewById(R.id.rvUnions);
@@ -327,6 +328,13 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         };
         tvLocation.setOnClickListener(locationDropDown);
         ivLocationDropDown.setOnClickListener(locationDropDown);
+        ivLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).getLocation();
+                Toast.makeText(context, "Sorry, could not get location. Please select nearest location from the available list", Toast.LENGTH_SHORT).show();
+            }
+        });
         ivNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -196,7 +196,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             buttonEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = PremiumSignupFragment.newInstance("",userId, "");
+                    Fragment fragment = PremiumSignupFragment.newInstance("edit",userId, "");
                     ((MainActivity) context).initFragment(fragment);
 
                 }
@@ -502,9 +502,6 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         });
         rootView = view;
         return view;
-    }
-
-    private void initFragment(PremiumSignupFragment fragment) {
     }
 
     private void fetchProfilePostInfo(Context context, String fetch_id) {

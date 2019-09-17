@@ -283,6 +283,14 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                     }
                     break;
                 }
+                case "submit":{
+                    if(type.toLowerCase().equals("new")) {
+                        Fragment fragment = PlansFragment.newInstance(userId, "");
+                        ((MainActivity) context).initFragment(fragment);
+                    }else{
+                        ((MainActivity) context).onBackPressed();
+                    }
+                }
             }
         }catch(Exception e){
             Toast.makeText(context, context.getString(R.string.response_error), Toast.LENGTH_SHORT).show();

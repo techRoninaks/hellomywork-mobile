@@ -300,30 +300,26 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void onTabClick(int position, ArrayList<String> tabs, int currentPosition){
+    public void onTabClick(int position, ArrayList<String> tabs, int currentPosition, int widthFocused){
+        String tag = tabs.get(position).toLowerCase();
+        showList(tag);
+        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this, tabList, rootView, tag);
+        rvTabs.setAdapter(adapter);
+        scrollToPosition(position, widthFocused);
+    }
+
+    public void scrollToPosition(int position, int offset){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((MainActivity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels/2;
-        int widthFocused = rvTabs.getFocusedChild().getWidth();
-        //        int y = rvTabs.getScrollY();
-//        TextView tvPrevious = (TextView)rvTabs.findViewHolderForLayoutPosition(currentPosition).itemView.findViewById(R.id.tvTabName);
-//        tvPrevious.setTypeface(tvPrevious.getTypeface(), Typeface.NORMAL);
-        String tag = tabs.get(position).toLowerCase();
-        showList(tag);
-//        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this,tabList, rootView);
-//        rvTabs.setAdapter(adapter);
-//        TextView tvCurrent = (TextView)rvTabs.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.tvTabName);
-//        tvCurrent.setTypeface(tvCurrent.getTypeface(), Typeface.BOLD);
-//        rvTabs.getAdapter().notifyItemChanged(position);
-//        rvTabs.getX();
-//        rvTabs.scrollBy(30, 0);
-        SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this, tabList, rootView, tag);
-        rvTabs.setAdapter(adapter);
+        int widthFocused = offset/2;
         rvTabs.scrollToPosition(position);
-        rvTabs.scrollBy(-width + widthFocused, 0);
+        if(position!=0)
+            rvTabs.scrollBy(-width + widthFocused, 0);
     }
 
     //Private Functions
+
     private void loadSearchList(String key){
         SqlHelper sqlHelper = new SqlHelper(context, SearchLanding.this);
         sqlHelper.setExecutePath("searchAuto.php");
