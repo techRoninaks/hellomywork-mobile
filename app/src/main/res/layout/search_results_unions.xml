@@ -3,12 +3,17 @@
     android:layout_height="wrap_content"
     android:id="@+id/containerMaster"
     android:padding="@dimen/standard_gap_extra_small"
+    android:paddingStart="@dimen/standard_gap_large"
+    android:paddingEnd="@dimen/standard_gap_large"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/containerIndividualRow"
         android:orientation="horizontal"
+        android:paddingTop="@dimen/standard_gap_small"
+        android:paddingBottom="@dimen/standard_gap_small"
+
         android:gravity="center_vertical">
 
         <TextView
@@ -19,12 +24,13 @@
             android:text="@string/hp_service"
             android:layout_marginStart="@dimen/standard_gap_medium"
             android:textColor="@color/colorTextBlackPrimary"
+            android:layout_marginTop="@dimen/standard_gap_extra_large"
+            android:layout_marginBottom="@dimen/standard_gap_extra_large"
             android:textSize="15dp"
             android:textStyle="bold" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorTextBlackSeperators"
-        android:layout_marginTop="@dimen/standard_gap_large"/>
+        android:background="@color/colorTextBlackSeperators" />
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -78,14 +79,16 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     Context context;
     ImageView masterProfilePster, ivProfileBackBtn, ivSettings;
     EditText postadDescrption,writeComments;
+    TextView sendComment;
     private TextView profilePCName,profileMainName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
     ImageButton profileCallPhoneBTN, profileSentEmailBTN, profileUseWhatspp,profileShare,profileBookmark;
-    Button buttonEdit,buttonImageUpload,buttonForsale,buttonOffers,buttonRequired,buttonAppreciations,buttonAchievemnet,buttonRandom,buttonPost;
+    Button buttonEdit,buttonImageUpload,buttonForsale,buttonOffers,buttonRequired,buttonAppreciations,buttonAchievemnet,buttonRandom,buttonPost,buttonForsale2,buttonOffers2,buttonRequired2,buttonAppreciations2,buttonAchievemnet2,buttonRandom2,buttonPost2;
     private RequestOptions requestOptions;
     private LinearLayout llpostMaster;
     RecyclerView recyclerView;
-    ArrayList <ProfilePostModel> profilePostModels;
+    ArrayList <ProfilePostModel> profilePostModels,profilePostModelsOffers,profilePostModelsForSale,profilePostModelsRequired,profilePostModelsAchivement,profilePostModelsAppreciation;
     ActivityFeedAdapter activityFeedAdapter;
+    LinearLayout llBtnGrp;
     String tagButton, isBookMarked;
     boolean filled;
 
@@ -121,6 +124,17 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             userId = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onResume() {
+        if(imageChanged){
+            buttonImageUpload.setBackgroundResource(R.drawable.career_button_color_radius);
+            buttonImageUpload.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
+            buttonPost.setBackgroundResource(R.drawable.card_background_shape);
+            buttonPost.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+        }
+        super.onResume();
     }
 
     @Override
@@ -172,14 +186,27 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         llpostMaster = view.findViewById(R.id.llpostMaster);
         requestOptions = new RequestOptions();
 
+        buttonAchievemnet2=view.findViewById(R.id.Achievement_BTN2);
+        buttonAppreciations2=view.findViewById(R.id.Appreciation_BTN2);
+        buttonOffers2=view.findViewById(R.id.Offers_BTN2);
+        buttonForsale2=view.findViewById(R.id.ForSale_BTN2);
+        buttonRequired2=view.findViewById(R.id.Required_BTN2);
+        buttonRandom2=view.findViewById(R.id.Random_BTN2);
+
         buttonEdit=view.findViewById(R.id.button_Edit);
         buttonImageUpload=view.findViewById(R.id.button_ImageUpload);
         ivProfileBackBtn=view.findViewById(R.id.imgBack);
 //        requestOptions.placeholder(R.drawable.icon_image);
 //        requestOptions.error(R.drawable.icon_image);
 
+        sendComment = view.findViewById(R.id.addComment);
 
         profilePostModels = new ArrayList<>();
+        profilePostModelsOffers = new ArrayList<>();
+        profilePostModelsForSale = new ArrayList<>();
+        profilePostModelsAchivement= new ArrayList<>();
+        profilePostModelsAppreciation = new ArrayList<>();
+        profilePostModelsRequired = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.profileRecyclerView);
 
@@ -203,8 +230,6 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             });
         }
 
-
-
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,10 +238,46 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 }
                 else {
                     saveInformation();
+                    refreshData();
+                    fetchProfilePostInfo(context, "fetch_id");
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                    recyclerView.setLayoutManager(layoutManager);
+                    activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+                    recyclerView.setAdapter(activityFeedAdapter);
+
+                    if(tagButton.equals("assets/img/icon/ic_Required-min.png")){
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired,rootView, us_id);
+                        recyclerView.setAdapter(activityFeedAdapter);
+                    }
+                    if(tagButton.equals("assets/img/icon/ic_Achievement-min.png")){
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement,rootView, us_id);
+                        recyclerView.setAdapter(activityFeedAdapter);
+                    }
+                    if(tagButton.equals("assets/img/icon/ic_Appreciations-min.png")){
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation,rootView, us_id);
+                        recyclerView.setAdapter(activityFeedAdapter);
+                    }
+                    if(tagButton.equals("assets/img/icon/ic_Offers-min.png")){
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers,rootView, us_id);
+                        recyclerView.setAdapter(activityFeedAdapter);
+                    }
+                    if(tagButton.equals("assets/img/icon/ic_ForSale-min.png")){
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale,rootView, us_id);
+                        recyclerView.setAdapter(activityFeedAdapter);
+                    }
+                    setDefaultButton(false);
+                    postadDescrption.setText("");
+
+                    //change button after post
+                    buttonPost.setBackgroundResource(R.drawable.career_button_color_radius);
+                    buttonPost.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
+                    buttonImageUpload.setBackgroundResource(R.drawable.card_background_shape);
+                    buttonImageUpload.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
                 }
 
             }
         });
+
 
         ivProfileBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,62 +295,145 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 bundle.putString("fragment", "profile");
                 intent.putExtra("bundle", bundle);
                 startActivity(intent);
+
             }
         });
+
+
+        // 1st scroll view
+
+
         buttonForsale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setDefaultButton(true);
                 tagButton = "assets/img/icon/ic_ForSale-min.png";
-            }
+                buttonForsale.setAlpha(1);
+                }
         });
         buttonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setDefaultButton(true);
                 tagButton = "assets/img/icon/ic_Random-min.png";
+                buttonRandom.setAlpha(1);
+
             }
         });
         buttonRequired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setDefaultButton(true);
                 tagButton = "assets/img/icon/ic_Required-min.png";
+                buttonRequired.setAlpha(1);
             }
         });
         buttonAchievemnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setDefaultButton(true);
                 tagButton = "assets/img/icon/ic_Achievement-min.png";
+                buttonAchievemnet.setAlpha(1);
             }
         });
         buttonAppreciations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setDefaultButton(true);
                 tagButton = "assets/img/icon/ic_Appreciations-min.png";
+                buttonAppreciations.setAlpha(1);
             }
         });
         buttonOffers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setDefaultButton(true);
                 tagButton = "assets/img/icon/ic_Offers-min.png";
+                buttonOffers.setAlpha(1);
             }
         });
 
 
+    //2nd scroll view
 
-//        ivComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-////                    if (writeComments.requestFocus()) {
-////                    }
-//            }
-//        });
-
-
-
-
-
+        buttonForsale2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_ForSale-min.png";
+                setDefaultButton(false);
+                buttonForsale2.setAlpha(1);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale,rootView, us_id);
+                recyclerView.setAdapter(activityFeedAdapter);
 
 
+            }
+        });
+        buttonRandom2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Random-min.png";
+                setDefaultButton(false);
+                buttonRandom2.setAlpha(1);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+                recyclerView.setAdapter(activityFeedAdapter);
+
+            }
+        });
+        buttonRequired2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Required-min.png";
+                setDefaultButton(false);
+                buttonRequired2.setAlpha(1);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired,rootView, us_id);
+                recyclerView.setAdapter(activityFeedAdapter);
+            }
+        });
+        buttonAchievemnet2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Achievement-min.png";
+                setDefaultButton(false);
+                buttonAchievemnet2.setAlpha(1);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement,rootView, us_id);
+                recyclerView.setAdapter(activityFeedAdapter);
+            }
+        });
+        buttonAppreciations2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Appreciations-min.png";
+                setDefaultButton(false);
+                buttonAppreciations2.setAlpha(1);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation,rootView, us_id);
+                recyclerView.setAdapter(activityFeedAdapter);
+            }
+        });
+        buttonOffers2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagButton = "assets/img/icon/ic_Offers-min.png";
+                setDefaultButton(false);
+                buttonOffers2.setAlpha(1);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(layoutManager);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers,rootView, us_id);
+                recyclerView.setAdapter(activityFeedAdapter);
+            }
+        });
+
+
+        // share buttons
 
         profileCallPhoneBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -500,8 +644,44 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 popup.show();
             }
         });
+
+//        addCommentBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //submit
+//            }
+//        });
+
         rootView = view;
         return view;
+    }
+
+    private void refreshData(){
+        profilePostModels.clear();
+        profilePostModelsAppreciation.clear();
+        profilePostModelsAchivement.clear();
+        profilePostModelsRequired.clear();
+        profilePostModelsForSale.clear();
+        profilePostModelsOffers.clear();
+    }
+
+    private void setDefaultButton(boolean s){
+        if (s){
+            buttonAchievemnet.setAlpha(0.5f);
+            buttonRandom.setAlpha(0.5f);
+            buttonForsale.setAlpha(0.5f);
+            buttonRequired.setAlpha(0.5f);
+            buttonOffers.setAlpha(0.5f);
+            buttonAppreciations.setAlpha(0.5f);
+        }
+        else{
+            buttonAchievemnet2.setAlpha(0.5f);
+            buttonRandom2.setAlpha(1);
+            buttonForsale2.setAlpha(0.5f);
+            buttonRequired2.setAlpha(0.5f);
+            buttonOffers2.setAlpha(0.5f);
+            buttonAppreciations2.setAlpha(0.5f);
+        }
     }
 
     private void fetchProfilePostInfo(Context context, String fetch_id) {
@@ -569,7 +749,8 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 JSONArray jsonArray = new JSONArray(response);
                 JSONObject jsonObject = jsonArray.getJSONObject(1);
                 int length = (jsonArray.getJSONObject(1).length());
-                inntRecyclerView(jsonArray, length);
+                //inntRecyclerView(jsonArray, length);
+                initTagList(jsonArray,length);
             } catch (JSONException e) {
 //                Toast.makeText(context, "Network error try again later", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
@@ -606,6 +787,73 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         recyclerView.setAdapter(activityFeedAdapter);
     }
 
+
+    private void initTagList(JSONArray jsonArray, int length) {
+        ModelHelper modelHelper = new ModelHelper(this.context);
+        for (int i = 1; i <= length; i++){
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Offers-min.png")){
+                    ProfilePostModel profilePostModelOffers = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelOffers.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsOffers.add(profilePostModelOffers);
+                }
+                if(jsonObject.getString("offer").equals("assets/img/icon/ic_ForSale-min.png")){
+                    ProfilePostModel profilePostModelForSale = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelForSale.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsForSale.add(profilePostModelForSale);
+                }
+                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Required-min.png")){
+                    ProfilePostModel profilePostModelRequired = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelRequired.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsRequired.add(profilePostModelRequired);
+                }
+                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Achievement-min.png")){
+                    ProfilePostModel profilePostModelAchievement = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelAchievement.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsAchivement.add(profilePostModelAchievement);
+                }
+                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Appreciations-min.png")){
+                    ProfilePostModel profilePostModelAppreciation = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelAppreciation.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsAppreciation.add(profilePostModelAppreciation);
+                }
+                ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
+                profilePostModel.setCommentsModels(getCommentList(jsonObject));
+                profilePostModels.add(profilePostModel);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+        recyclerView.setAdapter(activityFeedAdapter);
+    }
+
+
+//    private void filterList() {
+//        forSale = new ArrayList<>();
+//        for (int i = 0; i < profilePostModels.size(); i++) {
+//            ProfilePostModel profilePostModel = profilePostModels.get(i);
+//            String tag = profilePostModel.getImageLabel().toLowerCase();
+//            boolean ignored = true;
+//            if (tag.equals("for sale")) {
+//                forSale.add(profilePostModel);
+//                ignored = false;
+//            }
+//        }
+//    }
+//
+//    private void showTag(String tag){
+//        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+//        if(tag.equals("for sale")){
+//            activityFeedAdapter = new ActivityFeedAdapter(context, forSale, rootView);
+//        }
+//    }
+
+
     private ArrayList<CommentsModel> getCommentList(JSONObject jsonObject) {
         JSONArray jsonArray;
         ArrayList<CommentsModel> commentsModels = new ArrayList<>();
@@ -626,7 +874,6 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return commentsModels;
     }
 

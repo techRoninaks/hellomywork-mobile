@@ -41,15 +41,20 @@ import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CommentsModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapter.ViewHolder> implements SqlDelegate {
         private Context context;
         private View rootview;
         private ArrayList<ProfilePostModel> profilePostModels;
+        private ArrayList<CommentsModel> commentsModels;
         private RequestOptions requestOptions;
-        private String baseImagePostUrl;
-        RecyclerView commnetsRecyclerView;
+        private String baseImagePostUrl, userName;
+
+        RecyclerView commnetsRecyclerView,commentRecyclerView;
         CommetsAdapter commetsAdapter;
         private String user_id;
 //        private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
@@ -319,6 +324,34 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                     }
                 });
 
+                holder.tvSendComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //post comment
+                        commentRecyclerView = holder.commentrecyclerView;
+                        String comment = holder.writeComments.getText().toString();
+                        String us_id = ((MainActivity) context).isLoggedIn();
+                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                        sqlHelper.setExecutePath("postcomment.php");
+                        sqlHelper.setActionString("commentPost");
+                        sqlHelper.setMethod("POST");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("u_id", us_id);
+                        contentValues.put("comment", comment);
+                        contentValues.put("p_id", profilePostModels.get(position).getId());
+                        userName = profilePostModels.get(position).getName();
+                        HashMap<String,String> extras = new HashMap<>();
+                        extras.put("position", ""+position);
+                        sqlHelper.setExtras(extras);
+                        sqlHelper.setParams(contentValues);
+                        sqlHelper.executeUrl(false);
+                        holder.writeComments.clearFocus();
+                        holder.writeComments.setText("");
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
+                });
+
                 holder.writeComments.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -331,6 +364,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                     }
 
                     private void sendMessage() {
+                        commentRecyclerView = holder.commentrecyclerView;
                         String comment = holder.writeComments.getText().toString();
                         String us_id = ((MainActivity) context).isLoggedIn();
                         SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
@@ -341,14 +375,20 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         contentValues.put("u_id", us_id);
                         contentValues.put("comment", comment);
                         contentValues.put("p_id", profilePostModels.get(position).getId());
+                        userName = profilePostModels.get(position).getName();
+                        HashMap<String,String> extras = new HashMap<>();
+                        extras.put("position", ""+position);
+                        sqlHelper.setExtras(extras);
                         sqlHelper.setParams(contentValues);
                         sqlHelper.executeUrl(false);
                         holder.writeComments.clearFocus();
+                        holder.writeComments.setText("");
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     }
                 });
-
+                commentsModels = profilePostModels.get(position).getCommentsModels();
+                commentRecyclerView = holder.commentrecyclerView;
                 populateRecycler(holder.commentrecyclerView, profilePostModels.get(position).getCommentsModels());
 
             }catch (Exception e){
@@ -375,8 +415,26 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     public void onResponse(SqlHelper sqlHelper) {
         String response = sqlHelper.getStringResponse();
         if(sqlHelper.getActionString() == "commentPost"){
-            if (response.equals("Success "))
+            if (response.equals("Success ")){
                 Toast.makeText(context, "Comments Added", Toast.LENGTH_SHORT).show();
+                ContentValues contentValues = sqlHelper.getParams();
+                String userComment = contentValues.get("comment").toString();
+                String userId = contentValues.getAsString("u_id");
+                String pId = contentValues.getAsString("p_id");
+                int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
+
+
+                CommentsModel commentsModel = new CommentsModel();
+                commentsModel.setComment(userComment);
+                commentsModel.setCommentName(userName);
+                commentsModel.setCommentU_Id(userId);
+                commentsModel.setCommentP_Id(pId);
+                commentsModels.add(0,commentsModel);
+                profilePostModels.get(pos).getCommentsModels().add(0, commentsModel);
+                commentRecyclerView.getAdapter().notifyDataSetChanged();
+
+//                populateRecycler(commentRecyclerView,commentsModels);
+            }
         }
         else if(sqlHelper.getActionString() == "bookmark"){
 //            if(response.equals("1"))
@@ -396,7 +454,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-            TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount;
+            TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount,tvSendComment;
             ImageView ivPostProfileImage,ivPostImageLabel;
             ImageButton btnProfilePostOptions;
             EditText writeComments;
@@ -422,6 +480,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 tvPostCommentCount = itemView.findViewById(R.id.postCommentCount);
                 tvPostLikeCount = itemView.findViewById(R.id.postLikeCount);
                 ivPostImageLabel = itemView.findViewById(R.id.post_item_image_label);
+                tvSendComment = itemView.findViewById(R.id.addComment);
             }
         }
     }

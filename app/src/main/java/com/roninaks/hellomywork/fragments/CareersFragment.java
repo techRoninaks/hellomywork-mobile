@@ -278,6 +278,10 @@ public class CareersFragment extends Fragment implements SqlDelegate {
                     String response = sqlHelper.getStringResponse();
                     if (!(response.equals("null"))) {
                         Toast.makeText(context, "Upload completed", Toast.LENGTH_SHORT).show();
+                        careerUploadResumeBTN.setBackgroundResource(R.drawable.career_button_color_radius);
+                        careerUploadResumeBTN.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
+                        careerSubmitBTN.setBackgroundResource(R.drawable.card_background_shape);
+                        careerSubmitBTN.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
                     }
                     else {
                         Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show();

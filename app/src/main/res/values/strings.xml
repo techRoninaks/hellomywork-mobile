@@ -175,6 +175,62 @@ For the service providers, HELLOmywork acts as a platform to advertise their off
 <br/><br/>
 HELLOmywork is determinant to provide to our service providers the best possible outcomes of sales and profit. For this very purpose, we have designed a digital identity card which validates their membership with our website. What’s more, the ID card has been tailored with just enough information to act as a business card for our service providers which they can advertise and share digitally across the internet. Now spend less time on generating market plans and focus on delivering quality to your buyers.]]></string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profileMasterCardIV">Profile Master Card</string>
+    <string name="hp_searchHint">Search anything anywhere</string>
+    <string name="hp_popular_categories">Popular Categories</string>
+
+    <!-- About Us-->
+    <string name="hp_sales">Sales</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hp_repairs">Repairs</string>
+
+    <!-- Profile page -->
+    <string name="union_heading">Unions</string>
+
+    <!-- Home Page -->
+    <string name="contact_heading">Contact Us</string>
+    <string name="contact_message">Message</string>
+    <string name="contact_number">Contact</string>
+    <string name="contact_address_1">Retaj complex, 1st Floor, Post-Biyyam,</string>
+
+    <!-- Unions -->
+    <string name="contact_address_2">via-ponnani, dist-malappuram, Pin: 679567</string>
+
+    <!-- Contact -->
+    <string name="contact_phone">Telephone: +91 90724 76701</string>
+    <string name="contact_email">Email: support@hellomywork.com</string>
+    <string name="contact_success">Thank you for contacting Hellomywork. We will get back to you shortly</string>
+    <string name="post_option_report">Report</string>
+    <string name="post_option_delete">Delete</string>
+    <string name="plans_heading">Membership Plans</string>
+    <string name="plans_price_free">Rs. 00.00</string>
+    <string name="plans_price_user"><strike>Rs. 147.00</strike></string>
+
+    <!-- Post Options Menu -->
+    <string name="plans_price_company"><strike>Rs. 300.00</strike></string>
+    <string name="plans_duration">3 Months</string>
+
+    <!-- Plans -->
+    <string name="plans_offer_text">Limited offer</string>
+    <string name="plans_offer_duration">for life</string>
+    <string name="plans_free_details_price">Free account</string>
+    <string name="plans_free_details_access">Limited access</string>
+    <string name="plans_free_details_account">Basic account</string>
+    <string name="plans_free_details_service_access">No access to services</string>
+    <string name="plans_free_button">Proceed</string>
+    <string name="plans_user_details_price">Rs. 49/month</string>
+    <string name="plans_user_details_price_offer">Rs. 99</string>
+    <string name="plans_user_details_access">Full access</string>
+    <string name="plans_user_details_account">Premium account</string>
+    <string name="plans_user_details_service_access">Access to services</string>
+    <string name="plans_user_button">Pay Rs. 99.00</string>
+    <string name="plans_company_details_price">Rs. 99/month</string>
+    <string name="plans_company_details_price_offer">Rs. 199</string>
+    <string name="plans_company_details_access">Full access</string>
+    <string name="plans_company_details_account">Premium account</string>
+    <string name="plans_company_details_service_access">Access to services</string>
+    <string name="plans_company_button">Pay Rs. 199.00</string>
     <string-array name="org_array">
         <item>Organisation</item>
         <item>Private</item>
@@ -463,8 +519,6 @@ HELLOmywork is determinant to provide to our service providers the best possible
         <item>Uttar Pradesh</item>
         <item>West Bengal</item>
     </string-array>
-
-    <!-- About Us-->
     <string-array name="india_top_places">
         <item>Location</item>
         <item>Agartala</item>
@@ -655,8 +709,6 @@ HELLOmywork is determinant to provide to our service providers the best possible
         <item>Yercaud</item>
         <item>Zanskar</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="search_landing_tabs">
         <item>All</item>
         <item>Sales</item>
@@ -672,56 +724,4 @@ HELLOmywork is determinant to provide to our service providers the best possible
         <item>Renovation</item>
         <item>More</item>
     </string-array>
-
-    <!-- Profile page -->
-    <string name="profileMasterCardIV">Profile Master Card</string>
-
-    <!-- Home Page -->
-    <string name="hp_searchHint">Search anything anywhere</string>
-    <string name="hp_popular_categories">Popular Categories</string>
-    <string name="hp_sales">Sales</string>
-    <string name="hp_repairs">Repairs</string>
-
-    <!-- Unions -->
-    <string name="union_heading">Unions</string>
-
-    <!-- Contact -->
-    <string name="contact_heading">Contact Us</string>
-    <string name="contact_message">Message</string>
-    <string name="contact_number">Contact</string>
-    <string name="contact_address_1">Retaj complex, 1st Floor, Post-Biyyam,</string>
-    <string name="contact_address_2">via-ponnani, dist-malappuram, Pin: 679567</string>
-    <string name="contact_phone">Telephone: +91 90724 76701</string>
-    <string name="contact_email">Email: support@hellomywork.com</string>
-    <string name="contact_success">Thank you for contacting Hellomywork. We will get back to you shortly</string>
-
-    <!-- Post Options Menu -->
-    <string name="post_option_report">Report</string>
-    <string name="post_option_delete">Delete</string>
-
-    <!-- Plans -->
-    <string name="plans_heading">Membership Plans</string>
-    <string name="plans_price_free">Rs. 00.00</string>
-    <string name="plans_price_user"><strike>Rs. 147.00</strike></string>
-    <string name="plans_price_company"><strike>Rs. 300.00</strike></string>
-    <string name="plans_duration">3 Months</string>
-    <string name="plans_offer_text">Limited offer</string>
-    <string name="plans_offer_duration">for life</string>
-    <string name="plans_free_details_price">Free account</string>
-    <string name="plans_free_details_access">Limited access</string>
-    <string name="plans_free_details_account">Basic account</string>
-    <string name="plans_free_details_service_access">No access to services</string>
-    <string name="plans_free_button">Proceed</string>
-    <string name="plans_user_details_price">Rs. 49/month</string>
-    <string name="plans_user_details_price_offer">Rs. 99</string>
-    <string name="plans_user_details_access">Full access</string>
-    <string name="plans_user_details_account">Premium account</string>
-    <string name="plans_user_details_service_access">Access to services</string>
-    <string name="plans_user_button">Pay Rs. 99.00</string>
-    <string name="plans_company_details_price">Rs. 99/month</string>
-    <string name="plans_company_details_price_offer">Rs. 199</string>
-    <string name="plans_company_details_access">Full access</string>
-    <string name="plans_company_details_account">Premium account</string>
-    <string name="plans_company_details_service_access">Access to services</string>
-    <string name="plans_company_button">Pay Rs. 199.00</string>
 </resources>

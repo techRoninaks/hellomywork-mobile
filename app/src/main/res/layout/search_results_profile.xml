@@ -26,23 +26,22 @@
             <!-- Logo and QR -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="@dimen/standard_gap_medium"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="5">
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="4"
                     android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/imgQr"
-                    android:layout_width="15dp"
-                    android:layout_height="48dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingTop="@dimen/standard_gap_small"
                     android:src="@drawable/qr_code" />
 
             </LinearLayout>
@@ -59,54 +58,58 @@
                     android:layout_height="60dp"
                     android:layout_weight="1"
                     android:src="@drawable/ivprofile"
-                    android:paddingStart="20dp">
+                    android:layout_marginStart="@dimen/standard_gap_medium"
+                    android:layout_marginTop="@dimen/standard_gap_medium">
 
                 </ImageView>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="2"
+                    android:layout_marginTop="@dimen/standard_gap_medium">
 
                     <TextView
                         android:id="@+id/tvname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_gap_small"
                         android:layout_marginStart="15dp"
+                        android:singleLine="true"
+
+                        android:ellipsize="end"
                         android:shadowColor="#003F3C3C"
                         android:text="Amal Das V S"
                         android:textColor="@color/colorTextWhitePrimary"
-                        android:textSize="12sp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:layout_marginEnd="@dimen/standard_gap_small"/>
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tvdesignation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_gap_small"
                         android:layout_marginStart="15dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:shadowColor="#003F3C3C"
                         android:text="UI Designer"
                         android:textColor="@color/colorTextWhitePrimary"
-                        android:textSize="11sp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:layout_marginEnd="@dimen/standard_gap_small"/>
+                        android:textSize="11sp" />
 
                     <TextView
                         android:id="@+id/tvaddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_gap_small"
                         android:layout_marginStart="15dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:shadowColor="#003F3C3C"
                         android:text="Kundanoor"
                         android:textColor="@color/colorTextWhitePrimary"
-                        android:textSize="11sp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:layout_marginEnd="@dimen/standard_gap_small"/>
-                    </LinearLayout>
+                        android:textSize="11sp" />
+                </LinearLayout>
 
 
             </LinearLayout>
