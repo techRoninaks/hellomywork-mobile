@@ -38,4 +38,9 @@
     <color name="palette_green">#49c3b1</color>
     <color name="palette_blue">#0362b4</color>
 
+
+    <!--Button Colors-->
+    <color name="orange">#ffff8800</color>
+    <color name="light_orange">#ffe27d18</color>
+
 </resources>

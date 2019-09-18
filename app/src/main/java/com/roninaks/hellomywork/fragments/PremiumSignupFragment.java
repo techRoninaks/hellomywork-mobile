@@ -120,6 +120,17 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
     }
 
     @Override
+    public void onResume() {
+        if(imageChanged){
+            btnUploadImage.setBackgroundResource(R.drawable.career_button_color_radius);
+            btnUploadImage.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
+            btnSubmit.setBackgroundResource(R.drawable.card_background_shape);
+            btnSubmit.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+        }
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

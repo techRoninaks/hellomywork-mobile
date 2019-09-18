@@ -601,10 +601,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Edit"
+                            android:textAllCaps="false"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:id="@+id/button_Edit"
                             android:textColor="@color/colorTextWhitePrimary"
                             android:layout_margin="10dp"
-                            android:padding="5dp"
+                            android:paddingRight="@dimen/standard_gap_small"
+                            android:paddingLeft="@dimen/standard_gap_small"
                             android:background="@drawable/career_button_color_radius"/>
 
 
@@ -678,6 +682,7 @@
                                     android:layout_marginRight="10dp"
                                     android:background="@drawable/profile_postfilter_color_purple"
                                     android:text="RANDOM"
+                                    android:alpha="0.5"
                                     android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
@@ -687,6 +692,7 @@
                                     android:layout_marginRight="10dp"
                                     android:background="@drawable/profile_postfilter_color_blood"
                                     android:text="FOR SALE"
+                                    android:alpha="0.5"
                                     android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
@@ -696,6 +702,7 @@
                                     android:layout_marginRight="10dp"
                                     android:background="@drawable/profile_postfilter_color_mint"
                                     android:text="REQUIRED"
+                                    android:alpha="0.5"
                                     android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
@@ -705,6 +712,7 @@
                                     android:layout_marginRight="10dp"
                                     android:background="@drawable/profile_postfilter_color_yellow"
                                     android:text="OFFERES"
+                                    android:alpha="0.5"
                                     android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
@@ -716,6 +724,7 @@
                                     android:paddingRight="5dp"
                                     android:background="@drawable/profile_postfilter_color_black"
                                     android:text="ACHIEVEMENT"
+                                    android:alpha="0.5"
                                     android:textColor="@color/colorTextWhitePrimary" />
 
                                 <Button
@@ -727,6 +736,7 @@
                                     android:layout_marginRight="10dp"
                                     android:background="@drawable/profile_postfilter_color_green"
                                     android:text="APPRECIATION"
+                                    android:alpha="0.5"
                                     android:textColor="@color/colorTextWhitePrimary" />
 
 
@@ -742,24 +752,31 @@
                             <Button
                                 android:id="@+id/button_ImageUpload"
                                 android:layout_width="wrap_content"
-                                android:layout_height="40dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginRight="20dp"
-                                android:layout_marginTop="-5dp"
                                 android:layout_alignParentStart="true"
                                 android:layout_marginBottom="20dp"
+                                android:background="@drawable/card_background_shape"
+                                android:textStyle="bold"
+                                android:textAllCaps="false"
+                                android:paddingLeft="@dimen/standard_gap_large"
+                                android:paddingRight="@dimen/standard_gap_large"
                                 android:text="Upload Image" />
 
                             <Button
                                 android:id="@+id/button_Post"
                                 android:layout_width="wrap_content"
-                                android:layout_height="30dp"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginRight="20dp"
                                 android:layout_marginBottom="15dp"
                                 android:layout_alignParentEnd="true"
-                                android:background="@color/colorNavigationBarBkg"
+                                android:textAllCaps="false"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:background="@drawable/career_button_color_radius"
                                 android:text="Post"
                                 android:textColor="@color/colorTextWhitePrimary" />
 
@@ -803,65 +820,86 @@
 
                         <HorizontalScrollView
                             android:layout_width="wrap_content"
+                            android:layout_marginRight="20dp"
                             android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
                             android:scrollbars="none">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="15dp"
+                                android:layout_marginRight="5dp"
                                 >
 
                                 <Button
+                                    android:id="@+id/Random_BTN2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="30dp"
                                     android:text="RANDOM"
                                     android:layout_marginRight="10dp"
+                                    android:layout_marginStart="10dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_purple"/>
 
                                 <Button
+                                    android:id="@+id/ForSale_BTN2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="30dp"
+                                    android:alpha="0.5"
                                     android:text="FOR SALE"
                                     android:layout_marginRight="10dp"
+                                    android:layout_marginStart="10dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_blood"/>
 
                                 <Button
+                                    android:id="@+id/Required_BTN2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="30dp"
+                                    android:alpha="0.5"
                                     android:text="REQUIRED"
                                     android:layout_marginRight="10dp"
+                                    android:layout_marginStart="10dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_mint"/>
 
                                 <Button
+                                    android:id="@+id/Offers_BTN2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="30dp"
+                                    android:alpha="0.5"
                                     android:text="OFFERES"
                                     android:layout_marginRight="10dp"
+                                    android:layout_marginStart="10dp"
                                     android:textColor="@color/colorTextWhitePrimary"
                                     android:background="@drawable/profile_postfilter_color_yellow"/>
 
                                 <Button
+                                    android:id="@+id/Achievement_BTN2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="30dp"
-                                    android:text="APPRECIATION"
-                                    android:layout_marginRight="10dp"
-                                    android:textColor="@color/colorTextWhitePrimary"
-                                    android:background="@drawable/profile_postfilter_color_green"/>
-
-                                <Button
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="30dp"
+                                    android:alpha="0.5"
                                     android:text="ACHIEVEMENT"
                                     android:layout_marginLeft="10dp"
+                                    android:layout_marginStart="10dp"
                                     android:textColor="@color/colorTextWhitePrimary"
+                                    android:paddingLeft="@dimen/standard_gap_medium"
+                                    android:paddingRight="@dimen/standard_gap_medium"
                                     android:background="@drawable/profile_postfilter_color_black"/>
+
+                                <Button
+                                    android:id="@+id/Appreciation_BTN2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:alpha="0.5"
+                                    android:text="APPRECIATION"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginStart="10dp"
+                                    android:paddingLeft="@dimen/standard_gap_medium"
+                                    android:paddingRight="@dimen/standard_gap_medium"
+                                    android:textColor="@color/colorTextWhitePrimary"
+                                    android:background="@drawable/profile_postfilter_color_green"/>
 
                             </LinearLayout>
 
@@ -870,10 +908,8 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="@dimen/standard_gap_small"
                             android:layout_marginBottom="30dp"
-                            android:layout_marginLeft="-15dp"
-                            android:layout_marginRight="-15dp"
                             android:orientation="vertical"
                             android:id="@+id/profileRecyclerView"
                             >
