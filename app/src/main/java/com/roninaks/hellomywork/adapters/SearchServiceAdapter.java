@@ -82,7 +82,6 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
 
     }
 
-
     @Override
     public int getItemCount() {
         return categoryModels.size();

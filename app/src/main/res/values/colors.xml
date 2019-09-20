@@ -39,8 +39,11 @@
     <color name="palette_blue">#0362b4</color>
 
 
-    <!--Button Colors-->
-    <color name="orange">#ffff8800</color>
-    <color name="light_orange">#ffe27d18</color>
-
+    green:  #00A99D (graph/floating action button)
+    yellow: #C3811D
+    red: #B60915
+    <!-- HMW Dashboard colors-->
+    <color name="graph_green">#00A99D</color>
+    <color name="graph_yellow">#C3811D</color>
+    <color name="graph_red">#B60915</color>
 </resources>

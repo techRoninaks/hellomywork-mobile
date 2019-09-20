@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/list_announcement">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_gap_small"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/list_announcement_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Today"
+            android:gravity="center"
+            android:layout_margin="@dimen/standard_gap_small"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/announcement_list_bg"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/list_announcement_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sales Executive Monthly meeting postponded to 3rd January 2019 9 AM"
+                android:layout_margin="@dimen/standard_gap_small"
+                android:padding="@dimen/standard_gap_extra_small"
+                android:textColor="@color/colorTextBlackPrimary"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/list_announcement_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2:30 AM"
+                android:layout_marginStart="@dimen/standard_gap_small"
+                android:layout_marginEnd="@dimen/standard_gap_small"
+                android:layout_marginBottom="@dimen/standard_gap_small"
+                android:paddingEnd="@dimen/standard_gap_extra_small"
+                android:gravity="end"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
