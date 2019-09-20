@@ -2,10 +2,12 @@ package com.roninaks.hellomywork.helpers;
 
 import android.content.Context;
 
+import com.roninaks.hellomywork.models.AnnouncementsModel;
 import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
+import com.roninaks.hellomywork.models.TopPerformerModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
 import org.json.JSONException;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 public class ModelHelper {
 
     Context context;
+    int id=0;
 
     public ModelHelper(Context context) {
         this.context = context;
@@ -25,6 +28,38 @@ public class ModelHelper {
 
     public ModelHelper() {
     }
+
+
+    public AnnouncementsModel buildAnnouncementModel(JSONObject jsonObject) {
+        try{
+            AnnouncementsModel announcementsModel = new AnnouncementsModel();
+            String time = jsonObject.getString("modDate");
+            String[] splitStr = time.split("\\s+");
+            announcementsModel.setAnnouncementDate(splitStr[0]);
+            announcementsModel.setAnnouncementMessage(jsonObject.getString("content"));
+            announcementsModel.setGetAnnouncementTime(splitStr[1]);
+
+            return announcementsModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new AnnouncementsModel();
+    }
+
+    public TopPerformerModel buildTopPerformerModel(JSONObject jsonObject) {
+        try{
+            TopPerformerModel topPerformerModel = new TopPerformerModel();
+            id++;
+            topPerformerModel.setId(String.valueOf(id));
+            topPerformerModel.setUserName(jsonObject.getString("userName"));
+            topPerformerModel.setUserConversions(jsonObject.getString("conversions"));
+            return topPerformerModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new TopPerformerModel();
+    }
+
 
     public ProfilePostModel buildProfilePostModel(JSONObject jsonObject) {
         try{
