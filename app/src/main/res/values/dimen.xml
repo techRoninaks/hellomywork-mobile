@@ -3,7 +3,7 @@
 <!-- Careers Page -->
     <dimen name="logo_width_careers">100dp</dimen>
     <dimen name="logo_height_careers">100dp</dimen>
-    <dimen name="logo_margin_top_bottom_careers">70dp</dimen>
+    <dimen name="logo_margin_top_bottom_careers">30dp</dimen>
     <dimen name="text_margin_career">30dp</dimen>
     <dimen name="career_margin_left_right">15dp</dimen>
 
@@ -63,4 +63,7 @@
     <dimen name="plan_side_margin">30dp</dimen>
     <dimen name="plan_free_price_top_margin">64dp</dimen>
     <dimen name="plan_details_icon">16dp</dimen>
+
+    <!-- Ratings Dialog -->
+    <dimen name="ratings_main_star_size">60dp</dimen>
 </resources>

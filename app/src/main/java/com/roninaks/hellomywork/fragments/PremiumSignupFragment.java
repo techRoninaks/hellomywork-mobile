@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import es.dmoral.toasty.Toasty;
 
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
@@ -172,6 +173,8 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 loadUserDetails();
             }
         }
+        if(employeeId == null)
+            employeeId = ((MainActivity) context).isAdminLoggedIn();
         if(employeeId != null){
             if(!employeeId.isEmpty()){
                 btnSave.setVisibility(View.VISIBLE);
@@ -204,14 +207,14 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             @Override
             public void onClick(View v) {
                 if(!validate()){
-                    saveInformation();
+                    submitInformation();
                 }
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveInformation();
             }
         });
         btnUploadImage.setOnClickListener(new View.OnClickListener() {
@@ -297,10 +300,15 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 case "submit":{
                     if(type.toLowerCase().equals("new")) {
                         Fragment fragment = PlansFragment.newInstance(userId, "");
-                        ((MainActivity) context).initFragment(fragment);
+                        ((MainActivity) context).initFragment(fragment, "plans");
                     }else{
                         ((MainActivity) context).onBackPressed();
                     }
+                    break;
+                }
+                case "save":{
+                    Toast.makeText(context, "Information saved successfully", Toast.LENGTH_SHORT).show();
+                    break;
                 }
             }
         }catch(Exception e){
@@ -441,6 +449,42 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         SqlHelper sqlHelper = new SqlHelper(context, PremiumSignupFragment.this);
         sqlHelper.setExecutePath("postprofiledata.php");
         sqlHelper.setMethod("POST");
+        sqlHelper.setActionString("save");
+        ContentValues params = new ContentValues();
+        params.put("userId", userId);
+        params.put("name", etName.getText().toString());
+        params.put("email", etEmail.getText().toString());
+        params.put("password", etPassword.getText().toString());
+        params.put("phone", etPrimaryPhone.getText().toString());
+        params.put("category", spCategory.getSelectedItem().toString());
+        params.put("role", etRole.getText().toString());
+        params.put("country", "IN");
+        params.put("type", spOrgType.getSelectedItem().toString());
+        String address = etAddress.getText().toString();
+        address = address.replace(" ", "&#32;");
+        params.put("address", address);
+        params.put("state", spState.getSelectedItem().toString());
+        params.put("location", spLocation.getSelectedItem().toString());
+        params.put("sublocation", etSublocation.getText().toString());
+        params.put("pincode", etPincode.getText().toString());
+        params.put("union", etUnion.getText().toString());
+        params.put("whatsapp", etWhatsapp.getText().toString());
+        params.put("image", imageChanged ? StringHelper.imageToString(bitmap) : "1");
+        params.put("website", etWebsite.getText().toString());
+        params.put("phone2", etSecondaryContacts.getText().toString());
+        params.put("skills", etSkills.getText().toString());
+        params.put("privatetag", switchPrivacy.isChecked() ? "1" : "0");
+        params.put("prospectTag", cbProspect.isChecked() ? "1" : "0");
+        params.put("employId", employeeId);
+        params.put("mob", "1");
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(true);
+    }
+
+    private void submitInformation(){
+        SqlHelper sqlHelper = new SqlHelper(context, PremiumSignupFragment.this);
+        sqlHelper.setExecutePath("postprofiledata.php");
+        sqlHelper.setMethod("POST");
         sqlHelper.setActionString("submit");
         ContentValues params = new ContentValues();
         params.put("id", userId);
@@ -502,17 +546,28 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             etName.setText(serviceProviderModel.getName());
             String address = serviceProviderModel.getAddress();
             address = address.replace("&#32;", " ");
-            etAddress.setText(address);
-            etPincode.setText(serviceProviderModel.getPincode());
-            etEmail.setText(serviceProviderModel.getEmail());
-            etPrimaryPhone.setText(serviceProviderModel.getPhone());
-            etSecondaryContacts.setText(serviceProviderModel.getPhone2());
-            etSkills.setText(serviceProviderModel.getSkills());
-            etPassword.setText(serviceProviderModel.getPassword());
-            etSublocation.setText(serviceProviderModel.getSublocation());
-            etRole.setText(serviceProviderModel.getRole());
-            etWebsite.setText(serviceProviderModel.getWebsite());
-            etUnion.setText(serviceProviderModel.getUnionName());
+            if(!address.equals("null") || !address.isEmpty())
+                etAddress.setText(address);
+            if(!(serviceProviderModel.getPincode().equals("null") || serviceProviderModel.getPincode().isEmpty()))
+                etPincode.setText(serviceProviderModel.getPincode());
+            if(!(serviceProviderModel.getEmail().equals("null") || serviceProviderModel.getEmail().isEmpty()))
+                etEmail.setText(serviceProviderModel.getEmail());
+            if(!(serviceProviderModel.getPhone().equals("null") || serviceProviderModel.getPhone().isEmpty()))
+                etPrimaryPhone.setText(serviceProviderModel.getPhone());
+            if(!(serviceProviderModel.getPhone2().equals("null") || serviceProviderModel.getPhone2().isEmpty()))
+                etSecondaryContacts.setText(serviceProviderModel.getPhone2());
+            if(!(serviceProviderModel.getSkills().equals("null") || serviceProviderModel.getSkills().isEmpty()))
+                etSkills.setText(serviceProviderModel.getSkills());
+            if(!(serviceProviderModel.getPassword().equals("null") || !serviceProviderModel.getPassword().isEmpty()))
+                etPassword.setText(serviceProviderModel.getPassword());
+            if(!(serviceProviderModel.getSublocation().equals("null") || !serviceProviderModel.getSublocation().isEmpty()))
+                etSublocation.setText(serviceProviderModel.getSublocation());
+            if(!(serviceProviderModel.getRole().equals("null") || !serviceProviderModel.getRole().isEmpty()))
+                etRole.setText(serviceProviderModel.getRole());
+            if(!(serviceProviderModel.getWebsite().equals("null") || !serviceProviderModel.getWebsite().isEmpty()))
+                etWebsite.setText(serviceProviderModel.getWebsite());
+            if(!(serviceProviderModel.getUnionName().equals("null") || !serviceProviderModel.getUnionName().isEmpty()))
+                etUnion.setText(serviceProviderModel.getUnionName());
             cbProspect.setChecked(serviceProviderModel.isProspect());
             switchPrivacy.setChecked(serviceProviderModel.isPrivate());
             imageUrl = serviceProviderModel.getImage();
@@ -540,14 +595,14 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             //Set Org Type Spinner
             if(serviceProviderModel.getOrgType().toLowerCase().contains("private")){
                 spOrgType.setSelection(1);
-            }else{
+            }else if(!(serviceProviderModel.getOrgType().toLowerCase().isEmpty() || serviceProviderModel.getOrgType().toLowerCase().equals("null"))){
                 spOrgType.setSelection(2);
             }
             //Set Category Spinner
             if(categoryLoaded)
                 setSelectedCategory();
         }catch (Exception e){
-
+            Toast.makeText(context, context.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
         }
     }
 

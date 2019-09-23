@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/containerMaster"
+    android:padding="@dimen/standard_gap_medium">
+    <!-- Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:id="@+id/containerHeader">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/font_plans_secondary"
+            android:textColor="@color/colorTextBlackPrimary"
+            android:textStyle="bold"
+            android:text="Nihal Pradeep"
+            android:id="@+id/tvUserName"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.10"
+            android:textSize="@dimen/font_plans_secondary"
+            android:textColor="@color/colorTextBlackPrimary"
+            android:textStyle="bold"
+            android:text="Rating"
+            android:id="@+id/tvRatingText"
+            android:textAlignment="textEnd"
+            android:layout_marginEnd="@dimen/standard_gap_small"/>
+        <ImageView
+            android:layout_width="@dimen/icon_contact"
+            android:layout_height="@dimen/icon_contact"
+            android:src="@drawable/ic_star_orange"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:layout_marginStart="@dimen/standard_gap_extra_small"
+            android:textSize="@dimen/font_plans_secondary"
+            android:textColor="@color/colorTextBlackPrimary"
+            android:textStyle="bold"
+            android:id="@+id/tvRating"/>
+    </LinearLayout>
+    <!-- Review Text -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/standard_gap_small">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is a very long string test trying to focus on the merits and demerits of long text"
+            android:textSize="@dimen/font_plans_secondary"
+            android:textColor="@color/colorTextBlackSecondary"
+            android:id="@+id/tvReviewText"/>
+    </LinearLayout>
+</LinearLayout>

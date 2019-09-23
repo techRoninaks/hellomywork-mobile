@@ -46,4 +46,7 @@
     <color name="graph_green">#00A99D</color>
     <color name="graph_yellow">#C3811D</color>
     <color name="graph_red">#B60915</color>
+
+    <!-- Splash Screen -->
+    <color name="splash_screen_violet">#230046</color>
 </resources>

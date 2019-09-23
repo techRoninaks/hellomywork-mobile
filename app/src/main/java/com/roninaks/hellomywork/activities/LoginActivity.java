@@ -52,7 +52,20 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         activity = this;
-
+        String userId = "";
+        SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences("hmw", 0);
+        if(sharedPreferences.getBoolean("is_loggedin", false)) {
+            userId = sharedPreferences.getString("user_id", "");
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("return_path", "profile");
+            bundle.putInt("arg_count", 2);
+            bundle.putString("param_0", userId);
+            bundle.putString("param_1", "");
+            intent.putExtra("bundle", bundle);
+            startActivity(intent);
+            finish();
+        }
         editTextPhoneNumber = (EditText) findViewById(R.id.editText_Phonenumber);
         editTextPassword = (EditText) findViewById(R.id.editText_Password);
         btnLogIn = (Button) findViewById(R.id.button_LogIn);

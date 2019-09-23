@@ -20,4 +20,10 @@
         <item name="colorControlHighlight">@color/colorTextWhiteSecondary</item>
         <item name="android:textColorHint">@color/colorTextWhiteHint</item>
     </style>
+
+    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_bar</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
 </resources>

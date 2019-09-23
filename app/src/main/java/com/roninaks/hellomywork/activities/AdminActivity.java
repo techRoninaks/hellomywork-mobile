@@ -6,6 +6,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,12 +100,14 @@ public class AdminActivity extends AppCompatActivity {
 
         navigation = findViewById(R.id.navigation);
         floatActionAddUser = findViewById(R.id.add_user_fab);
-
+//        if(isLoggedIn().isEmpty())
+//            floatActionAddUser.setVisibility(View.GONE);
         //Floating Action Button Onclick
         floatActionAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // onclick for fab
+                Intent intent = new Intent(AdminActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -128,6 +132,18 @@ public class AdminActivity extends AppCompatActivity {
 
     public void initFragment(DialogFragment fragment){
         fragment.show(getSupportFragmentManager(), "PostAdsFragment");
+    }
+
+    public String isLoggedIn(){
+        boolean loggedIn = true;
+        String userId = "";
+        SharedPreferences sharedPreferences = AdminActivity.this.getSharedPreferences("hmw", 0);
+        loggedIn = sharedPreferences.getBoolean("is_loggedin_admin", false);
+        if(loggedIn)
+            userId = sharedPreferences.getString("emp_id", "");
+        if(userId.isEmpty())
+            sharedPreferences.edit().putBoolean("is_loggedin_admin", false).commit();
+        return userId;
     }
 
     private void setDefaultIcon(MenuItem menuItem){

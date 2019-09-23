@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.AdminLogin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- Header Section -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/llContainerHeader"
+                android:paddingTop="@dimen/standard_gap_large"
+                android:paddingBottom="@dimen/standard_gap_large">
+                <ImageView
+                    android:layout_width="@dimen/icon_contact"
+                    android:layout_height="@dimen/icon_contact"
+                    android:src="@drawable/ic_back_black"
+                    android:id="@+id/imgBack"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/standard_gap_large"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/admin_login_header"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorTextBlackPrimary"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/font_page_title"
+                    android:textAlignment="center"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"/>
+            </RelativeLayout>
+            <!-- Banner Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:background="@drawable/career_drawable_background"
+                android:paddingBottom="@dimen/text_margin_career">
+
+                <ImageView
+                    android:layout_width="@dimen/logo_width_careers"
+                    android:layout_height="@dimen/logo_height_careers"
+                    android:src="@drawable/logo_white_min"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/logo_image"
+                    android:layout_marginTop="@dimen/logo_margin_top_bottom_careers"
+                    android:layout_marginBottom="@dimen/logo_margin_top_bottom_careers"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/admin_login_description"
+                    android:layout_marginBottom="@dimen/text_margin_career"
+                    android:layout_marginLeft="@dimen/text_margin_career"
+                    android:layout_marginRight="@dimen/text_margin_career"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <!-- Content Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorTextWhitePrimary"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="8dp"
+                android:layout_marginTop="-40dp"
+                android:layout_marginLeft="@dimen/career_margin_left_right"
+                android:layout_marginRight="@dimen/career_margin_left_right"
+                app:cardUseCompatPadding="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="25dp">
+                    <!-- Email -->
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:hint="@string/careers_name_hint"
+                        android:padding="10dp"
+                        android:background="@drawable/career_edit_background"
+                        android:id="@+id/etEmail"
+                        android:nextFocusForward="@+id/etPassword"
+                        android:inputType="textEmailAddress" />
+                    <!-- Password -->
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_margin="25dp"
+                        android:padding="10dp"
+                        android:hint="@string/careers_address_hint"
+                        android:background="@drawable/career_edit_background"
+                        android:id="@+id/etPassword"
+                        android:inputType="textPassword"
+                        />
+                    <!-- Button Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        android:gravity="center">
+                        <Button
+                            android:id="@+id/btn_submit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/career_button_color_radius"
+                            android:elevation="8dp"
+                            android:text="@string/careers_submit_text"
+                            android:textColor="@color/colorTextWhitePrimary" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
