@@ -18,10 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import es.dmoral.toasty.Toasty;
 
 import com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.razorpay.PaymentResultListener;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.BookmarkFragment;
 import com.roninaks.hellomywork.fragments.CareersFragment;
@@ -31,6 +33,7 @@ import com.roninaks.hellomywork.fragments.HomeFragment;
 import com.roninaks.hellomywork.fragments.PlansFragment;
 import com.roninaks.hellomywork.fragments.PostAdFragment;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
+import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.fragments.SearchLanding;
 import com.roninaks.hellomywork.fragments.UnionsFragment;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -40,7 +43,7 @@ import java.util.HashMap;
 
 //TODO FAB show on Login
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PaymentResultListener {
 
     private BottomNavigationViewEx navigation;
     private MenuItem PreviousMenuItem;
@@ -157,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DialogFragment fragment = PostAdFragment.newInstance("", "");
-                initFragment(fragment);
+                initFragment(fragment, "PostAdFragment");
             }
         });
         //Set Bottom navigation properties
@@ -187,7 +190,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initFragment(DialogFragment fragment){
-        fragment.show(getSupportFragmentManager(), "PostAdsFragment");
+        initFragment(fragment, "");
+    }
+
+    public void initFragment(DialogFragment fragment, String tag){
+        fragment.show(getSupportFragmentManager(), tag);
     }
 
     private void setDefaultIcon(MenuItem menuItem){
@@ -275,6 +282,18 @@ public class MainActivity extends AppCompatActivity {
         return userId;
     }
 
+    public String isAdminLoggedIn(){
+        boolean loggedIn = true;
+        String userId = "";
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("hmw", 0);
+        loggedIn = sharedPreferences.getBoolean("is_loggedin_admin", false);
+        if(loggedIn)
+            userId = sharedPreferences.getString("emp_id", "");
+        if(userId.isEmpty())
+            sharedPreferences.edit().putBoolean("is_loggedin_admin", false).commit();
+        return userId;
+    }
+
     public void logout(){
         SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
         sharedPreferences.edit().putString("user_id", "")
@@ -302,6 +321,12 @@ public class MainActivity extends AppCompatActivity {
                     case "premium_signup":{
                         Fragment fragment = PremiumSignupFragment.newInstance(args[0], args[1], args[2]);
                         initFragment(fragment);
+                        break;
+                    }
+                    case "profile":{
+                        Fragment fragment = ProfileFragment.newInstance(args[0], args[1]);
+                        initFragment(fragment);
+                        break;
                     }
                 }
                 return;
@@ -312,4 +337,16 @@ public class MainActivity extends AppCompatActivity {
         initFragment(fragment);
     }
 
+    @Override
+    public void onPaymentSuccess(String s) {
+        PlansFragment fragment = (PlansFragment) getSupportFragmentManager().findFragmentByTag("plans");
+        if (fragment != null && fragment.isVisible()) {
+            fragment.saveUserPlan();
+        }
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        Toasty.error(MainActivity.this, getString(R.string.payment_failed), Toasty.LENGTH_SHORT).show();
+    }
 }

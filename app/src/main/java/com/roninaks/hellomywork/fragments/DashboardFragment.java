@@ -20,6 +20,7 @@ import com.razerdp.widget.animatedpieview.AnimatedPieView;
 import com.razerdp.widget.animatedpieview.AnimatedPieViewConfig;
 import com.razerdp.widget.animatedpieview.data.SimplePieInfo;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.AdminActivity;
 import com.roninaks.hellomywork.adapters.AnnouncementsAdapter;
 import com.roninaks.hellomywork.adapters.TopPerformerListAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
@@ -49,8 +50,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String empId;
+    private String empName;
     
     private View rootView;
     private Context context;
@@ -91,8 +92,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            empId = getArguments().getString(ARG_PARAM1);
+            empName = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -102,8 +103,12 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         // Inflate the layout for this fragment
         context = getActivity();
         // Get logged in user
-        getUserDetails(context);
-
+//        if(((AdminActivity) context).isLoggedIn().isEmpty()){
+//            Fragment fragment = AdminLogin.newInstance("", "");
+//            ((AdminActivity) context).initFragment(fragment);
+//        }else {
+            getUserDetails(context);
+//        }
         rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         recyclerViewTopPerformers = rootView.findViewById(R.id.recyclerView_topPerformers);
@@ -153,8 +158,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setActionString("pie_data");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
-        mParam1 = "5";  //remove
-        contentValues.put("userId", mParam1);
+        empId = "5";  //remove
+        contentValues.put("userId", empId);
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
     }
@@ -166,8 +171,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setActionString("get_user");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
-        mParam1 = "5";  //remove
-        contentValues.put("id", mParam1);
+        empId = "5";  //remove
+        contentValues.put("id", empId);
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
     }
@@ -179,7 +184,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setActionString("topPerformers");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id", mParam1);
+        contentValues.put("id", empId);
 //        contentValues.put("action", "queryAction");
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
@@ -192,7 +197,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setActionString("announcements");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id", mParam1);
+        contentValues.put("id", empId);
 //        contentValues.put("action", "queryAction");
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);

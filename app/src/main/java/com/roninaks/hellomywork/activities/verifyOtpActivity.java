@@ -166,7 +166,7 @@ public class verifyOtpActivity extends AppCompatActivity implements SqlDelegate 
                         bundle.putString("return_path", "premium_signup");
                         bundle.putInt("arg_count", 3);
                         bundle.putString("param_0", "new");
-                        bundle.putString("param_1", sqlHelper.getStringResponse().split("~")[0]);
+                        bundle.putString("param_1", sqlHelper.getStringResponse().split("~")[1]);
                         bundle.putString("param_2", "");
                         intent.putExtra("bundle", bundle);
                         startActivity(intent);

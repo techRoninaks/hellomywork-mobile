@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.AdminActivity;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.RegisterActivity;
@@ -184,6 +185,11 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                             case R.id.options_contact:{
                                 Fragment fragment = ContactFragment.newInstance("", "");
                                 ((MainActivity) context).initFragment(fragment);
+                                break;
+                            }
+                            case R.id.options_admin:{
+                                Intent intent = new Intent(context, AdminActivity.class);
+                                startActivity(intent);
                                 break;
                             }
                         }

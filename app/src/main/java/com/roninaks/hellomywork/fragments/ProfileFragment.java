@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,7 +78,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     private final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 4;
     String imageBaseUri = "https://www.hellomywork.com/",telphone, sentToMail, whatsppNumber, profileName,profileCard;
     Context context;
-    ImageView masterProfilePster, ivProfileBackBtn, ivSettings;
+    ImageView masterProfilePster, ivProfileBackBtn, ivSettings, ivRatings;
     EditText postadDescrption,writeComments;
     TextView sendComment;
     private TextView profilePCName,profileMainName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
@@ -103,15 +104,15 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 User ID.
+     * @param userId User ID.
      * @param param2 Parameter 2.
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance(String userId, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM1, userId);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -181,6 +182,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         buttonRandom=view.findViewById(R.id.Random_BTN);
         buttonPost=view.findViewById(R.id.button_Post);
         ivSettings=view.findViewById(R.id.profile_settings);
+        ivRatings=view.findViewById(R.id.profile_ratings);
         writeComments=view.findViewById(R.id.editText_WriteComments);
         profileMainName = view.findViewById(R.id.profileMainName);
         llpostMaster = view.findViewById(R.id.llpostMaster);
@@ -212,22 +214,24 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
         if(((MainActivity) context).isLoggedIn().isEmpty()){
             ivSettings.setVisibility(View.GONE);
+            ivRatings.setVisibility(View.GONE);
         }
-        if(userId != ((MainActivity) context).isLoggedIn()){
+        if(userId.equals(((MainActivity) context).isLoggedIn())){
+            ivRatings.setVisibility(View.GONE);
+            if(((MainActivity) context).isLoggedIn().equals(us_id)){
+                buttonEdit.setVisibility(View.VISIBLE);
+                buttonEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Fragment fragment = PremiumSignupFragment.newInstance("edit",userId, "");
+                        ((MainActivity) context).initFragment(fragment);
+
+                    }
+                });
+            }
+        }else{
             llpostMaster.setVisibility(View.GONE);
-        }
-
-        buttonEdit.setVisibility(View.GONE);
-        if(((MainActivity) context).isLoggedIn().equals(us_id)){
-            buttonEdit.setVisibility(View.VISIBLE);
-            buttonEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment fragment = PremiumSignupFragment.newInstance("edit",userId, "");
-                    ((MainActivity) context).initFragment(fragment);
-
-                }
-            });
+            buttonEdit.setVisibility(View.GONE);
         }
 
         buttonPost.setOnClickListener(new View.OnClickListener() {
@@ -642,6 +646,14 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                     }
                 });
                 popup.show();
+            }
+        });
+
+        ivRatings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment fragment = RatingsDialog.newInstance(userId, "");
+                ((MainActivity) context).initFragment(fragment, "RatingsDialog");
             }
         });
 

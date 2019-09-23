@@ -185,7 +185,8 @@
                         android:paddingStart="@dimen/plan_side_margin"
                         android:paddingEnd="@dimen/plan_side_margin"
                         android:layout_marginTop="@dimen/standard_gap_medium"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:id="@+id/btn_Free"/>
                 </LinearLayout>
                 <!-- Premium User -->
                 <LinearLayout
@@ -373,7 +374,8 @@
                         android:paddingStart="@dimen/plan_side_margin"
                         android:paddingEnd="@dimen/plan_side_margin"
                         android:layout_marginTop="@dimen/standard_gap_medium"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:id="@+id/btn_User"/>
                 </LinearLayout>
                 <!-- Premium Company -->
                 <LinearLayout
@@ -562,7 +564,8 @@
                         android:paddingStart="@dimen/plan_side_margin"
                         android:paddingEnd="@dimen/plan_side_margin"
                         android:layout_marginTop="@dimen/standard_gap_medium"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:id="@+id/btn_Company"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

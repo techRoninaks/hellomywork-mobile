@@ -49,7 +49,20 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         activity = this;
-
+        String userId = "";
+        SharedPreferences sharedPreferences = RegisterActivity.this.getSharedPreferences("hmw", 0);
+        if(sharedPreferences.getBoolean("is_loggedin", false)) {
+            userId = sharedPreferences.getString("user_id", "");
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("return_path", "profile");
+            bundle.putInt("arg_count", 2);
+            bundle.putString("param_0", userId);
+            bundle.putString("param_1", "");
+            intent.putExtra("bundle", bundle);
+            startActivity(intent);
+            finish();
+        }
         btnSendOtpRegister = (Button) findViewById(R.id.button_SendOtpReg);
         editTextPhoneNumberRegister = (EditText) findViewById(R.id.editText_Phone);
         editTextNameRegister = (EditText) findViewById(R.id.editText_UserName);

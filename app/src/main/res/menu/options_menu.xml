@@ -15,4 +15,7 @@
     <item
         android:id="@+id/options_careers"
         android:title="@string/options_careers"/>
+    <item
+        android:id="@+id/options_admin"
+        android:title="@string/options_admin"/>
 </menu>
