@@ -652,7 +652,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         ivRatings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment fragment = RatingsDialog.newInstance(userId, "");
+                DialogFragment fragment = RatingsDialog.newInstance(userId, ((MainActivity) context).isLoggedIn());
                 ((MainActivity) context).initFragment(fragment, "RatingsDialog");
             }
         });

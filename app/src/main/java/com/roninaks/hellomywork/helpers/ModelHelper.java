@@ -5,6 +5,7 @@ import android.content.Context;
 import com.roninaks.hellomywork.models.AnnouncementsModel;
 import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
+import com.roninaks.hellomywork.models.RatingsModel;
 import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.TopPerformerModel;
@@ -59,7 +60,6 @@ public class ModelHelper {
         }
         return new TopPerformerModel();
     }
-
 
     public ProfilePostModel buildProfilePostModel(JSONObject jsonObject) {
         try{
@@ -192,6 +192,21 @@ public class ModelHelper {
             return new SearchSuggestionsModel();
         }
         return searchSuggestionsModel;
+    }
+
+    public RatingsModel buildRatingsModel(JSONObject jsonObject){
+        RatingsModel ratingsModel = new RatingsModel();
+        try {
+            ratingsModel.setId(Integer.parseInt(jsonObject.getString("id")));
+            ratingsModel.setProfileId(Integer.parseInt(jsonObject.getString("profile_id")));
+            ratingsModel.setRating(Float.parseFloat(jsonObject.getString("rating")));
+            ratingsModel.setReview(jsonObject.getString("review"));
+            ratingsModel.setUserName(jsonObject.getString("user_name"));
+            ratingsModel.setUserId(Integer.parseInt(jsonObject.getString("user_id")));
+        }catch (Exception e){
+            return new RatingsModel();
+        }
+        return ratingsModel;
     }
 
 //    public CommentsModel buildComments(JSONObject jsonObject) {
