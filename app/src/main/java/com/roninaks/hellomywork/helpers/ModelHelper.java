@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.roninaks.hellomywork.models.AnnouncementsModel;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.LocationModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 import com.roninaks.hellomywork.models.RatingsModel;
 import com.roninaks.hellomywork.models.SearchSuggestionsModel;
@@ -208,6 +209,19 @@ public class ModelHelper {
         }
         return ratingsModel;
     }
+
+    public LocationModel buildLocationModel(JSONObject jsonObject){
+        LocationModel locationModel = new LocationModel();
+        try{
+            locationModel.setId(Integer.parseInt(jsonObject.getString("id")));
+            locationModel.setName(jsonObject.getString("location"));
+            return locationModel;
+        }catch (Exception e){
+
+        }
+        return new LocationModel();
+    }
+
 
 //    public CommentsModel buildComments(JSONObject jsonObject) {
 //        CommentsModel commentsModel = new CommentsModel();

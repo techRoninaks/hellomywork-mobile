@@ -42,12 +42,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class RatingsDialog extends DialogFragment implements SqlDelegate {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "userId";
     private static final String ARG_PARAM2 = "currentUserId";
 
-    // TODO: Rename and change types of parameters
+
     private String userId;
     private String currentUserId;
 
@@ -75,7 +75,7 @@ public class RatingsDialog extends DialogFragment implements SqlDelegate {
      * @param currentUserId User Id of current User.
      * @return A new instance of fragment RatingsDialog.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static RatingsDialog newInstance(String userId, String currentUserId) {
         RatingsDialog fragment = new RatingsDialog();
         Bundle args = new Bundle();
@@ -126,7 +126,7 @@ public class RatingsDialog extends DialogFragment implements SqlDelegate {
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -188,7 +188,7 @@ public class RatingsDialog extends DialogFragment implements SqlDelegate {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 

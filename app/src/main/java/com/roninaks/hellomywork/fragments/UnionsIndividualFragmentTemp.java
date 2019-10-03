@@ -36,12 +36,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class UnionsIndividualFragmentTemp extends Fragment implements SqlDelegate {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
@@ -64,7 +64,7 @@ public class UnionsIndividualFragmentTemp extends Fragment implements SqlDelegat
      * @param param2 Parameter 2.
      * @return A new instance of fragment UnionsIndividualFragmentTemp.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static UnionsIndividualFragmentTemp newInstance(String param1, String param2) {
         UnionsIndividualFragmentTemp fragment = new UnionsIndividualFragmentTemp();
         Bundle args = new Bundle();
@@ -106,7 +106,7 @@ public class UnionsIndividualFragmentTemp extends Fragment implements SqlDelegat
         sqlHelper.executeUrl(false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -176,7 +176,7 @@ public class UnionsIndividualFragmentTemp extends Fragment implements SqlDelegat
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 }

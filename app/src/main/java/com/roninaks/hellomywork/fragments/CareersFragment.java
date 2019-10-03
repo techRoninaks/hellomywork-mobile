@@ -47,12 +47,12 @@ import java.util.StringTokenizer;
  * create an instance of this fragment.
  */
 public class CareersFragment extends Fragment implements SqlDelegate {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     Bitmap bitmap;
@@ -78,7 +78,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
      * @param param2 Parameter 2.
      * @return A new instance of fragment CareersFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static CareersFragment newInstance(String param1, String param2) {
         CareersFragment fragment = new CareersFragment();
         Bundle args = new Bundle();
@@ -226,7 +226,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         sqlHelper.executeUrl(false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -358,51 +358,6 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         return imageEncoded;
     }
 
-//    private String encodeFileToBase64Binary(File file){
-//        String encodedfile = null;
-//        try {
-//            FileInputStream fileInputStreamReader = new FileInputStream(file);
-//            byte[] bytes = new byte[(int)file.length()];
-//            fileInputStreamReader.read(bytes);
-//            encodedfile = Base64.encodeToString(bytes, Base64.DEFAULT);
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//
-//        return encodedfile;
-//    }
-
-//    public String getStringFile(File f) {
-//        InputStream inputStream = null;
-//        String encodedFile= "", lastVal;
-//        try {
-//            inputStream = new FileInputStream(f.getAbsolutePath());
-//
-//            byte[] buffer = new byte[10240];//specify the size to allow
-//            int bytesRead;
-//            ByteArrayOutputStream output = new ByteArrayOutputStream();
-//            Base64OutputStream output64 = new Base64OutputStream(output, Base64.DEFAULT);
-//
-//            while ((bytesRead = inputStream.read(buffer)) != -1) {
-//                output64.write(buffer, 0, bytesRead);
-//            }
-//            output64.close();
-//            encodedFile =  output.toString();
-//        }
-//        catch (FileNotFoundException e1 ) {
-//            e1.printStackTrace();
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        lastVal = encodedFile;
-//        return lastVal;
-//    }
-
     private void upload(String encoded, String imageName){
         try {
             SqlHelper sqlHelper = new SqlHelper(context, CareersFragment.this);
@@ -434,7 +389,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 }
