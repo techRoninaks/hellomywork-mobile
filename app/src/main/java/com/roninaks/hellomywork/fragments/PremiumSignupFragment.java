@@ -99,7 +99,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
      * @param param2 User Id.
      * @return A new instance of fragment PremiumSignupFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static PremiumSignupFragment newInstance(String param1, String param2, String param3) {
         PremiumSignupFragment fragment = new PremiumSignupFragment();
         Bundle args = new Bundle();
@@ -249,7 +249,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         return  v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -327,7 +327,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 

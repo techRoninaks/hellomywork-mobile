@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.LinearLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -24,6 +26,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,6 +51,7 @@ import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.LocationModel;
 import com.roninaks.hellomywork.models.SearchSuggestionsModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.UnionModel;
@@ -64,7 +70,6 @@ import java.util.Arrays;
  * create an instance of this fragment.
  */
 
-//TODO: Top performers click
 public class HomeFragment extends Fragment implements SqlDelegate {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -73,7 +78,9 @@ public class HomeFragment extends Fragment implements SqlDelegate {
     private String mParam1;
     private String mParam2;
 
+
     //Private Members
+    private Handler handler;
     private Context context;
     private LinearLayout llContainerSales, llContainerRepairs, llContainerService, llContainerMovers, llContainerHealth, llContainerPersonal, llContainerEats, llContainerRest, llContainerEvents, llContainerRenovation, llContainerBusiness, llContainerMore;
     private TextView tvCategoriesMore, tvUnionsMore, tvLocation;
@@ -85,7 +92,32 @@ public class HomeFragment extends Fragment implements SqlDelegate {
     private ArrayList<UnionModel> unionModels;
     private ArrayList<ServiceProviderModel> serviceProviderModels;
     private ArrayList<String> locationList;
+    private ArrayList<LocationModel> locationModels;
     private ArrayList<SearchSuggestionsModel> searchSuggestionsModels;
+    private int imgCount;
+    //Banner Image Slider
+    private int images[] = { R.drawable.union_banner_photo, R.drawable.banner_bg};
+    private Runnable changeImage = new Runnable() {
+
+        @Override
+        public void run() {
+            if (imgCount > images.length) {
+                handler.removeCallbacks(changeImage);
+            } else {
+
+                if (imgCount >= images.length)
+                    imgCount = 0;
+//                Animation slideAnim = AnimationUtils.loadAnimation(context, R.anim.slide);
+                AlphaAnimation animation1 = new AlphaAnimation(0.2f, 1.0f); //here is a bit of animation for ya ;)
+                animation1.setDuration(1500);
+                animation1.setStartOffset(400); //time for that color effect
+                animation1.setFillAfter(true);
+                ivBanner.startAnimation(animation1);
+                ivBanner.setImageDrawable(context.getDrawable(images[imgCount++]));
+                handler.postDelayed(changeImage, 5000);
+            }
+        }
+    };
 
     private OnFragmentInteractionListener mListener;
 
@@ -164,7 +196,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -190,6 +222,8 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         context = getActivity();
+        handler = new Handler();
+        imgCount = images.length;
         locationList = new ArrayList<>();
         llContainerSales = (LinearLayout) rootView.findViewById(R.id.containerDirectorySales);
         llContainerRepairs = (LinearLayout) rootView.findViewById(R.id.containerDirectoryRepairs);
@@ -212,6 +246,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
         ivLocationDropDown = (ImageView) rootView.findViewById(R.id.imgLocationDropDown);
         ivLocation = (ImageView) rootView.findViewById(R.id.imgLocation);
+        ivBanner = (ImageView) rootView.findViewById(R.id.imgBanner);
         rvPopularCategories = (RecyclerView) rootView.findViewById(R.id.rvPopularCategories);
         rvTopPerformers = (RecyclerView) rootView.findViewById(R.id.rvTopPerformers);
         rvUnions = (RecyclerView) rootView.findViewById(R.id.rvUnions);
@@ -220,6 +255,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
 
         //Set Defaults
         Resources res = context.getResources();
+        handler.postDelayed(changeImage, 5000);
         locationList.addAll(Arrays.asList(res.getStringArray(R.array.india_top_places)));
         ArrayAdapter<String> adapterLocation = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_item, locationList);
@@ -227,6 +263,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         loadCategories();
         loadUnions();
         loadProfiles();
+        loadLocations();
         llContainerSales.setOnClickListener(onDirectoriesClickListener);
         llContainerRepairs.setOnClickListener(onDirectoriesClickListener);
         llContainerService.setOnClickListener(onDirectoriesClickListener);
@@ -377,16 +414,24 @@ public class HomeFragment extends Fragment implements SqlDelegate {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     acLocation.setVisibility(View.GONE);
-                    tvLocation.setVisibility(View.GONE);
+                    tvLocation.setVisibility(View.VISIBLE);
                 }
                 return true;
+            }
+        });
+        acLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tvLocation.setText(acLocation.getText());
+                SharedPreferences sharedPreferences = context.getSharedPreferences("hmw", 0);
+                sharedPreferences.edit().putString("location", findLocation(acLocation.getText().toString())).commit();
             }
         });
         acSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
+                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), ((MainActivity) context).getDefaultLocation(), "");
                     ((MainActivity) context).initFragment(fragment);
                 }
                 return true;
@@ -421,7 +466,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -496,6 +541,14 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                     }
                     break;
                 }
+                case "location":{
+                    JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
+                    String response = jsonArray.getJSONObject(0).getString("response");
+                    if(response.equals(context.getString(R.string.response_success))){
+                        buildLocation(jsonArray);
+                    }
+                    break;
+                }
             }
         }catch (Exception e){
 
@@ -513,11 +566,35 @@ public class HomeFragment extends Fragment implements SqlDelegate {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 
     //private functions
+
+    private String findLocation(String location){
+        try {
+            for (int i = 0; i < locationModels.size(); i++) {
+                if (locationModels.get(i).getName().toLowerCase().equals(location.toLowerCase())) {
+                    return "" + locationModels.get(i).getId();
+                }
+            }
+        }catch (Exception e){
+
+        }
+        return "1";
+    }
+
+    private void loadLocations(){
+        SqlHelper sqlHelper = new SqlHelper(context, HomeFragment.this);
+        sqlHelper.setExecutePath("getsearchlist.php");
+        sqlHelper.setMethod("GET");
+        sqlHelper.setActionString("location");
+        ContentValues params = new ContentValues();
+        sqlHelper.setParams(params);
+        sqlHelper.executeUrl(false);
+    }
+
     private void loadSearchList(String key){
         SqlHelper sqlHelper = new SqlHelper(context, HomeFragment.this);
         sqlHelper.setExecutePath("searchAuto.php");
@@ -627,6 +704,27 @@ public class HomeFragment extends Fragment implements SqlDelegate {
             }
             SearchAdapter adapter = new SearchAdapter(context, acSearch.getId(), searchSuggestionsModels, HomeFragment.this);
             acSearch.setAdapter(adapter);
+        }catch (Exception e){
+
+        }
+    }
+
+    private void buildLocation(JSONArray jsonArray){
+        try{
+            int locId = Integer.parseInt(((MainActivity) context).getDefaultLocation());
+            locationModels = new ArrayList<>();
+            locationList.clear();
+            for(int i = 1; i < jsonArray.length(); i++){
+                LocationModel locationModel = new ModelHelper().buildLocationModel(jsonArray.getJSONObject(i));
+                locationModels.add(locationModel);
+                locationList.add(locationModel.getName());
+                if(locId == locationModel.getId()){
+                    tvLocation.setText(locationModel.getName());
+                }
+            }
+            ArrayAdapter<String> adapterLocation = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item, locationList);
+            acLocation.setAdapter(adapterLocation);
         }catch (Exception e){
 
         }

@@ -11,16 +11,27 @@
         android:id="@+id/containerIndividualRow"
         android:orientation="vertical"
         android:gravity="center_vertical|center_horizontal">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="@dimen/home_category_icon_width"
-            android:layout_height="@dimen/home_category_icon_width"
-            android:orientation="vertical">
+            android:layout_height="@dimen/home_category_icon_width">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/civProfileImage"
-                android:src="@drawable/profile_default"/>
-        </LinearLayout>
+                android:layout_centerInParent="true"
+                android:src="@color/palette_blue"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/font_page_title_emphasis"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextWhitePrimary"
+                android:text="A"
+                android:textAllCaps="true"
+                android:id="@+id/tvNameFirstLetter"
+                android:visibility="gone"/>
+        </RelativeLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

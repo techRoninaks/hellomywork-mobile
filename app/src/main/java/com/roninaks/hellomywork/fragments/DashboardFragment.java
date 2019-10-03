@@ -44,12 +44,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class DashboardFragment extends Fragment implements SqlDelegate {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String empId;
     private String empName;
     
@@ -78,7 +78,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
      * @param param2 Parameter 2.
      * @return A new instance of fragment DashboardFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static DashboardFragment newInstance(String param1, String param2) {
         DashboardFragment fragment = new DashboardFragment();
         Bundle args = new Bundle();
@@ -203,7 +203,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.executeUrl(false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -424,7 +424,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 }

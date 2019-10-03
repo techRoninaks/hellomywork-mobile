@@ -36,7 +36,6 @@ import java.io.InputStream;
 //import com.bumptech.glide.load.engine.DiskCacheStrategy;
 //import com.roninaks.hellomywork.GlideApp;
 
-//TODO: Profile Image change from External not reloading
 public class ProfileImage extends Activity implements SqlDelegate {
 
     ImageView imageView;

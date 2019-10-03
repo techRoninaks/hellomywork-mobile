@@ -59,7 +59,7 @@ public class SearchLandingTabsAdapter extends RecyclerView.Adapter<SearchLanding
 //                float myTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12F, context.getResources().getDisplayMetrics());
                 holder.tvTabName.setTypeface(holder.tvTabName.getTypeface(), Typeface.BOLD);
                 holder.tvTabName.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.font_page_title_emphasis));
-                fragment.scrollToPosition(position, holder.llMaster.getWidth());
+//                fragment.scrollToPosition(position, holder.llMaster.getWidth());
             }
             holder.llMaster.setOnClickListener(new View.OnClickListener() {
                 @Override
