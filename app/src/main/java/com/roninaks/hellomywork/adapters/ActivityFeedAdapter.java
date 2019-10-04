@@ -36,11 +36,15 @@ import com.roninaks.hellomywork.fragments.AboutFragment;
 import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.ContactFragment;
 import com.roninaks.hellomywork.fragments.ProfileFragment;
+import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
+import com.roninaks.hellomywork.interfaces.OnLoadMoreListener;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CommentsModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -53,6 +57,9 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         private ArrayList<CommentsModel> commentsModels;
         private RequestOptions requestOptions;
         private String baseImagePostUrl, userName;
+        private int lastVisibleItem, totalItemCount;
+        private boolean loading;
+        private OnLoadMoreListener onLoadMoreListener;
 
         RecyclerView commnetsRecyclerView,commentRecyclerView;
         CommetsAdapter commetsAdapter;
@@ -70,7 +77,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             requestOptions.placeholder(R.drawable.icon_image);
             requestOptions.error(R.drawable.icon_image);
         }
-        public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview, String user_id) {
+        public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview, String user_id,RecyclerView recyclerView) {
             this.context = context;
             this.profilePostModels = profilePostModels;
             this.rootview = rootview;
@@ -80,6 +87,27 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.icon_image);
             requestOptions.error(R.drawable.icon_image);
+
+            try {
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+
+                        totalItemCount = getItemCount();
+                        lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (!loading && (totalItemCount - lastVisibleItem - 1) == 0) {
+
+                            if (onLoadMoreListener != null) {
+                                onLoadMoreListener.onLoadMore();
+                            }
+                            loading = true;
+                        }
+                    }
+                });
+//        }
+            }catch (Exception e){
+            }
         }
 
 
@@ -104,6 +132,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 holder.tvPostProfileTime.setText(profilePostModels.get(position).getTime());
                 holder.tvPostLikeCount.setText(profilePostModels.get(position).getLikeCount());
                 holder.tvPostCommentCount.setText(profilePostModels.get(position).getCommentCount());
+                holder.commentsModels = new ArrayList<>();
                 Glide.with(context)
                         .setDefaultRequestOptions(requestOptions
                             .centerCrop()
@@ -278,6 +307,28 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                     }
                 });
 
+                if (Integer.valueOf(profilePostModels.get(position).getCommentCount()) <= 3){
+                    holder.viewMoreComments.setVisibility(View.GONE);
+                }
+
+                holder.viewMoreComments.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String post_id = profilePostModels.get(position).getId();
+
+                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                        sqlHelper.setExecutePath("getcomments.php");
+                        sqlHelper.setActionString("postComments");
+                        sqlHelper.setMethod("POST");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("id", post_id);
+                        sqlHelper.setParams(contentValues);
+                        HashMap<String,String> extras = new HashMap<>();
+                        extras.put("position", ""+position);
+                        sqlHelper.setExtras(extras);
+                        sqlHelper.executeUrl(true);
+                    }
+                });
 
                 holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -310,13 +361,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         sqlHelper.executeUrl(false);
                     }
                 });
-//                holder.ivComment.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        writeComments.requestFocus();
-//
-//                    }
-//                });
+
                 holder.ivShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -386,6 +431,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     }
+
                 });
                 commentsModels = profilePostModels.get(position).getCommentsModels();
                 commentRecyclerView = holder.commentrecyclerView;
@@ -405,6 +451,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         commentrecyclerView.setAdapter(commetsAdapter);
     }
 
+    public void setLoaded() {
+        loading = false;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
 
     @Override
         public int getItemCount() {
@@ -422,8 +475,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 String userId = contentValues.getAsString("u_id");
                 String pId = contentValues.getAsString("p_id");
                 int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
-
-
                 CommentsModel commentsModel = new CommentsModel();
                 commentsModel.setComment(userComment);
                 commentsModel.setCommentName(userName);
@@ -451,17 +502,56 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         else if(sqlHelper.getActionString() == "postReport"){
 //            Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
         }
+        else  if (sqlHelper.getActionString() == "postComments"){
+            String responseFrom = sqlHelper.getStringResponse();
+            if(responseFrom.equals("0")){
+                Toast.makeText(context, "No more comments", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
+                    getCommentList(jsonArray,pos);
+                    commentRecyclerView.getAdapter().notifyDataSetChanged();
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void getCommentList(JSONArray jsonArray,int pos) {
+        try {
+            for (int i= 3; i< jsonArray.length(); i++) {
+
+                CommentsModel commentsModel = new CommentsModel();
+                commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
+                commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
+                commentsModel.setCommentId(jsonArray.getJSONObject(i).getString("id"));
+                commentsModel.setCommentU_Id(jsonArray.getJSONObject(i).getString("u_id"));
+                commentsModel.setCommentP_Id(jsonArray.getJSONObject(i).getString("p_id"));
+                commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
+                commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                commentsModels.add(commentsModel);
+                profilePostModels.get(pos).getCommentsModels().add(0,commentsModel);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-            TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount,tvSendComment;
-            ImageView ivPostProfileImage,ivPostImageLabel;
-            ImageButton btnProfilePostOptions;
-            EditText writeComments;
-            boolean filled= false;
-            boolean bookmarkFilled= false;
-            RecyclerView commentrecyclerView;
-            private ImageView ivLike,ivComment,ivShare,ivBookmark;
+        TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount,tvSendComment;
+        ImageView ivPostProfileImage,ivPostImageLabel;
+        ImageButton btnProfilePostOptions;
+        TextView viewMoreComments;
+        EditText writeComments;
+        boolean filled= false;
+        boolean bookmarkFilled= false;
+        RecyclerView commentrecyclerView;
+        ArrayList<CommentsModel> commentsModels;
+        private ImageView ivLike,ivComment,ivShare,ivBookmark;
             public ViewHolder(View itemView) {
                 super(itemView);
                 tvPostProfileName = itemView.findViewById(R.id.post_item_name);
@@ -481,6 +571,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 tvPostLikeCount = itemView.findViewById(R.id.postLikeCount);
                 ivPostImageLabel = itemView.findViewById(R.id.post_item_image_label);
                 tvSendComment = itemView.findViewById(R.id.addComment);
+                viewMoreComments = itemView.findViewById(R.id.view_more_comments);
             }
         }
     }

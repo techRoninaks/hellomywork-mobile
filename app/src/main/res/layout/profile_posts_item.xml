@@ -202,12 +202,14 @@
                             android:textColor="@color/colorTextBlackPrimary" />
 
                         <TextView
+                            android:id="@+id/view_more_comments"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:textSize="11sp"
-                            android:layout_marginTop="7dp"
-                            android:text="VIEW ALL COMMENTS" />
+                            android:textSize="14sp"
+                            android:textAllCaps="false"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/view_more_comments" />
                     </RelativeLayout>
 
                     <androidx.recyclerview.widget.RecyclerView

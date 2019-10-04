@@ -75,14 +75,36 @@ public class ModelHelper {
             profilePostModel.setCommentCount(jsonObject.getString("commentnumber"));
             profilePostModel.setIsLiked(jsonObject.getString("isLiked"));
             profilePostModel.setImageLabel(jsonObject.getString("offer"));
-            profilePostModel.setIsBoomarked(jsonObject.getString("IsBookmarked"));
+            profilePostModel.setIsBoomarked(jsonObject.getString("IsBookmarked")); // change to
             return profilePostModel;
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return new ProfilePostModel();
     }
-  
+
+    public ProfilePostModel buildProfilePostBookmarkModel(JSONObject jsonObject) {
+        try{
+            ProfilePostModel profilePostModel = new ProfilePostModel();
+            profilePostModel.setName(jsonObject.getString("name"));
+            profilePostModel.setDescription(jsonObject.getString("des"));
+            profilePostModel.setDate(jsonObject.getString("date"));
+            profilePostModel.setLocation(jsonObject.getString("location"));
+            //profilePostModel.setTime(jsonObject.getString("role"));
+            profilePostModel.setImageUri(jsonObject.getString("postimage"));
+            profilePostModel.setId(jsonObject.getString("id"));
+            profilePostModel.setLikeCount(jsonObject.getString("likes"));
+            profilePostModel.setCommentCount(jsonObject.getString("commentsnumber"));
+            profilePostModel.setIsLiked(jsonObject.getString("isLiked"));
+            profilePostModel.setImageLabel(jsonObject.getString("offer"));
+            profilePostModel.setIsBoomarked(jsonObject.getString("is_bookmarked"));
+            return profilePostModel;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new ProfilePostModel();
+    }
+
     public CategoryModel buildCategoryModel(JSONObject jsonObject){
         try {
             CategoryModel categoryModel = new CategoryModel();

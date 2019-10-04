@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                 android.R.layout.simple_spinner_item, locationList);
         acLocation.setAdapter(adapterLocation);
         loadCategories();
-        loadUnions();
+        loadUnions("1");
         loadProfiles();
         llContainerSales.setOnClickListener(onDirectoriesClickListener);
         llContainerRepairs.setOnClickListener(onDirectoriesClickListener);
@@ -272,7 +272,12 @@ public class HomeFragment extends Fragment implements SqlDelegate {
                 PopupMenu popup = new PopupMenu(context, v);
                 Menu m = popup.getMenu();
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.options_menu, popup.getMenu());
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    inflater.inflate(R.menu.options_menu, popup.getMenu());
+                }
+                else{
+                    inflater.inflate(R.menu.options_menu_logged_in, popup.getMenu());
+                }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -539,12 +544,13 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         sqlHelper.executeUrl(true);
     }
 
-    private void loadUnions(){
+    private void loadUnions(String pageNo){
         SqlHelper sqlHelper = new SqlHelper(context, HomeFragment.this);
         sqlHelper.setExecutePath("getunionlist.php");
         sqlHelper.setMethod("GET");
         sqlHelper.setActionString("unions");
         ContentValues params = new ContentValues();
+        params.put("pageNo",pageNo);
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }

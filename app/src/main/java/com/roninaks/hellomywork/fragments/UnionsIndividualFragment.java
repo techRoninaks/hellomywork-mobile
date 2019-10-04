@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
+import com.roninaks.hellomywork.models.CommentsModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
 import org.json.JSONArray;
@@ -55,6 +57,9 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     private View rootView;
 
     private OnFragmentInteractionListener mListener;
+    private EditText writeComments;
+    private TextView sendComment;
+    private TextView viewMoreComments;
 
     public UnionsIndividualFragment() {
         // Required empty public constructor
@@ -97,6 +102,11 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         unionName = rootView.findViewById(R.id.union_indi_name);
         ivBack = rootView.findViewById(R.id.imgBack);
         recyclerView = rootView.findViewById(R.id.unionPostRv);
+
+        writeComments=rootView.findViewById(R.id.editText_WriteComments);
+        viewMoreComments = rootView.findViewById(R.id.view_more_comments);
+        sendComment = rootView.findViewById(R.id.addComment);
+
         fetchProfilePostInfo(context, mParam1);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +192,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
+                profilePostModel.setCommentsModels(getCommentList(jsonObject));
                 profilePostModels.add(profilePostModel);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -192,6 +203,29 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         recyclerView.setLayoutManager(layoutManager);
         activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView);
         recyclerView.setAdapter(activityFeedAdapter);
+    }
+
+    private ArrayList<CommentsModel> getCommentList(JSONObject jsonObject) {
+        JSONArray jsonArray;
+        ModelHelper modelHelper = new ModelHelper(this.context);
+        ArrayList<CommentsModel> commentsModels =  new ArrayList<>();
+        try {
+            jsonArray = jsonObject.getJSONArray("comments");
+            for (int i= 0; i< jsonArray.length(); i++) {
+                CommentsModel commentsModel = new CommentsModel();
+                commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
+                commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
+                commentsModel.setCommentId(jsonArray.getJSONObject(i).getString("id"));
+                commentsModel.setCommentU_Id(jsonArray.getJSONObject(i).getString("u_id"));
+                commentsModel.setCommentP_Id(jsonArray.getJSONObject(i).getString("p_id"));
+                commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
+                commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                commentsModels.add(commentsModel);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return commentsModels;
     }
 
     /**

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +41,7 @@ import com.roninaks.hellomywork.adapters.ActivityFeedAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.helpers.StringHelper;
+import com.roninaks.hellomywork.interfaces.OnLoadMoreListener;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CommentsModel;
 import com.roninaks.hellomywork.models.ProfilePostModel;
@@ -65,6 +67,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int SEARCH_RESULT_LIMIT = 24;
 
     public static String imageUrl = "";
     public static boolean imageChanged = false;
@@ -81,7 +84,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     ImageView masterProfilePster, ivProfileBackBtn, ivSettings, ivRatings;
     EditText postadDescrption,writeComments;
     TextView sendComment;
-    private TextView profilePCName,profileMainName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
+    private TextView viewMoreComments,profilePCName,profileMainName, profileUnion, profileJTRole, profileWebsite, profileLocation, profileCNumber, profileWhatsappNumber, profileEmail, profileSublocation, profileAddress, profileSkills;
     ImageButton profileCallPhoneBTN, profileSentEmailBTN, profileUseWhatspp,profileShare,profileBookmark;
     Button buttonEdit,buttonImageUpload,buttonForsale,buttonOffers,buttonRequired,buttonAppreciations,buttonAchievemnet,buttonRandom,buttonPost,buttonForsale2,buttonOffers2,buttonRequired2,buttonAppreciations2,buttonAchievemnet2,buttonRandom2,buttonPost2;
     private RequestOptions requestOptions;
@@ -90,9 +93,9 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
     ArrayList <ProfilePostModel> profilePostModels,profilePostModelsOffers,profilePostModelsForSale,profilePostModelsRequired,profilePostModelsAchivement,profilePostModelsAppreciation;
     ActivityFeedAdapter activityFeedAdapter;
     LinearLayout llBtnGrp;
+    Handler handler;
     String tagButton, isBookMarked;
     boolean filled;
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -151,7 +154,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             us_id = userId;
         }
         fetchProfileCardInfo(context, us_id);
-        fetchProfilePostInfo(context, "fetch_id");
+        fetchProfilePostInfo(context, "fetch_id","1");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         JSONObject jsonObject;
@@ -194,6 +197,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         buttonForsale2=view.findViewById(R.id.ForSale_BTN2);
         buttonRequired2=view.findViewById(R.id.Required_BTN2);
         buttonRandom2=view.findViewById(R.id.Random_BTN2);
+        viewMoreComments = view.findViewById(R.id.view_more_comments);
 
         buttonEdit=view.findViewById(R.id.button_Edit);
         buttonImageUpload=view.findViewById(R.id.button_ImageUpload);
@@ -209,6 +213,8 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         profilePostModelsAchivement= new ArrayList<>();
         profilePostModelsAppreciation = new ArrayList<>();
         profilePostModelsRequired = new ArrayList<>();
+
+        handler = new Handler();
 
         recyclerView = view.findViewById(R.id.profileRecyclerView);
 
@@ -243,30 +249,30 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 else {
                     saveInformation();
                     refreshData();
-                    fetchProfilePostInfo(context, "fetch_id");
+                    fetchProfilePostInfo(context, "fetch_id","1");
                     LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                     recyclerView.setLayoutManager(layoutManager);
-                    activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+                    activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id,recyclerView);
                     recyclerView.setAdapter(activityFeedAdapter);
 
                     if(tagButton.equals("assets/img/icon/ic_Required-min.png")){
-                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired,rootView, us_id);
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired,rootView, us_id,recyclerView);
                         recyclerView.setAdapter(activityFeedAdapter);
                     }
                     if(tagButton.equals("assets/img/icon/ic_Achievement-min.png")){
-                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement,rootView, us_id);
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement,rootView, us_id,recyclerView);
                         recyclerView.setAdapter(activityFeedAdapter);
                     }
                     if(tagButton.equals("assets/img/icon/ic_Appreciations-min.png")){
-                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation,rootView, us_id);
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation,rootView, us_id,recyclerView);
                         recyclerView.setAdapter(activityFeedAdapter);
                     }
                     if(tagButton.equals("assets/img/icon/ic_Offers-min.png")){
-                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers,rootView, us_id);
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers,rootView, us_id,recyclerView);
                         recyclerView.setAdapter(activityFeedAdapter);
                     }
                     if(tagButton.equals("assets/img/icon/ic_ForSale-min.png")){
-                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale,rootView, us_id);
+                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale,rootView, us_id,recyclerView);
                         recyclerView.setAdapter(activityFeedAdapter);
                     }
                     setDefaultButton(false);
@@ -302,7 +308,6 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
             }
         });
-
 
         // 1st scroll view
 
@@ -368,7 +373,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 buttonForsale2.setAlpha(1);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
-                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale,rootView, us_id);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale,rootView, us_id,recyclerView);
                 recyclerView.setAdapter(activityFeedAdapter);
 
 
@@ -382,7 +387,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 buttonRandom2.setAlpha(1);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
-                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id,recyclerView);
                 recyclerView.setAdapter(activityFeedAdapter);
 
             }
@@ -395,7 +400,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 buttonRequired2.setAlpha(1);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
-                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired,rootView, us_id);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired,rootView, us_id,recyclerView);
                 recyclerView.setAdapter(activityFeedAdapter);
             }
         });
@@ -407,7 +412,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 buttonAchievemnet2.setAlpha(1);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
-                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement,rootView, us_id);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement,rootView, us_id,recyclerView);
                 recyclerView.setAdapter(activityFeedAdapter);
             }
         });
@@ -419,7 +424,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 buttonAppreciations2.setAlpha(1);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
-                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation,rootView, us_id);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation,rootView, us_id,recyclerView);
                 recyclerView.setAdapter(activityFeedAdapter);
             }
         });
@@ -431,7 +436,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 buttonOffers2.setAlpha(1);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(layoutManager);
-                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers,rootView, us_id);
+                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers,rootView, us_id,recyclerView);
                 recyclerView.setAdapter(activityFeedAdapter);
             }
         });
@@ -599,7 +604,6 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 }
                 else
                 {
-
                     if (filled) {
                         profileBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
                         Toast.makeText(context, "Bookmark have been removed", Toast.LENGTH_SHORT).show();
@@ -696,7 +700,19 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         }
     }
 
-    private void fetchProfilePostInfo(Context context, String fetch_id) {
+
+    private void loadMoreComments(Context context,String us_id) {
+        SqlHelper sqlHelper = new SqlHelper(context, ProfileFragment.this);
+        sqlHelper.setExecutePath("getcomments.php");
+        sqlHelper.setActionString("postComments");
+        sqlHelper.setMethod("POST");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id", us_id);
+        sqlHelper.setParams(contentValues);
+        sqlHelper.executeUrl(true);
+    }
+
+    private void fetchProfilePostInfo(Context context, String fetch_id,String pageNo) {
         SqlHelper sqlHelper = new SqlHelper(context, ProfileFragment.this);
         sqlHelper.setExecutePath("getprofilepost.php");
         sqlHelper.setActionString("profilePosts");
@@ -704,6 +720,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", us_id);
         contentValues.put("userid", ((MainActivity) context).isLoggedIn());
+        contentValues.put("pageNo",pageNo);
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(true);
     }
@@ -780,25 +797,6 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
     }
 
-    private void inntRecyclerView(JSONArray jsonArray, int length) {
-        ModelHelper modelHelper = new ModelHelper(this.context);
-        for (int i = 1; i <= length; i++){
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
-                profilePostModel.setCommentsModels(getCommentList(jsonObject));
-                profilePostModels.add(profilePostModel);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
-        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
-        recyclerView.setAdapter(activityFeedAdapter);
-    }
-
 
     private void initTagList(JSONArray jsonArray, int length) {
         ModelHelper modelHelper = new ModelHelper(this.context);
@@ -840,36 +838,28 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
-        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
+        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id,recyclerView);
         recyclerView.setAdapter(activityFeedAdapter);
+        activityFeedAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = (int)Math.ceil(((double)profilePostModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
+                        fetchProfilePostInfo(context,"",String.valueOf(index));
+                        activityFeedAdapter.notifyDataSetChanged();
+                        activityFeedAdapter.setLoaded();
+                    }
+                },1000);
+            }
+        });
     }
-
-
-//    private void filterList() {
-//        forSale = new ArrayList<>();
-//        for (int i = 0; i < profilePostModels.size(); i++) {
-//            ProfilePostModel profilePostModel = profilePostModels.get(i);
-//            String tag = profilePostModel.getImageLabel().toLowerCase();
-//            boolean ignored = true;
-//            if (tag.equals("for sale")) {
-//                forSale.add(profilePostModel);
-//                ignored = false;
-//            }
-//        }
-//    }
-//
-//    private void showTag(String tag){
-//        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels,rootView, us_id);
-//        if(tag.equals("for sale")){
-//            activityFeedAdapter = new ActivityFeedAdapter(context, forSale, rootView);
-//        }
-//    }
-
 
     private ArrayList<CommentsModel> getCommentList(JSONObject jsonObject) {
         JSONArray jsonArray;
-        ArrayList<CommentsModel> commentsModels = new ArrayList<>();
         ModelHelper modelHelper = new ModelHelper(this.context);
+        ArrayList<CommentsModel> commentsModels =  new ArrayList<>();
         try {
             jsonArray = jsonObject.getJSONArray("comments");
             for (int i= 0; i< jsonArray.length(); i++) {

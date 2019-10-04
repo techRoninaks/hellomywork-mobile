@@ -145,35 +145,49 @@
         </LinearLayout>
 
         <!-- Profile Section -->
-        <LinearLayout
-            android:id="@+id/bmcontainerProfile"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProfiles"
-                android:layout_marginBottom="@dimen/standard_gap_medium"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/bmcontainerProfile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
 
-            </androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvProfiles"
+                    android:layout_marginBottom="@dimen/standard_gap_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         <!-- Posts Section-->
-        <LinearLayout
-            android:id="@+id/bmcontainerPosts"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_containerPosts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:visibility="gone">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPosts"
+            <LinearLayout
+                android:id="@+id/bmcontainerPosts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            </androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPosts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     </LinearLayout>
 
