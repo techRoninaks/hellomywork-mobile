@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,15 +23,20 @@ import com.roninaks.hellomywork.activities.AdminActivity;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.RegisterActivity;
+import com.roninaks.hellomywork.adapters.PostBookmarkAdapter;
 import com.roninaks.hellomywork.adapters.SearchProfileAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CategoryModel;
+import com.roninaks.hellomywork.models.CommentsModel;
+import com.roninaks.hellomywork.models.ProfilePostModel;
 import com.roninaks.hellomywork.models.ServiceProviderModel;
 import com.roninaks.hellomywork.models.UnionModel;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -39,6 +45,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +61,7 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String BOOKMARK = "bookmark";
+    private static final int SEARCH_RESULT_LIMIT = 24;
 
 
     private String mParam1;
@@ -63,9 +71,10 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
     private ArrayList<CategoryModel> categoryModels;
     private ArrayList<UnionModel> unionModels;
     private ArrayList<ServiceProviderModel> serviceProviderModels;
+    private ArrayList<ProfilePostModel> profilePostModels;
     private Context context;
     LinearLayout bmcontainerProfile, bmcontainerPosts;
-
+    private SwipeRefreshLayout swipeContainerProfile,swipeContainerPost;
 
 
     View rootView,bmporfilenav,bmpostnav;
@@ -73,6 +82,7 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
     private ImageView backarrow, imgOptions;
     LinearLayout LlContainerProfile, llContainerPost;
     RecyclerView rvProfiles, rvPosts;
+    Handler handler;
 
 
     private OnFragmentInteractionListener mListener;
@@ -155,6 +165,10 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
 //        backarrow = (ImageView) rootView.findViewById(R.id.backarrow);
         imgOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
 
+        swipeContainerProfile = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        swipeContainerPost = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_containerPosts);
+        handler = new Handler();
+
         //Defaults
         toggleTabs(default_load == null || default_load.isEmpty() ? "profiles" : default_load);
 
@@ -164,7 +178,12 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
                 PopupMenu popup = new PopupMenu(context, v);
                 Menu m = popup.getMenu();
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.options_menu, popup.getMenu());
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    inflater.inflate(R.menu.options_menu, popup.getMenu());
+                }
+                else{
+                    inflater.inflate(R.menu.options_menu_logged_in, popup.getMenu());
+                }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -224,21 +243,33 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
                         break;
                     }
                     case R.id.bmposts: {
-                        toggleTabs("services");
+                        toggleTabs("posts");
                         break;
                     }
                 }
             }
         };
-
         bmprofiles.setOnClickListener(toggleTabsListener);
         bmposts.setOnClickListener(toggleTabsListener);
 
         // option popup
 
+        swipeContainerProfile.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadProfiles();
+            }
+        });
+        swipeContainerPost.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadPosts();
+            }
+        });
 
         return rootView;
     }
+
 
 
 
@@ -273,16 +304,18 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
         try{
             switch (sqlHelper.getActionString()){
                 case "posts":{
+                    swipeContainerPost.setRefreshing(false);
                     JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
-                    String response = jsonArray.getJSONObject(0).getString("response");
-                    if(response.equals(context.getString(R.string.response_success))){
-                        buildPosts(jsonArray);
-                    }else{
+                    String response = jsonArray.getJSONObject(0).getString("count");
+                    if(response.equals("")){
                         Toast.makeText(context, "Sorry. Your Union list seems empty", Toast.LENGTH_SHORT).show();
+                    }else{
+                        buildPosts(jsonArray);
                     }
                     break;
                 }
                 case "profiles":{
+                    swipeContainerProfile.setRefreshing(false);
                     if(sqlHelper.getStringResponse().equals("0")){
                         Toast.makeText(context, "Sorry. No results", Toast.LENGTH_SHORT).show();
                     }else{
@@ -295,6 +328,9 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
 
         }
     }
+
+
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -328,15 +364,16 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
 
     private void loadPosts() {
         SqlHelper sqlHelper = new SqlHelper(context, BookmarkFragment.this);
-        sqlHelper.setExecutePath("searchQuery.php");
-        sqlHelper.setMethod("POST");
-        sqlHelper.setActionString("profiles");
+        sqlHelper.setExecutePath("getbookmarks.php");
+        sqlHelper.setMethod("GET");
+        sqlHelper.setActionString("posts");
         ContentValues params = new ContentValues();
 //        params.put("srchType", searchKey);
 //        params.put("locType", location);
 //        params.put("catType", category);
-        params.put("pageNo", "1");
-        params.put("mob", "1");
+//        params.put("pageNo", "1");
+//        params.put("mob", "1");
+        params.put("type", "posts");
         params.put("userId", ((MainActivity) context).isLoggedIn());
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
@@ -355,12 +392,12 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
                 bmporfilenav.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 bmpostnav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
 
-                bmcontainerProfile.setVisibility(View.VISIBLE);
-                bmcontainerPosts.setVisibility(View.GONE);
+                swipeContainerProfile.setVisibility(View.VISIBLE);
+                swipeContainerPost.setVisibility(View.GONE);
                 break;
             }
             case "posts":{
-                if(categoryModels == null){
+                if(profilePostModels == null){
                     loadPosts();
                 }
                 bmposts.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
@@ -369,8 +406,8 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
                 bmpostnav.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 bmporfilenav.setBackgroundColor(getResources().getColor(R.color.colorTextWhiteSecondary));
 
-                bmcontainerPosts.setVisibility(View.VISIBLE);
-                bmcontainerProfile.setVisibility(View.GONE);
+                swipeContainerProfile.setVisibility(View.GONE);
+                swipeContainerPost.setVisibility(View.VISIBLE);
                 break;
             }
         }
@@ -379,12 +416,13 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
     private void buildProfiles(JSONArray jsonArray){
         try{
             serviceProviderModels = new ArrayList<>();
+            boolean isProfileBookmark = true;
             for(int i = 1; i < jsonArray.length(); i++){
                 ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
                 serviceProviderModels.add(serviceProviderModel);
             }
             GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
-            SearchProfileAdapter adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView);
+            SearchProfileAdapter adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView,rvProfiles,true);
             rvProfiles.setLayoutManager(layoutManager);
             rvProfiles.setAdapter(adapter);
         }catch (Exception e){
@@ -394,18 +432,69 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
 
     private void buildPosts(JSONArray jsonArray){
         try{
-            serviceProviderModels = new ArrayList<>();
+            profilePostModels = new ArrayList<>();
             for(int i = 1; i < jsonArray.length(); i++){
-                ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
-                serviceProviderModels.add(serviceProviderModel);
+                ProfilePostModel profilePostModel = new ModelHelper().buildProfilePostBookmarkModel(jsonArray.getJSONObject(i));
+                //profilePostModel.setCommentsModels(getCommentList(jsonArray.getJSONObject(i)));
+                profilePostModels.add(profilePostModel);
             }
-            GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
-            SearchProfileAdapter adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView);
-            rvProfiles.setLayoutManager(layoutManager);
-            rvProfiles.setAdapter(adapter);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2);
+            PostBookmarkAdapter adapter = new PostBookmarkAdapter(context,profilePostModels,rootView,rvPosts);
+
+            rvPosts.setLayoutManager(gridLayoutManager);
+            rvPosts.setAdapter(adapter);
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
+
+
+    private void addPost() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2);
+        final PostBookmarkAdapter adapter = new PostBookmarkAdapter(context,profilePostModels,rootView,rvPosts);
+
+        rvProfiles.setLayoutManager(gridLayoutManager);
+        rvProfiles.setAdapter(adapter);
+//        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        int index = (int)Math.ceil(((double)categoryModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
+//                        loadPosts(String.valueOf(index));
+//                        adapter.notifyDataSetChanged();
+//                        adapter.setLoaded();
+//                    }
+//                },1000);
+//            }
+//        });
+    }
+
+    private ArrayList<CommentsModel> getCommentList(JSONObject jsonObject) {
+        JSONArray jsonArray;
+        ModelHelper modelHelper = new ModelHelper(this.context);
+        ArrayList<CommentsModel> commentsModels =  new ArrayList<>();
+        try {
+            jsonArray = jsonObject.getJSONArray("comments");
+            for (int i= 0; i< jsonArray.length(); i++) {
+                CommentsModel commentsModel = new CommentsModel();
+                commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
+                commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
+                commentsModel.setCommentId(jsonArray.getJSONObject(i).getString("id"));
+                commentsModel.setCommentU_Id(jsonArray.getJSONObject(i).getString("u_id"));
+                commentsModel.setCommentP_Id(jsonArray.getJSONObject(i).getString("p_id"));
+                commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
+                commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                commentsModels.add(commentsModel);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return commentsModels;
+    }
+
+
 
 }

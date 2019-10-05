@@ -131,17 +131,17 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
             logIn = false;
 
         }
-        else if(!phoneNumber.isEmpty() || !username.isEmpty()){
+        if(!phoneNumber.isEmpty() || !username.isEmpty()){
             if(!isValidPhoneNumber(phoneNumber)){
                 editTextNameRegister.setText("");
                 editTextPhoneNumberRegister.setText("");
-                Toasty.error(RegisterActivity.this, R.string.invalid_cred, Toast.LENGTH_SHORT, false).show();
+                Toasty.error(RegisterActivity.this, R.string.invalid_phone, Toast.LENGTH_SHORT, false).show();
                 logIn = false;
             }
             if(!isValidUserName(username)){
                 editTextNameRegister.setText("");
                 editTextPhoneNumberRegister.setText("");
-                Toasty.error(RegisterActivity.this, R.string.invalid_cred, Toast.LENGTH_SHORT, false).show();
+                Toasty.error(RegisterActivity.this, R.string.invalid_user, Toast.LENGTH_SHORT, false).show();
                 logIn = false;
             }
         }
@@ -157,8 +157,9 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
      */
     public static boolean isValidPhoneNumber(String phoneNumber){
         boolean isValid = false;
-//        if(!Pattern.matches("[a-zA-Z]+", phoneNumber) && phoneNumber.length() <9)
-        isValid = true;
+        if(!Pattern.matches("[a-zA-Z]+", phoneNumber) && phoneNumber.length() <=10) {
+            isValid = true;
+        }
         return isValid;
     }
 

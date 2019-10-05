@@ -237,6 +237,10 @@ HELLOmywork is determinant to provide to our service providers the best possible
     <string name="plans_company_details_service_access">Access to services</string>
     <string name="plans_company_button">Pay Rs. 199.00</string>
     <string name="contest_announcements"><![CDATA[CONTEST & ANNOUNCEMENTS]]></string>
+    <string name="invalid_phone">Please enter a valid phone number</string>
+    <string name="invalid_pass">Minimum 6 characters required.</string>
+    <string name="invalid_user">Minimum 3 charaters required</string>
+    <string name="view_more_comments">View more</string>
     <string-array name="org_array">
         <item>Organisation</item>
         <item>Private</item>

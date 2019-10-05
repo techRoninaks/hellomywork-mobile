@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -34,6 +35,7 @@ import com.roninaks.hellomywork.adapters.SearchServiceAdapter;
 import com.roninaks.hellomywork.adapters.SearchUnionAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
+import com.roninaks.hellomywork.interfaces.OnLoadMoreListener;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.CategoryModel;
 import com.roninaks.hellomywork.models.SearchSuggestionsModel;
@@ -70,7 +72,9 @@ public class SearchResults extends Fragment implements SqlDelegate{
     private static final String ARG_PARAM3 = "category";
     private static final String ARG_PARAM4 = "default";
 
-
+    // amount of data for each search result
+    private static final int SEARCH_RESULT_LIMIT = 24;
+ 
     private String searchKey;
     private String location;
     private String category;
@@ -91,6 +95,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
     private ImageView ivSearch, ivOptions;
     private OnFragmentInteractionListener mListener;
 
+    private Handler handler;
 
     public SearchResults() {
         // Required empty public constructor
@@ -178,6 +183,8 @@ public class SearchResults extends Fragment implements SqlDelegate{
         toggleTabs(default_load == null || default_load.isEmpty() ? "services" : default_load);
         acSearch.setText(searchKey);
 
+        handler = new Handler();
+
         //On click listeners
         View.OnClickListener toggleTabsListener = new View.OnClickListener() {
             @Override
@@ -217,7 +224,12 @@ public class SearchResults extends Fragment implements SqlDelegate{
                 PopupMenu popup = new PopupMenu(context, v);
                 Menu m = popup.getMenu();
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.options_menu, popup.getMenu());
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    inflater.inflate(R.menu.options_menu, popup.getMenu());
+                }
+                else{
+                    inflater.inflate(R.menu.options_menu_logged_in, popup.getMenu());
+                }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -356,7 +368,11 @@ public class SearchResults extends Fragment implements SqlDelegate{
                     String response = jsonArray.getJSONObject(0).getString("response");
                     if(response.equals(context.getString(R.string.response_success))){
                         buildUnions(jsonArray);
-                    }else{
+                    }else if(response.equals("last-page")){
+                        Toast.makeText(context, "No more results", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else{
                         Toast.makeText(context, "Sorry. Your Union list seems empty", Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -398,29 +414,31 @@ public class SearchResults extends Fragment implements SqlDelegate{
     }
 
     //Loaders
-    private void loadCategories(){
+    private void loadCategories(String pageNo){
         SqlHelper sqlHelper = new SqlHelper(context, SearchResults.this);
         sqlHelper.setExecutePath("searchcategory.php");
         sqlHelper.setMethod("GET");
         sqlHelper.setActionString("categories");
         ContentValues params = new ContentValues();
         params.put("srch_key", searchKey);
+        params.put("pageNo",pageNo);
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }
 
-    private void loadUnions(){
+    private void loadUnions(String pageNo){
         SqlHelper sqlHelper = new SqlHelper(context, SearchResults.this);
         sqlHelper.setExecutePath("searchunions.php");
         sqlHelper.setMethod("GET");
         sqlHelper.setActionString("unions");
         ContentValues params = new ContentValues();
         params.put("srch_key", searchKey);
+        params.put("pageNo",pageNo);
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }
 
-    private void loadProfiles(){
+    private void loadProfiles(String pageNo,boolean isPrem){
         SqlHelper sqlHelper = new SqlHelper(context, SearchResults.this);
         sqlHelper.setExecutePath("searchQuery.php");
         sqlHelper.setMethod("POST");
@@ -429,8 +447,11 @@ public class SearchResults extends Fragment implements SqlDelegate{
         params.put("srchType", searchKey);
         params.put("locType", location);
         params.put("catType", category);
-        params.put("pageNo", "1");
+        params.put("pageNo", pageNo);
         params.put("mob", "1");
+        if (isPrem){
+            params.put("isPrem",1);
+        }
         params.put("userId", ((MainActivity) context).isLoggedIn());
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
@@ -452,7 +473,10 @@ public class SearchResults extends Fragment implements SqlDelegate{
         switch (tabName){
             case "profiles":{
                 if(serviceProviderModels == null){
-                    loadProfiles();
+                    serviceProviderModels = new ArrayList<>();
+                    serviceProviderModelsFiltered = new ArrayList<>();
+                    loadProfiles("1",false);
+                    //loadProfiles("1",true);
                 }
                 tvTabProfile.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
                 tvTabService.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
@@ -469,7 +493,8 @@ public class SearchResults extends Fragment implements SqlDelegate{
             }
             case "services":{
                 if(categoryModels == null){
-                    loadCategories();
+                    categoryModels = new ArrayList<>();
+                    loadCategories("1");
                 }
                 tvTabService.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
                 tvTabProfile.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
@@ -486,7 +511,8 @@ public class SearchResults extends Fragment implements SqlDelegate{
             }
             case "unions":{
                 if(unionModels == null){
-                    loadUnions();
+                    unionModels = new ArrayList<>();
+                    loadUnions("1");
                 }
                 tvTabUnions.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
                 tvTabProfile.setTextColor(getResources().getColor(R.color.colorTextBlackHint));
@@ -506,47 +532,85 @@ public class SearchResults extends Fragment implements SqlDelegate{
 
     private void buildCategories(JSONArray jsonArray){
         try{
-            categoryModels = new ArrayList<>();
+
             for(int i = 1; i < jsonArray.length(); i++){
                 CategoryModel categoryModel = new ModelHelper().buildCategoryModel(jsonArray.getJSONObject(i));
                 categoryModels.add(categoryModel);
             }
-            SearchServiceAdapter adapter = new SearchServiceAdapter(context, categoryModels, rootView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-            rvServices.setLayoutManager(layoutManager);
-            rvServices.setAdapter(adapter);
+            createCategoriesList();
+            rvServices.scrollToPosition(categoryModels.size()-SEARCH_RESULT_LIMIT - 7);
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void createCategoriesList() {
+        final SearchServiceAdapter adapter = new SearchServiceAdapter(context, categoryModels, rootView,rvServices);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+        rvServices.setLayoutManager(layoutManager);
+        rvServices.setAdapter(adapter);
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = (int)Math.ceil(((double)categoryModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
+                        loadCategories(String.valueOf(index));
+                        adapter.notifyDataSetChanged();
+                        adapter.setLoaded();
+                    }
+                },1000);
+            }
+        });
     }
 
     private void buildUnions(JSONArray jsonArray){
         try{
-            unionModels = new ArrayList<>();
             for(int i = 1; i < jsonArray.length(); i++){
                 UnionModel unionModel = new ModelHelper().buildUnionModel(jsonArray.getJSONObject(i));
                 unionModels.add(unionModel);
             }
-            SearchUnionAdapter adapter = new SearchUnionAdapter(context, unionModels, rootView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-            rvUnions.setLayoutManager(layoutManager);
-            rvUnions.setAdapter(adapter);
+            createUnionList();
+            rvUnions.scrollToPosition(unionModels.size() - SEARCH_RESULT_LIMIT);
+
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void createUnionList() {
+
+        final SearchUnionAdapter adapter = new SearchUnionAdapter(context, unionModels, rootView,rvUnions);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+        rvUnions.setLayoutManager(layoutManager);
+        rvUnions.setAdapter(adapter);
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = (int)Math.ceil(((double)unionModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
+                        loadUnions(String.valueOf(index));
+                        adapter.notifyDataSetChanged();
+                        adapter.setLoaded();
+                    }
+                },1000);
+            }
+        });
+    }
+
     private void buildProfiles(JSONArray jsonArray){
         try{
-            serviceProviderModels = new ArrayList<>();
-            serviceProviderModelsFiltered = new ArrayList<>();
             for(int i = 1; i < jsonArray.length(); i++){
                 ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
                 serviceProviderModels.add(serviceProviderModel);
                 if(serviceProviderModel.isPremium())
                     serviceProviderModelsFiltered.add(serviceProviderModel);
             }
-            filterList(false);
+            filterList(switchPremium.isChecked());
+            rvProfiles.scrollToPosition(serviceProviderModels.size() - SEARCH_RESULT_LIMIT);
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -566,15 +630,40 @@ public class SearchResults extends Fragment implements SqlDelegate{
         }
     }
 
-    private void filterList(boolean isChecked){
-        SearchProfileAdapter adapter;
+    private void filterList(final boolean isChecked){
+        final SearchProfileAdapter adapter;
         if(isChecked){
-            adapter = new SearchProfileAdapter(context, serviceProviderModelsFiltered, rootView);
+            adapter = new SearchProfileAdapter(context, serviceProviderModelsFiltered, rootView,rvProfiles,false);
+
         }else{
-            adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView);
+            adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView,rvProfiles,false);
         }
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
         rvProfiles.setLayoutManager(layoutManager);
         rvProfiles.setAdapter(adapter);
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = 0;
+                        if(!isChecked){
+                            index = (int)Math.ceil(((double)serviceProviderModelsFiltered.size() / SEARCH_RESULT_LIMIT)) + 1;
+                            loadProfiles(String.valueOf(index),false);
+                            adapter.notifyDataSetChanged();
+                            adapter.setLoaded();
+                        }
+                        else {
+                            //index = (int)Math.ceil(((double) serviceProviderModels.size() / SEARCH_RESULT_LIMIT)) + 1;
+//                            loadProfiles(String.valueOf(index),false);
+//                            adapter.notifyDataSetChanged();
+//                            adapter.setLoaded();
+                        }
+
+                    }
+                },1000);
+            }
+        });
     }
 }

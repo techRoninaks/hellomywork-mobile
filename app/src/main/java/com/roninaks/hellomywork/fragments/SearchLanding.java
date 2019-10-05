@@ -149,7 +149,12 @@ public class SearchLanding extends Fragment implements SqlDelegate {
                 PopupMenu popup = new PopupMenu(context, v);
                 Menu m = popup.getMenu();
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.options_menu, popup.getMenu());
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    inflater.inflate(R.menu.options_menu, popup.getMenu());
+                }
+                else{
+                    inflater.inflate(R.menu.options_menu_logged_in, popup.getMenu());
+                }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {

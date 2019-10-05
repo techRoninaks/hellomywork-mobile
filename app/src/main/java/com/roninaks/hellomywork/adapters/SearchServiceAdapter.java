@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +23,7 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.fragments.ProfileFragment;
 import com.roninaks.hellomywork.fragments.SearchResults;
+import com.roninaks.hellomywork.interfaces.OnLoadMoreListener;
 import com.roninaks.hellomywork.models.CategoryModel;
 
 import java.util.ArrayList;
@@ -31,15 +33,33 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
     private Context context;
     private View rootview;
     private RequestOptions requestOptions;
+    private RecyclerView recyclerView;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListener;
 
-
-    public SearchServiceAdapter(Context context, ArrayList<CategoryModel> categoryModels, View rootview) {
+    public SearchServiceAdapter(Context context, ArrayList<CategoryModel> categoryModels, View rootview,RecyclerView recyclerView) {
         this.context = context;
         this.categoryModels = categoryModels;
         this.rootview = rootview;
         requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.profile_default);
         requestOptions.error(R.drawable.profile_default);
+        this.recyclerView = recyclerView;
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    totalItemCount = getItemCount();
+                    lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    if (!loading && (totalItemCount - lastVisibleItem-1)==0) {
+                        if (onLoadMoreListener != null) {
+                            onLoadMoreListener.onLoadMore();
+                        }
+                        loading = true;
+                    }
+                }
+            });
     }
 
 
@@ -82,9 +102,17 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
 
     }
 
+    public void setLoaded() {
+        loading = false;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
     @Override
     public int getItemCount() {
-        return categoryModels.size();
+        return categoryModels == null ? 0 : categoryModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

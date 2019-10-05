@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.bumptech.glide.request.RequestOptions;
@@ -18,6 +19,7 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.fragments.SearchResults;
 import com.roninaks.hellomywork.fragments.UnionsIndividualFragment;
+import com.roninaks.hellomywork.interfaces.OnLoadMoreListener;
 import com.roninaks.hellomywork.models.UnionModel;
 
 import java.util.ArrayList;
@@ -26,13 +28,30 @@ public class SearchUnionAdapter extends RecyclerView.Adapter<SearchUnionAdapter.
     private ArrayList<UnionModel> unionModels;
     private Context context;
     private View rootview;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListener;
 //    private RequestOptions requestOptions;
 
 
-    public SearchUnionAdapter(Context context, ArrayList<UnionModel> unionModels, View rootview) {
+    public SearchUnionAdapter(Context context, ArrayList<UnionModel> unionModels, View rootview,RecyclerView recyclerView) {
         this.context = context;
         this.unionModels = unionModels;
         this.rootview = rootview;
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                totalItemCount = getItemCount();
+                lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                if (!loading && (totalItemCount - lastVisibleItem-1)==0) {
+                    if (onLoadMoreListener != null) {
+                        onLoadMoreListener.onLoadMore();
+                    }
+                    loading = true;
+                }
+            }
+        });
 //        requestOptions = new RequestOptions();
 //        requestOptions.placeholder(R.drawable.profile_default);
 //        requestOptions.error(R.drawable.profile_default);
@@ -66,6 +85,14 @@ public class SearchUnionAdapter extends RecyclerView.Adapter<SearchUnionAdapter.
 
     }
 
+
+    public void setLoaded() {
+        loading = false;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
 
     @Override
     public int getItemCount() {

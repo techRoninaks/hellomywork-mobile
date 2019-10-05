@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.LinearLayoutManager;
 import androidx.appcompat.widget.PopupMenu;
 //import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +36,7 @@ import com.roninaks.hellomywork.activities.RegisterActivity;
 import com.roninaks.hellomywork.adapters.UnionsAdapter;
 import com.roninaks.hellomywork.helpers.ModelHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
+import com.roninaks.hellomywork.interfaces.OnLoadMoreListener;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.UnionModel;
 
@@ -57,6 +59,7 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int SEARCH_RESULT_LIMIT = 24;
 
     private String mParam1;
     private String mParam2;
@@ -70,6 +73,7 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
     private ArrayList<UnionModel> unionModels;
     private AutoCompleteTextView acSearch;
     private ImageView ivSearch, ivOptions;
+    private Handler handler;
 
     public UnionsFragment() {
         // Required empty public constructor
@@ -113,7 +117,9 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
         //Load Defaults
-        loadUnions();
+        handler = new Handler();
+        unionModels = new ArrayList<>();
+        loadUnions("1");
 
         //Listeners
         ivSearch.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +135,12 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
                 PopupMenu popup = new PopupMenu(context, v);
                 Menu m = popup.getMenu();
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.options_menu, popup.getMenu());
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    inflater.inflate(R.menu.options_menu, popup.getMenu());
+                }
+                else{
+                    inflater.inflate(R.menu.options_menu_logged_in, popup.getMenu());
+                }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -233,7 +244,10 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
                     String response = jsonArray.getJSONObject(0).getString("response");
                     if(response.equals(context.getString(R.string.response_success))){
                         buildUnions(jsonArray);
-                    }else{
+                    }else if(response.equals("last-page")){
+                        Toast.makeText(context, "No more results available", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
                         Toast.makeText(context, "Sorry. Your Union list seems empty", Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -261,19 +275,19 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
 
     //Private Functions
 
-    private void loadUnions(){
+    private void loadUnions(String pageNo){
         SqlHelper sqlHelper = new SqlHelper(context, UnionsFragment.this);
         sqlHelper.setExecutePath("getunionlist.php");
         sqlHelper.setMethod("GET");
         sqlHelper.setActionString("unions");
         ContentValues params = new ContentValues();
+        params.put("pageNo",pageNo);
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }
 
     private void buildUnions(JSONArray jsonArray){
         try{
-            unionModels = new ArrayList<>();
             ArrayList<String> searchList = new ArrayList<>();
             for(int i = 1; i < jsonArray.length(); i++){
                 UnionModel unionModel = new ModelHelper().buildUnionModel(jsonArray.getJSONObject(i));
@@ -281,10 +295,8 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
                 unionModels.add(unionModel);
             }
             //Set Unions List
-            UnionsAdapter adapter = new UnionsAdapter(context, unionModels, rootView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-            rvUnions.setLayoutManager(layoutManager);
-            rvUnions.setAdapter(adapter);
+            setUnionList();
+            rvUnions.scrollToPosition(unionModels.size()-SEARCH_RESULT_LIMIT);
 
             //Set Search bar Autocomplete
             ArrayAdapter<String> adapterSearch = new ArrayAdapter<String>(context,
@@ -294,6 +306,28 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setUnionList() {
+        final UnionsAdapter adapter = new UnionsAdapter(context, unionModels, rootView,rvUnions);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+        rvUnions.setLayoutManager(layoutManager);
+        rvUnions.setAdapter(adapter);
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = (int)Math.ceil(((double)unionModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
+                        loadUnions(String.valueOf(index));
+                        adapter.notifyDataSetChanged();
+                        adapter.setLoaded();
+                    }
+                },1000);
+            }
+        });
+
     }
 
     private int getUnionIdByName(String unionName){
