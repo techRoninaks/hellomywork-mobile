@@ -41,7 +41,6 @@ import com.roninaks.hellomywork.helpers.SqlHelper;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
-//TODO FAB show on Login
 
 public class MainActivity extends AppCompatActivity implements PaymentResultListener {
 
@@ -292,6 +291,12 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         if(userId.isEmpty())
             sharedPreferences.edit().putBoolean("is_loggedin_admin", false).commit();
         return userId;
+    }
+
+    public String getDefaultLocation(){
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("hmw", 0);
+        return sharedPreferences.getString("location", "1");
+
     }
 
     public void logout(){

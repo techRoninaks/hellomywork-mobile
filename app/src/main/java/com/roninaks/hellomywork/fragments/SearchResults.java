@@ -74,7 +74,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
 
     // amount of data for each search result
     private static final int SEARCH_RESULT_LIMIT = 24;
-    // TODO: Rename and change types of parameters
+ 
     private String searchKey;
     private String location;
     private String category;
@@ -111,7 +111,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
      * @return A new instance of fragment SearchResults.
      */
 
-    // TODO: Rename and change types and number of parameters
+
     public static SearchResults newInstance(String param1, String param2, String param3) {
         SearchResults fragment = new SearchResults();
         Bundle args = new Bundle();
@@ -284,7 +284,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
+                    Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), ((MainActivity) context).getDefaultLocation(), "");
                     ((MainActivity) context).initFragment(fragment);
                 }
                 return true;
@@ -325,7 +325,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -409,7 +409,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 
