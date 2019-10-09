@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">HELLOmywork</string>
+    <string name="app_version">1.0.0</string>
 
     <!-- Generic -->
     <string name="response_error">Something went wrong. Please try again later</string>
     <!--<string name="response_success">successful</string>-->
-    Eda..
     <string name="response_failure">unsuccessful</string>
     <string name="permission_camera_denied">Please allow camera permission to take photograph</string>
     <string name="view_more">View More</string>
@@ -160,6 +160,7 @@
 
     <!-- Search Landing Page -->
     <string name="hp_service">Service</string>
+    <string name="sl_banner_prefix">search_landing_</string>
 
     <!-- Home Page -->
     <string name="hp_movers">Movers</string>

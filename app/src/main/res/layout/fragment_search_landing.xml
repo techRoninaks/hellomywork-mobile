@@ -17,16 +17,22 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/containerRelative">
                 <!-- Banner Image Section -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="290dp"
+                    android:src="@drawable/union_banner_photo"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/imgBanner"/>
                 <LinearLayout
                     android:id="@+id/containerBanner"
                     android:layout_width="match_parent"
                     android:layout_height="290dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:background="@drawable/banner_bg"
+                    android:background="@android:color/transparent"
                     android:orientation="vertical">
-
-
                     <!-- Searchbar -->
                     <LinearLayout
                         android:id="@+id/containerSearchBar"
@@ -86,18 +92,18 @@
 
                     </LinearLayout>
                 </LinearLayout>
-                            <!-- Content Section -->
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/rvCategories"
-                                android:layout_alignParentTop="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_marginTop="150dp"
-                                android:paddingStart="@dimen/standard_gap_large"
-                                android:paddingEnd="@dimen/standard_gap_large"
-                                >
-                            </androidx.recyclerview.widget.RecyclerView>
+                <!-- Content Section -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rvCategories"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="150dp"
+                    android:paddingStart="@dimen/standard_gap_large"
+                    android:paddingEnd="@dimen/standard_gap_large"
+                    >
+                </androidx.recyclerview.widget.RecyclerView>
             </RelativeLayout>
 
     </LinearLayout>

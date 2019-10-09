@@ -115,6 +115,20 @@
                             android:layout_gravity="top|right"
                             android:id="@+id/post_item_image_label"
                             android:src="@drawable/ic_random_min" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Testing text for long descriptions and trying to see if it fits the center of the image in the best possible way and trying to decipher the most elegant way of trying to understand the fundamental difference in being able to understand what life is all about the possibilities of a"
+                            android:textColor="@color/colorTextWhitePrimary"
+                            android:textSize="@dimen/font_inputs"
+                            android:layout_gravity="center"
+                            android:textAlignment="center"
+                            android:layout_marginStart="@dimen/standard_gap_ultra_large"
+                            android:layout_marginEnd="@dimen/standard_gap_ultra_large"
+                            android:maxLines="6"
+                            android:ellipsize="end"
+                            android:id="@+id/tvNoImageTextDesc"
+                            android:visibility="gone"/>
 
                     </FrameLayout>
 

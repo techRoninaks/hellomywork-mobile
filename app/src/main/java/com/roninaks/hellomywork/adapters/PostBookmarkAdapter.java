@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
@@ -20,9 +27,12 @@ import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapter.ViewHolder> implements SqlDelegate {
@@ -31,6 +41,8 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
     private View rootview;
     private ArrayList<ProfilePostModel> profilePostModels;
     private RecyclerView recyclerView;
+    private String baseImagePostUrl;
+    private RequestOptions requestOptions;
 
 
     public PostBookmarkAdapter(Context context, final ArrayList<ProfilePostModel> profilePostModels, View rootview, RecyclerView recyclerView) {
@@ -38,6 +50,11 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
         this.profilePostModels = profilePostModels;
         this.rootview = rootview;
         this.recyclerView = recyclerView;
+        baseImagePostUrl = "https://www.hellomywork.com/";
+        baseImagePostUrl = "http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/";
+        requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.icon_image);
+        requestOptions.error(R.drawable.icon_image);
     }
 
     @NonNull
@@ -62,6 +79,31 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
             holder.tvLikeCount.setText(profilePostModels.get(position).getLikeCount());
             holder.tvCommentCount.setText(profilePostModels.get(position).getCommentCount());
 
+            Glide.with(context)
+                    .setDefaultRequestOptions(requestOptions
+                            .centerCrop()
+                    )
+                    .asBitmap()
+                    .load(baseImagePostUrl + profilePostModels.get(position).getImageUri())
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            int width = holder.ivBookmarkPostImage.getWidth();
+                            int height = holder.ivBookmarkPostImage.getHeight();
+                            Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                            image.eraseColor(getColor());
+                            holder.ivBookmarkPostImage.setImageBitmap(image);
+                            holder.tvBookmarkNoImageDesc.setVisibility(View.VISIBLE);
+                            holder.tvBookmarkNoImageDesc.setText(profilePostModels.get(position).getDescription());
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(holder.ivBookmarkPostImage);
             if(profilePostModels.get(position).getIsLiked().equals("0")){
                 holder.filled = false;
                 holder.ivIsLiked.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
@@ -205,9 +247,9 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tvBookmarkPostName, tvBookmarkPostDes,tvBookmarkPostPlace,tvBookmarkPostDate,tvBookmarkPostTime;
+        TextView tvBookmarkPostName, tvBookmarkPostDes,tvBookmarkPostPlace,tvBookmarkPostDate,tvBookmarkPostTime, tvBookmarkNoImageDesc;
         TextView tvLikeCount,tvCommentCount;
-        ImageView ivIsBookmarked,ivIsLiked,ivComments,ivShare;
+        ImageView ivIsBookmarked,ivIsLiked,ivComments,ivShare,ivBookmarkPostImage;
         boolean filled= false;
         boolean bookmarkFilled= false;
         public ViewHolder(View itemView) {
@@ -217,6 +259,7 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
             tvBookmarkPostPlace = itemView.findViewById(R.id.bookmark_post_location);
             tvBookmarkPostDate = itemView.findViewById(R.id.bookmark_post_date);
             tvBookmarkPostTime = itemView.findViewById(R.id.bookmark_post_time);
+            tvBookmarkNoImageDesc = itemView.findViewById(R.id.tvNoImageTextDesc);
 
             tvLikeCount = itemView.findViewById(R.id.postBookmarkLikeCount);
             tvCommentCount = itemView.findViewById(R.id.postBookmarkCommentCount);
@@ -225,6 +268,32 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
             ivIsLiked = itemView.findViewById(R.id.iv_postBookmark_like_button);
             ivComments = itemView.findViewById(R.id.iv_postBookmarkComment);
             ivShare = itemView.findViewById(R.id.iv_postBookmark_Share);
+            ivBookmarkPostImage = itemView.findViewById(R.id.ivBookmarkPostImage);
         }
+    }
+
+    private int getColor(){
+        Random rand = new Random();
+        int n = rand.nextInt(4);
+        int color = ResourcesCompat.getColor(context.getResources(), R.color.palette_blue, null);
+        switch (n){
+            case 0:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_blue, null);
+                break;
+            }
+            case 1:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_orange, null);
+                break;
+            }
+            case 2:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_brown, null);
+                break;
+            }
+            case 3:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_green, null);
+                break;
+            }
+        }
+        return color;
     }
 }
