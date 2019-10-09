@@ -541,9 +541,9 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
+                    commentsModels.clear();
                     getCommentList(jsonArray,pos);
-                    commentRecyclerView.getAdapter().notifyDataSetChanged();
-
+                    notifyDataSetChanged();
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -554,7 +554,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     private void getCommentList(JSONArray jsonArray,int pos) {
         try {
             for (int i= 3; i< jsonArray.length(); i++) {
-
                 CommentsModel commentsModel = new CommentsModel();
                 commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
                 commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
@@ -564,7 +563,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
                 commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
                 commentsModels.add(commentsModel);
-                profilePostModels.get(pos).getCommentsModels().add(0,commentsModel);
+                profilePostModels.get(pos).getCommentsModels().add(commentsModel);
             }
         } catch (JSONException e) {
             e.printStackTrace();

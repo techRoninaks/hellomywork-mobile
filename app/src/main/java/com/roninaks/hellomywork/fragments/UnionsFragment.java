@@ -313,20 +313,20 @@ public class UnionsFragment extends Fragment implements SqlDelegate {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
         rvUnions.setLayoutManager(layoutManager);
         rvUnions.setAdapter(adapter);
-        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        int index = (int)Math.ceil(((double)unionModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
-                        loadUnions(String.valueOf(index));
-                        adapter.notifyDataSetChanged();
-                        adapter.setLoaded();
-                    }
-                },1000);
-            }
-        });
+//        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        int index = (int)Math.ceil(((double)unionModels.size() / SEARCH_RESULT_LIMIT) )+ 1;
+//                        loadUnions(String.valueOf(index));
+//                        adapter.notifyDataSetChanged();
+//                        adapter.setLoaded();
+//                    }
+//                },1000);
+//            }
+//        });
 
     }
 

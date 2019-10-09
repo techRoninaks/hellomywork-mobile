@@ -126,23 +126,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:layout_marginTop="15dp"
-                            android:layout_marginRight="15dp"
-                            android:layout_weight=".5"
-                            android:background="@drawable/career_edit_background"
-                            android:hint="@string/careers_primaryphone_hint"
-                            android:inputType="number"
-                            android:padding="10dp" />
-
-                        <EditText
-                            android:id="@+id/careerWhatsappOneET"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginTop="15dp"
                             android:layout_marginRight="25dp"
                             android:layout_weight=".5"
                             android:background="@drawable/career_edit_background"
-                            android:hint="@string/careers_whatsapp_one_hint"
+                            android:hint="@string/careers_primaryphone_hint"
                             android:inputType="number"
                             android:padding="10dp" />
                     </LinearLayout>

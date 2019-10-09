@@ -358,6 +358,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
                 else {
 
                     // Dummy data for testing
+                    // todo : remove this
 
                     targetLeads = "40";
                     targetProspective = "25";
