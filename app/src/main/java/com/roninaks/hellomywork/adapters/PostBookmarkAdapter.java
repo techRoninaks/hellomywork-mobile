@@ -51,7 +51,6 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
         this.rootview = rootview;
         this.recyclerView = recyclerView;
         baseImagePostUrl = "https://www.hellomywork.com/";
-        baseImagePostUrl = "http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/";
         requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.icon_image);
         requestOptions.error(R.drawable.icon_image);

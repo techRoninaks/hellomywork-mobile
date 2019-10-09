@@ -80,7 +80,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             this.profilePostModels = profilePostModels;
             this.rootview = rootview;
             baseImagePostUrl = "https://www.hellomywork.com/";
-            baseImagePostUrl = "http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/";
             requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.icon_image);
             requestOptions.error(R.drawable.icon_image);
@@ -91,7 +90,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             this.rootview = rootview;
             this.user_id = user_id;
             baseImagePostUrl = "https://www.hellomywork.com/";
-            baseImagePostUrl = "http://understandable-blin.hostingerapp.com/helloMyWork-Mobile/php/";
             requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.icon_image);
             requestOptions.error(R.drawable.icon_image);
