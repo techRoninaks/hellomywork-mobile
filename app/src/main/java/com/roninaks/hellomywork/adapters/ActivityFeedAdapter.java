@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,13 +22,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
@@ -49,6 +56,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapter.ViewHolder> implements SqlDelegate {
         private Context context;
@@ -139,6 +147,24 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                             )
                         .asBitmap()
                         .load(baseImagePostUrl + profilePostModels.get(position).getImageUri())
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                int width = holder.ivPostProfileImage.getWidth();
+                                int height = holder.ivPostProfileImage.getHeight();
+                                Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                                image.eraseColor(getColor());
+                                holder.ivPostProfileImage.setImageBitmap(image);
+                                holder.tvNoImageDesc.setVisibility(View.VISIBLE);
+                                holder.tvNoImageDesc.setText(profilePostModels.get(position).getDescription());
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
                         .into(holder.ivPostProfileImage);
 
                 if(profilePostModels.get(position).getIsLiked().equals("0")){
@@ -333,6 +359,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String mapping_id = profilePostModels.get(position).getId();
+                        String is_active = profilePostModels.get(position).getIsBoomarked();
                         if(holder.bookmarkFilled) {
                             holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
                             Toast.makeText(context, "Post have been removed from bookmark", Toast.LENGTH_SHORT).show();
@@ -343,10 +371,12 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                             Toast.makeText(context, "Post have been added to bookmark", Toast.LENGTH_SHORT).show();
                             holder.bookmarkFilled= true;
                         }
-                        bookmark();
+                        bookmark(mapping_id,is_active);
+                        profilePostModels.get(position).setIsBoomarked(holder.bookmarkFilled ? "1" : "0");
+                        notifyDataSetChanged();
                     }
 
-                    private void bookmark() {
+                    private void bookmark(String mapping_id,String is_active) {
 
                         SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
                         sqlHelper.setExecutePath("updatebookmarks.php");
@@ -355,8 +385,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                         ContentValues contentValues = new ContentValues();
                         contentValues.put("userId", ((MainActivity) context).isLoggedIn());
                         contentValues.put("type", "posts");
-                        contentValues.put("mapping_id", profilePostModels.get(position).getId());
-                        contentValues.put("is_active", profilePostModels.get(position).getIsBoomarked());
+                        contentValues.put("mapping_id", mapping_id);
+                        contentValues.put("is_active", is_active);
                         sqlHelper.setParams(contentValues);
                         sqlHelper.executeUrl(false);
                     }
@@ -542,7 +572,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount,tvSendComment;
+        TextView tvPostProfileName, tvPostProfileDes, tvPostProfileLocation, tvPostProfileDate, tvPostProfileTime, tvPostLikeCount, tvPostCommentCount,tvSendComment, tvNoImageDesc;
         ImageView ivPostProfileImage,ivPostImageLabel;
         ImageButton btnProfilePostOptions;
         TextView viewMoreComments;
@@ -559,6 +589,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 tvPostProfileLocation = itemView.findViewById(R.id.post_item_loaction);
                 tvPostProfileDate = itemView.findViewById(R.id.post_item_date);
                 tvPostProfileTime = itemView.findViewById(R.id.post_item_time);
+                tvNoImageDesc = itemView.findViewById(R.id.tvNoImageTextDesc);
                 ivPostProfileImage = itemView.findViewById(R.id.post_item_post_image);
                 btnProfilePostOptions = itemView.findViewById(R.id.post_item_shareBTN);
                 ivLike=itemView.findViewById(R.id.iv_LikeButton);
@@ -574,4 +605,29 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 viewMoreComments = itemView.findViewById(R.id.view_more_comments);
             }
         }
+
+    private int getColor(){
+        Random rand = new Random();
+        int n = rand.nextInt(4);
+        int color = ResourcesCompat.getColor(context.getResources(), R.color.palette_blue, null);
+        switch (n){
+            case 0:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_blue, null);
+                break;
+            }
+            case 1:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_orange, null);
+                break;
+            }
+            case 2:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_brown, null);
+                break;
+            }
+            case 3:{
+                color = ResourcesCompat.getColor(context.getResources(), R.color.palette_green, null);
+                break;
+            }
+        }
+        return color;
+    }
     }

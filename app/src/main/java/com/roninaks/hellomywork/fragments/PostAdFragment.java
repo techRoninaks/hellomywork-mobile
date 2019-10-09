@@ -208,7 +208,17 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
 
     @Override
     public void onResponse(SqlHelper sqlHelper) {
+        try{
+            switch (sqlHelper.getActionString()){
+                case "submit":{
+                    Toast.makeText(context, "Posted Successfully", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                    break;
+                }
+            }
+        }catch (Exception e){
 
+        }
     }
 
     /**

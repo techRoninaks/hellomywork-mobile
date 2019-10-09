@@ -308,7 +308,7 @@ public class BookmarkFragment extends Fragment implements SqlDelegate{
                     JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
                     String response = jsonArray.getJSONObject(0).getString("count");
                     if(response.equals("")){
-                        Toast.makeText(context, "Sorry. Your Union list seems empty", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Sorry. Your Post list seems empty", Toast.LENGTH_SHORT).show();
                     }else{
                         buildPosts(jsonArray);
                     }

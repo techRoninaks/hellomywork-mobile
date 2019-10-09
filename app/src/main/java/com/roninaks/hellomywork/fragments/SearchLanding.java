@@ -84,7 +84,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     private ArrayList<String> tabList;
     private ArrayList<CategoryModel> categoryModels, alSales, alRepairs, alService, alMovers, alHealth, alPersonal, alEats, alRest, alEvents, alBusiness, alRenovation, alMore;
     private AutoCompleteTextView acSearch;
-    private ImageView ivSearch, ivOptions;
+    private ImageView ivSearch, ivOptions, ivBanner;
     private LinearLayout llBanner;
 
     private ArrayList<SearchSuggestionsModel> searchSuggestionsModels;
@@ -130,6 +130,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         acSearch = (AutoCompleteTextView) rootView.findViewById(R.id.etSearch);
         ivSearch = (ImageView) rootView.findViewById(R.id.imgSearch);
         ivOptions = (ImageView) rootView.findViewById(R.id.imgOptions);
+        ivBanner = (ImageView) rootView.findViewById(R.id.imgBanner);
 
         //Setting Defaults
         loadTabs();
@@ -314,6 +315,7 @@ public class SearchLanding extends Fragment implements SqlDelegate {
     public void onTabClick(int position, ArrayList<String> tabs, int currentPosition, int widthFocused){
         String tag = tabs.get(position).toLowerCase();
         showList(tag);
+        showBanner(tag);
         SearchLandingTabsAdapter adapter = new SearchLandingTabsAdapter(context, SearchLanding.this, tabList, rootView, tag);
         rvTabs.setAdapter(adapter);
         scrollToPosition(position, widthFocused);
@@ -484,6 +486,13 @@ public class SearchLanding extends Fragment implements SqlDelegate {
             adapter = new HomeCategoriesAdapter(context, alMore, rootView, "search");
         }
         rvCategories.setAdapter(adapter);
+    }
+
+    private void showBanner(String tag){
+        String imgString = context.getString(R.string.sl_banner_prefix) + tag;
+        int imgResource = context.getResources().getIdentifier(imgString, "drawable",
+                context.getPackageName());
+        ivBanner.setImageDrawable(context.getDrawable(imgResource));
     }
 
     private void buildSearchList(JSONArray jsonArray){
