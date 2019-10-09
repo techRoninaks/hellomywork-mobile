@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.CareersFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- Header Section -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/llContainerHeader"
+                android:paddingTop="@dimen/standard_gap_large"
+                android:paddingBottom="@dimen/standard_gap_large">
+                <ImageView
+                    android:layout_width="@dimen/icon_contact"
+                    android:layout_height="@dimen/icon_contact"
+                    android:src="@drawable/ic_back_black"
+                    android:id="@+id/imgBack"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/standard_gap_large"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Careers_main_title"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorTextBlackPrimary"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/font_page_title"
+                    android:textAlignment="center"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"/>
+            </RelativeLayout>
+            <!-- Banner Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:background="@drawable/career_drawable_background">
+
+                <ImageView
+                    android:layout_width="@dimen/logo_width_careers"
+                    android:layout_height="@dimen/logo_height_careers"
+                    android:src="@drawable/logo_white_min"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/logo_image"
+                    android:layout_marginTop="@dimen/logo_margin_top_bottom_careers"
+                    android:layout_marginBottom="@dimen/logo_margin_top_bottom_careers"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/careers_text_one"
+                    android:layout_marginBottom="@dimen/text_margin_career"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:textAlignment="center"
+                    android:text="@string/careers_text_two"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:layout_marginBottom="@dimen/text_margin_career"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <!-- Content Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorTextWhitePrimary"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="8dp"
+                android:layout_marginTop="-60dp"
+                android:layout_marginLeft="@dimen/career_margin_left_right"
+                android:layout_marginRight="@dimen/career_margin_left_right"
+
+                app:cardUseCompatPadding="true"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:hint="@string/careers_name_hint"
+                        android:padding="10dp"
+                        android:background="@drawable/career_edit_background"
+                        android:id="@+id/careerNameEditText"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:padding="10dp"
+                        android:hint="@string/careers_address_hint"
+                        android:background="@drawable/career_edit_background"
+                        android:id="@+id/careerAddressEditText"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <EditText
+                            android:id="@+id/careerPrimaryPhoneET"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_weight=".5"
+                            android:background="@drawable/career_edit_background"
+                            android:hint="@string/careers_primaryphone_hint"
+                            android:inputType="number"
+                            android:padding="10dp" />
+
+                        <EditText
+                            android:id="@+id/careerWhatsappOneET"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_weight=".5"
+                            android:background="@drawable/career_edit_background"
+                            android:hint="@string/careers_whatsapp_one_hint"
+                            android:inputType="number"
+                            android:padding="10dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:padding="10dp"
+                        android:hint="@string/careers_email_hint"
+                        android:background="@drawable/career_edit_background"
+                        android:id="@+id/careerEmailEditText"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <EditText
+                            android:id="@+id/careerSecondaryPhoneET"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_weight=".5"
+                            android:background="@drawable/career_edit_background"
+                            android:hint="@string/careers_secondaryphone_hint"
+                            android:inputType="number"
+                            android:padding="10dp" />
+
+                        <EditText
+                            android:id="@+id/careerWhatsappTwoET"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="25dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_weight=".5"
+                            android:background="@drawable/career_edit_background"
+                            android:hint="@string/careers_whatsapp_two_hint"
+                            android:inputType="number"
+                            android:padding="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginBottom="25dp"
+                            android:text="@string/careers_upload_text"
+                            android:layout_gravity="left"
+                            android:textColor="@color/colorTextBlackPrimary"
+                            android:background="@drawable/career_button_radius"
+                            android:elevation="8dp"
+                            android:padding="10dp"
+                            android:id="@+id/careerUploadBTN"
+                            />
+
+                        <Button
+                            android:id="@+id/careerSubmitBTN"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|end"
+                            android:layout_marginLeft="25dp"
+                            android:background="@drawable/career_button_color_radius"
+                            android:elevation="8dp"
+                            android:text="@string/careers_submit_text"
+                            android:textColor="@color/colorTextWhitePrimary" />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="-25dp"
+                        android:layout_marginBottom="15dp"
+                        android:textColor="@color/colorAccent"
+                        android:text="*pdf"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

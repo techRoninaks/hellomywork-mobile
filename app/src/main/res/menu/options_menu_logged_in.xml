@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/options_contact"
+        android:title="@string/options_contact"/>
+    <item
+        android:id="@+id/options_about"
+        android:title="@string/options_about"/>
+    <item
+        android:id="@+id/options_careers"
+        android:title="@string/options_careers"/>
+    <item
+        android:id="@+id/options_admin"
+        android:title="@string/options_admin"/>
+</menu>

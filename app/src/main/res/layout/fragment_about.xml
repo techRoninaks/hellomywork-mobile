@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.AboutFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/containerRelative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- Banner Image Section -->
+                <LinearLayout
+                    android:id="@+id/containerBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/home_banner"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/career_drawable_background"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/about_heading"
+                        android:layout_width="291dp"
+                        android:layout_height="137dp"
+                        android:layout_alignStart="@+id/containerBanner"
+                        android:layout_alignTop="@+id/containerBanner"
+                        android:layout_marginStart="45dp"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/logo_white_about_page_min" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="@dimen/standard_gap_large"
+                    android:layout_marginTop="159dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="@dimen/standard_gap_large"
+                    android:layout_marginBottom="@dimen/standard_gap_large"
+                    android:background="@drawable/card_background_shape"
+                    android:orientation="vertical"
+                    android:padding="@dimen/standard_gap_large">
+
+                    <com.codesgood.views.JustifiedTextView
+                        android:id="@+id/tvAbout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_content"
+                        android:textColor="@color/colorTextBlackPrimary"
+                        android:textSize="@dimen/font_para"
+                        android:justificationMode="inter_word" />
+                </LinearLayout>
+            </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

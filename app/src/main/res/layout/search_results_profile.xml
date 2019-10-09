@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/containerMaster"
+    android:weightSum="1"
+    android:paddingTop="@dimen/standard_gap_large"
+    android:paddingLeft="@dimen/standard_gap_small"
+    android:paddingRight="@dimen/standard_gap_small">
+
+    <LinearLayout
+        android:id="@+id/containerIndividualRow"
+        android:layout_width="440dp"
+        android:layout_height="177dp"
+        android:layout_weight="1"
+        android:background="@drawable/custom_textview_white"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:background="@drawable/id_card_thumpnail_green"
+            android:orientation="vertical">
+            <!-- Logo and QR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="@dimen/standard_gap_medium"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/imgQr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/qr_code" />
+
+            </LinearLayout>
+
+            <!-- Premium -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ivprofile"
+                    android:layout_marginStart="@dimen/standard_gap_medium"
+                    android:layout_marginTop="@dimen/standard_gap_medium">
+
+                </ImageView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="2"
+                    android:layout_marginTop="@dimen/standard_gap_medium">
+
+                    <TextView
+                        android:id="@+id/tvname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_gap_small"
+                        android:layout_marginStart="15dp"
+                        android:singleLine="true"
+
+                        android:ellipsize="end"
+                        android:shadowColor="#003F3C3C"
+                        android:text="Amal Das V S"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvdesignation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_gap_small"
+                        android:layout_marginStart="15dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:shadowColor="#003F3C3C"
+                        android:text="UI Designer"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvaddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/standard_gap_small"
+                        android:layout_marginStart="15dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:shadowColor="#003F3C3C"
+                        android:text="Kundanoor"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerMemberShip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/standard_gap_large">
+
+                <TextView
+                    android:id="@+id/tvPremium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#003F3C3C"
+                    android:text="@string/sr_profile_premium"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:textSize="@dimen/font_list_title" />
+            </LinearLayout>
+            <!-- Information -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:id="@+id/containerTextInformation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.75"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_star_white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/standard_gap_extra_small"
+                            android:text="3.4"
+                            android:textColor="@color/colorTextWhitePrimary"
+                            android:textSize="@dimen/font_para" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvRole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UI/UX Designer"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="@dimen/font_inputs"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Noufal"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:textSize="@dimen/font_page_title"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:orientation="horizontal"
+            android:weightSum="11">
+
+            <ImageView
+                android:id="@+id/imgWhatsapp"
+                android:layout_width="8dp"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/ic_whatsapp_search" />
+
+            <ImageView
+                android:id="@+id/imgPhone"
+                android:layout_width="8dp"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/ic_phone_search" />
+
+            <ImageView
+                android:id="@+id/imgEmail"
+                android:layout_width="8dp"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/ic_mail_search" />
+
+            <ImageView
+                android:id="@+id/imgBookmark"
+                android:layout_width="8dp"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="1dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_bookmark_search" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

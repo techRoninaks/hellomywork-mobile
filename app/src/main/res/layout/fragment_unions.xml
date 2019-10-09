@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.UnionsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/containerRelative">
+                <!-- Banner Image Section -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sl_banner"
+                    android:src="@drawable/union_banner_photo"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/imgBanner"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sl_banner"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/containerBanner"
+                    android:orientation="vertical">
+                    <!-- Searchbar -->
+                    <LinearLayout
+                        android:id="@+id/containerSearchBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/standard_gap_medium"
+                        android:layout_marginEnd="@dimen/standard_gap_medium"
+                        android:layout_marginTop="@dimen/standard_gap_small"
+                        android:background="@drawable/card_background_shape"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/standard_gap_large"
+                        android:weightSum="8">
+
+                        <AutoCompleteTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:hint="@string/union_search"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:id="@+id/etSearch"
+                            android:inputType="text"
+                            android:imeOptions="actionSearch"
+                            android:background="@android:color/transparent"/>
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_search_blue"
+                            android:layout_weight="1"
+                            android:id="@+id/imgSearch"/>
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_options"
+                            android:layout_weight="1"
+                            android:id="@+id/imgOptions"/>
+                    </LinearLayout>
+                    <!-- Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="@dimen/font_page_title_emphasis"
+                        android:textColor="@color/colorTextWhitePrimary"
+                        android:text="@string/union_heading"
+                        android:textAlignment="center"
+                        android:layout_marginTop="@dimen/union_title_text_margin"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/banner_bottom_clip"
+                    android:layout_marginTop="155dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true">
+                </LinearLayout>
+                <!-- Content Section -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rvUnions"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="150dp"
+                    android:paddingStart="@dimen/standard_gap_small"
+                    android:paddingEnd="@dimen/standard_gap_small">
+                </androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

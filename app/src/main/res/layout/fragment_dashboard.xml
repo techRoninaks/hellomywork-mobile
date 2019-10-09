@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    tools:context=".fragments.DashboardFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/bgLinearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg_dash">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/standard_gap_medium"
+            android:weightSum="9"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:padding="@dimen/standard_gap_small"
+                android:layout_weight="2"
+                android:src="@drawable/logo_white_min"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/userNameAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nandu Kaatungal"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:paddingStart="@dimen/standard_gap_small"
+                    android:paddingTop="@dimen/standard_gap_small"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/userJobAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextWhiteSecondary"
+                    android:text="Sales Executive"
+                    android:paddingStart="@dimen/standard_gap_small"/>
+
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:paddingStart="@dimen/standard_gap_small"
+                android:paddingEnd="@dimen/standard_gap_small"
+                android:paddingTop="@dimen/standard_gap_large"
+                android:paddingBottom="@dimen/standard_gap_large"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_menu"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lldashboard1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/standard_gap_extra_large"
+            android:layout_marginStart="@dimen/standard_gap_extra_large"
+            android:layout_marginEnd="@dimen/standard_gap_extra_large"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Convertion Ratio"
+                android:textAllCaps="true"
+                android:textColor="@color/colorTextWhitePrimary"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Campaign send 2 days ago"
+                android:layout_marginBottom="@dimen/standard_gap_medium"
+                android:textColor="@color/colorTextWhiteSecondary"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/standard_gap_small"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:padding="@dimen/standard_gap_extra_small"
+                    android:src="@drawable/ic_green"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leads"
+                    android:layout_marginStart="@dimen/standard_gap_medium"
+                    android:layout_marginTop="@dimen/standard_gap_extra_small"
+                    android:textColor="@color/colorTextWhitePrimary"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/standard_gap_small"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:padding="@dimen/standard_gap_extra_small"
+                    android:src="@drawable/ic_yellow"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prospective"
+                    android:layout_marginStart="@dimen/standard_gap_medium"
+                    android:layout_marginTop="@dimen/standard_gap_extra_small"
+                    android:textColor="@color/colorTextWhitePrimary"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/standard_gap_small"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:padding="@dimen/standard_gap_extra_small"
+                    android:src="@drawable/ic_red"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Conversions"
+                    android:layout_marginStart="@dimen/standard_gap_medium"
+                    android:layout_marginTop="@dimen/standard_gap_extra_small"
+                    android:textColor="@color/colorTextWhitePrimary"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-120dp"
+                android:padding="@dimen/standard_gap_extra_small"
+                android:background="@drawable/graph_bg_circle"
+                android:layout_gravity="end">
+
+            <com.razerdp.widget.animatedpieview.AnimatedPieView
+                android:id="@+id/animatedPieView"
+                android:layout_width="150dp"
+                android:layout_height="150dp">
+
+            </com.razerdp.widget.animatedpieview.AnimatedPieView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorTextWhitePrimary"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp"
+            android:layout_marginLeft="@dimen/standard_gap_small"
+            android:layout_marginRight="@dimen/standard_gap_small"
+            app:cardUseCompatPadding="true"
+            android:layout_below="@+id/bgLinearlayout"
+            android:layout_marginTop="-70dp"
+            android:id="@+id/cardContainerTargets">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_gap_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/standard_gap_extra_small"
+                    android:text="Weekly Targets"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorTextBlackPrimary"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/standard_gap_medium"
+                    android:text="2 days ago"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayoutLeads"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginTop="@dimen/standard_gap_medium"
+                        android:layout_weight="1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <!-- ProgressBar that represents a total of 100% -->
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="100"
+                            android:progressDrawable="@drawable/stats_full"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
+                        <ProgressBar
+                            android:id="@+id/stats_progressbarLeads"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="75"
+                            android:progressDrawable="@drawable/stats_progress_leads"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- The text that goes in a center of the chart -->
+                        <TextView
+                            android:id="@+id/leads_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1/15"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorTextBlackPrimary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginTop="@dimen/standard_gap_medium"
+                        android:layout_weight="1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <!-- ProgressBar that represents a total of 100% -->
+                        <ProgressBar
+                            android:id="@+id/background_progressbar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="100"
+                            android:progressDrawable="@drawable/stats_full"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
+                        <ProgressBar
+                            android:id="@+id/stats_progressbarProspective"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="75"
+                            android:progressDrawable="@drawable/stats_progress_prospective"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- The text that goes in a center of the chart -->
+                        <TextView
+                            android:id="@+id/prospective_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1/15"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorTextBlackPrimary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!--  Conversions pie-->
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout2"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginTop="@dimen/standard_gap_medium"
+                        android:layout_weight="1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <!-- ProgressBar that represents a total of 100% -->
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="100"
+                            android:progressDrawable="@drawable/stats_full"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
+                        <ProgressBar
+                            android:id="@+id/stats_progressbarConversions"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="75"
+                            android:progressDrawable="@drawable/stats_progress_conversions"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- The text that goes in a center of the chart -->
+                        <TextView
+                            android:id="@+id/conversions_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1/15"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorTextBlackPrimary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/standard_gap_small"
+                        android:text="LEADS"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorTextBlackPrimary"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/standard_gap_small"
+                        android:text="PROSPECTIVE"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorTextBlackPrimary"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/standard_gap_small"
+                        android:text="CONVERSIONS"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorTextBlackPrimary"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/colorTextBlackSeperators"
+                    android:layout_margin="@dimen/standard_gap_small"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Note : Minimum 5 conversions on each sector"
+                    android:layout_marginStart="@dimen/standard_gap_medium"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardContainerTopPerformers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorTextWhitePrimary"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp"
+            android:layout_marginLeft="@dimen/standard_gap_small"
+            android:layout_marginRight="@dimen/standard_gap_small"
+            android:layout_below="@+id/cardContainerTargets"
+            app:cardUseCompatPadding="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_gap_large"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="5">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/standard_gap_extra_small"
+                    android:text="TOP PERFORMERS"
+                    android:textAllCaps="true"
+                    android:layout_weight="4"
+                    android:textColor="@color/colorTextBlackPrimary"
+                    android:textStyle="bold"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/standard_gap_extra_large"
+                        android:padding="@dimen/standard_gap_extra_small"
+                        android:src="@drawable/ic_arrow"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/colorTextBlackSeperators"
+                    android:layout_margin="@dimen/standard_gap_extra_small"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_topPerformers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorTextWhitePrimary"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp"
+            android:layout_marginLeft="@dimen/standard_gap_small"
+            android:layout_marginRight="@dimen/standard_gap_small"
+            android:layout_below="@+id/cardContainerTopPerformers"
+            app:cardUseCompatPadding="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_gap_large"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="5">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/standard_gap_extra_small"
+                        android:text="@string/contest_announcements"
+                        android:layout_weight="4"
+                        android:textColor="@color/colorTextBlackPrimary"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/standard_gap_extra_large"
+                        android:padding="@dimen/standard_gap_extra_small"
+                        android:src="@drawable/ic_arrow"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/colorTextBlackSeperators"
+                    android:layout_margin="@dimen/standard_gap_extra_small"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_announcemnents"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    </ScrollView>
