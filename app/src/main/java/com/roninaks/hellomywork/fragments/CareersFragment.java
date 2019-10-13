@@ -56,7 +56,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
     private String mParam1;
     private String mParam2;
     Bitmap bitmap;
-    private EditText careerNameET, careerAddressET, careerPrimaryPhoneET, careerWhatsappOneET, careerEmailET, careerSecondaryPhoneET, careerWhatsappTwoET;
+    private EditText careerNameET, careerAddressET, careerPrimaryPhoneET, careerEmailET, careerSecondaryPhoneET, careerWhatsappTwoET;
     private Button careerUploadResumeBTN, careerSubmitBTN;
     private ImageView careersBackBTN;
     Context context = getContext();
@@ -106,7 +106,6 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         careerNameET = view.findViewById(R.id.careerNameEditText);
         careerAddressET = view.findViewById(R.id.careerAddressEditText);
         careerPrimaryPhoneET = view.findViewById(R.id.careerPrimaryPhoneET);
-        careerWhatsappOneET = view.findViewById(R.id.careerWhatsappOneET);
         careerEmailET = view.findViewById(R.id.careerEmailEditText);
         careerSecondaryPhoneET = view.findViewById(R.id.careerSecondaryPhoneET);
         careerWhatsappTwoET = view.findViewById(R.id.careerWhatsappTwoET);
@@ -156,7 +155,6 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         String name = careerNameET.getText().toString();
         String address = careerAddressET.getText().toString();
         String primaryPhone = careerPrimaryPhoneET.getText().toString();
-        //String whatsappOne = careerWhatsappOneET.getText().toString();
         String email = careerEmailET.getText().toString();
         String secondaryPhone = careerSecondaryPhoneET.getText().toString();
         String whatsappTwo = careerWhatsappTwoET.getText().toString();
@@ -263,7 +261,6 @@ public class CareersFragment extends Fragment implements SqlDelegate {
                         careerNameET.setText("");
                         careerAddressET.setText("");
                         careerPrimaryPhoneET.setText("");
-                        //careerWhatsappOneET.setText("");
                         careerEmailET.setText("");
                         careerSecondaryPhoneET.setText("");
                         careerWhatsappTwoET.setText("");

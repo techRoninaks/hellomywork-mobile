@@ -107,36 +107,42 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
             @Override
             public void onClick(View v) {
                 tagButton = "assets/img/icon/ic_ForSale-min.png";
+                setButtonActive(buttonForsale);
             }
         });
         buttonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagButton = "assets/img/icon/ic_Random-min.png";
+                setButtonActive(buttonRandom);
             }
         });
         buttonRequired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagButton = "assets/img/icon/ic_Required-min.png";
+                setButtonActive(buttonRequired);
             }
         });
         buttonAchievemnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagButton = "assets/img/icon/ic_Achievement-min.png";
+                setButtonActive(buttonAchievemnet);
             }
         });
         buttonAppreciations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagButton = "assets/img/icon/ic_Appreciations-min.png";
+                setButtonActive(buttonAppreciations);
             }
         });
         buttonOffers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagButton = "assets/img/icon/ic_Offers-min.png";
+                setButtonActive(buttonOffers);
             }
         });
 
@@ -165,6 +171,16 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
         });
 
         return view;
+    }
+
+    private void setButtonActive(Button button) {
+        buttonAchievemnet.setAlpha(0.5f);
+        buttonAppreciations.setAlpha(0.5f);
+        buttonForsale.setAlpha(0.5f);
+        buttonOffers.setAlpha(0.5f);
+        buttonRandom.setAlpha(0.5f);
+        buttonRequired.setAlpha(0.5f);
+        button.setAlpha(1);
     }
 
     private void saveInformation(){
