@@ -195,8 +195,8 @@ public class AdminActivity extends AppCompatActivity {
             }
         }
         navigation.setSelectedItemId(R.id.navigation_home);
-        Fragment fragment = DashboardFragment.newInstance("", "");
-        initFragment(fragment, "Dashboard");
+//        Fragment fragment = DashboardFragment.newInstance("", "");
+//        initFragment(fragment, "Dashboard");
     }
 
 }
