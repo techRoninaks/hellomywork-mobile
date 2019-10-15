@@ -87,7 +87,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
         sharedPreferences = context.getSharedPreferences("hmw", 0);
         if(sharedPreferences.getBoolean("is_loggedin_admin", false)){
             Fragment fragment = DashboardFragment.newInstance(sharedPreferences.getString("emp_id", ""), sharedPreferences.getString("emp_name", ""));
-            ((AdminActivity) context).initFragment(fragment);
+            ((AdminActivity) context).initFragment(fragment, "Dashboard");
         }
         etEmail = (EditText) rootView.findViewById(R.id.etEmail);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
@@ -141,7 +141,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
                         sharedPreferences.edit().putString("emp_id", jsonObject.getString("userId")).commit();
                         sharedPreferences.edit().putString("emp_name", jsonObject.getString("userName")).commit();
                         Fragment fragment = DashboardFragment.newInstance(jsonObject.getString("userId"), jsonObject.getString("userName"));
-                        ((AdminActivity) context).initFragment(fragment);
+                        ((AdminActivity) context).initFragment(fragment, "Dashboard");
                     }
                     break;
                 }
