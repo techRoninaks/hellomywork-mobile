@@ -29,6 +29,7 @@
     <!-- Connection Strings -->
     <string name="master_url">https://www.hellomywork.com/</string>
     <string name="driver_path">assets/php/</string>
+    <string name="driver_path_admin">admin/assets/php/</string>
 
     <!-- No Internet Activity -->
     <string name="no_internet_retry">Retry</string>

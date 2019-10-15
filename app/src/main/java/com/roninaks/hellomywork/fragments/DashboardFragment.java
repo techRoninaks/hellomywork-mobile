@@ -156,7 +156,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private void getPieData(Context context) {
 
         SqlHelper sqlHelper = new SqlHelper(context, DashboardFragment.this);
-        sqlHelper.setExecutePath("admin/php/getPieData.php");
+        sqlHelper.setMasterUrl(context.getString(R.string.master_url));
+        sqlHelper.setExecutePath(context.getString(R.string.driver_path_admin) + "getPieData.php");
         sqlHelper.setActionString("pie_data");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
@@ -169,7 +170,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private void getUserDetails(Context context) {
 
         SqlHelper sqlHelper = new SqlHelper(context, DashboardFragment.this);
-        sqlHelper.setExecutePath("admin/php/fetchUser.php");
+        sqlHelper.setMasterUrl(context.getString(R.string.master_url));
+        sqlHelper.setExecutePath(context.getString(R.string.driver_path_admin) + "fetchUser.php");
         sqlHelper.setActionString("get_user");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
@@ -182,7 +184,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private void getTopPerformers(Context context) {
 
         SqlHelper sqlHelper = new SqlHelper(context, DashboardFragment.this);
-        sqlHelper.setExecutePath("admin/php/getConversions.php");
+        sqlHelper.setMasterUrl(context.getString(R.string.master_url));
+        sqlHelper.setExecutePath(context.getString(R.string.driver_path_admin) + "getConversions.php");
         sqlHelper.setActionString("topPerformers");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
@@ -195,7 +198,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private void getAnnouncements(Context context) {
 
         SqlHelper sqlHelper = new SqlHelper(context, DashboardFragment.this);
-        sqlHelper.setExecutePath("admin/php/getNotifications.php");
+        sqlHelper.setMasterUrl(context.getString(R.string.master_url));
+        sqlHelper.setExecutePath(context.getString(R.string.driver_path_admin) + "getNotifications.php");
         sqlHelper.setActionString("announcements");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();

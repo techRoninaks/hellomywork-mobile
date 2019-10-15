@@ -193,6 +193,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
 
     private void attemptSignup(){
         SqlHelper sqlHelper = new SqlHelper(context, AdminLogin.this);
+        sqlHelper.setMasterUrl(context.getString(R.string.master_url));
         sqlHelper.setExecutePath("admin/login/assets/php/login.php");
         sqlHelper.setMethod("POST");
         sqlHelper.setActionString("login");
