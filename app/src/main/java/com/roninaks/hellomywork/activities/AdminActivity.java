@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.fragments.AdminLogin;
 import com.roninaks.hellomywork.fragments.DashboardFragment;
 import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
@@ -51,8 +52,13 @@ public class AdminActivity extends AppCompatActivity {
                     case R.id.navigation_home: //dashboard fragment
                     {
                         item.setIcon(R.drawable.ic_home_fill);
-                        DashboardFragment dashboardFragment = DashboardFragment.newInstance("","");
-                        initFragment(dashboardFragment, "Dashboard");
+                        if(AdminActivity.this.isLoggedIn().isEmpty()){
+                            Fragment fragment = AdminLogin.newInstance("", "");
+                            initFragment(fragment);
+                        }else {
+                            DashboardFragment dashboardFragment = DashboardFragment.newInstance("", "");
+                            initFragment(dashboardFragment, "Dashboard");
+                        }
                     }
                     return true;
                     case R.id.navigation_search://add customer fragment
