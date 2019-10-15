@@ -160,6 +160,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                             else {
                                 editTextPassword.setVisibility(View.VISIBLE);
                                 tvForgotPassword.setText(getString(R.string.login_forgot_password));
+                                btnLogIn.setText(getString(R.string.login_button));
                                 break;
                             }
 

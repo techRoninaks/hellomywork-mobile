@@ -261,8 +261,8 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
      * @param email - Email id to send mails to
      */
     public void sendMail(String email){
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setType("text/plain");
+        Intent intent = new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:" + email));
+        //intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_EMAIL, email);
         intent.putExtra(Intent.EXTRA_SUBJECT, "Hellomywork: Service");
         intent.putExtra(Intent.EXTRA_TEXT, "Greetings from Hellomywork.");

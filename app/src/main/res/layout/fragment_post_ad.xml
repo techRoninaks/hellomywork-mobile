@@ -69,6 +69,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/profile_postfilter_color_purple"
                             android:text="RANDOM"
+                            android:alpha="0.5"
                             android:textColor="@color/colorTextWhitePrimary" />
 
                         <Button
@@ -78,6 +79,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/profile_postfilter_color_blood"
                             android:text="FOR SALE"
+                            android:alpha="0.5"
                             android:textColor="@color/colorTextWhitePrimary" />
 
                         <Button
@@ -87,6 +89,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/profile_postfilter_color_mint"
                             android:text="REQUIRED"
+                            android:alpha="0.5"
                             android:textColor="@color/colorTextWhitePrimary" />
 
                         <Button
@@ -96,6 +99,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/profile_postfilter_color_yellow"
                             android:text="OFFERES"
+                            android:alpha="0.5"
                             android:textColor="@color/colorTextWhitePrimary" />
 
                         <Button
@@ -107,6 +111,7 @@
                             android:paddingRight="5dp"
                             android:background="@drawable/profile_postfilter_color_black"
                             android:text="ACHIEVEMENT"
+                            android:alpha="0.5"
                             android:textColor="@color/colorTextWhitePrimary" />
 
                         <Button
@@ -118,6 +123,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/profile_postfilter_color_green"
                             android:text="APPRECIATION"
+                            android:alpha="0.5"
                             android:textColor="@color/colorTextWhitePrimary" />
 
 

@@ -26,7 +26,10 @@ import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
@@ -70,9 +73,12 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
             holder.tvBookmarkPostDes.setText(profilePostModels.get(position).getDescription());
             holder.tvBookmarkPostPlace.setText(profilePostModels.get(position).getLocation());
             String date = profilePostModels.get(position).getDate();
+            String rdate = date.split(String.valueOf(' '))[1];
+            String time = formatTime(rdate);
             date = date.split(String.valueOf(' '))[0];
             String [] datepost = date.split("-");//Converting date to standard form.
             holder.tvBookmarkPostDate.setText(datepost[2]+"-"+datepost[1]+"-"+datepost[0]);
+            holder.tvBookmarkPostTime.setText(time);
             //holder.tvBookmarkPostTime.setText(profilePostModels.get(position).getDescription());
 
             holder.tvLikeCount.setText(profilePostModels.get(position).getLikeCount());
@@ -227,6 +233,21 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
 //            EmailHelper emailHelper = new EmailHelper(context, EmailHelper.TECH_SUPPORT, "Error: ActorAdapter", StringHelper.convertStackTrace(e));
 //            emailHelper.sendEmail();
         }
+    }
+
+    private String formatTime(String announcementTime){
+        SimpleDateFormat time1 = new SimpleDateFormat("hh:mm:ss");
+        Date date;
+        try {
+            date = time1.parse(announcementTime);
+        }catch (Exception e){
+            date = Calendar.getInstance().getTime();
+        }
+
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm aa");
+        String time = dateFormat2.format(date);
+
+        return time;
     }
 
     @Override

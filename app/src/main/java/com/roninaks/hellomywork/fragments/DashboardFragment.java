@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,12 +104,13 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         // Inflate the layout for this fragment
         context = getActivity();
         // Get logged in user
-//        if(((AdminActivity) context).isLoggedIn().isEmpty()){
-//            Fragment fragment = AdminLogin.newInstance("", "");
-//            ((AdminActivity) context).initFragment(fragment);
-//        }else {
+        if(((AdminActivity) context).isLoggedIn().isEmpty()){
+            getActivity().getSupportFragmentManager().popBackStack("Dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            Fragment fragment = AdminLogin.newInstance("", "");
+            ((AdminActivity) context).initFragment(fragment);
+        }else {
             getUserDetails(context);
-//        }
+        }
         rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         recyclerViewTopPerformers = rootView.findViewById(R.id.recyclerView_topPerformers);
@@ -358,6 +360,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
                 else {
 
                     // Dummy data for testing
+                    // todo : remove this
 
                     targetLeads = "40";
                     targetProspective = "25";

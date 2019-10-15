@@ -52,7 +52,7 @@ public class AdminActivity extends AppCompatActivity {
                     {
                         item.setIcon(R.drawable.ic_home_fill);
                         DashboardFragment dashboardFragment = DashboardFragment.newInstance("","");
-                        initFragment(dashboardFragment);
+                        initFragment(dashboardFragment, "Dashboard");
                     }
                     return true;
                     case R.id.navigation_search://add customer fragment
@@ -196,7 +196,7 @@ public class AdminActivity extends AppCompatActivity {
         }
         navigation.setSelectedItemId(R.id.navigation_home);
         Fragment fragment = DashboardFragment.newInstance("", "");
-        initFragment(fragment);
+        initFragment(fragment, "Dashboard");
     }
 
 }
