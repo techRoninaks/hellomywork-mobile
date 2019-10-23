@@ -28,6 +28,7 @@ import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.fragments.BookmarkFragment;
 import com.roninaks.hellomywork.fragments.CareersFragment;
 import com.roninaks.hellomywork.fragments.ContactFragment;
+import com.roninaks.hellomywork.fragments.DashboardFragment;
 import com.roninaks.hellomywork.fragments.HomeFragment;
 
 import com.roninaks.hellomywork.fragments.PlansFragment;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
     private MenuItem PreviousMenuItem;
     private String args[];
     private Bundle bundle;
+    private boolean firstRun = true;
+    private int backpressedPrompt = 1;
 
     private DragFloatActionButton floatActionButton;
 
@@ -65,31 +68,54 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                     //fragments are selected based on the item clicked
                     case R.id.navigation_home: //dashboard fragment
                     {
-                        item.setIcon(R.drawable.ic_home_fill);
-                        HomeFragment homeFragment = HomeFragment.newInstance("","");
-                        initFragment(homeFragment);
+                        if(firstRun) {
+                            item.setIcon(R.drawable.ic_home_fill);
+                            firstRun = false;
+                        }else {
+                            HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("home");
+                            if(fragment != null&& fragment.isVisible()){
+                                item.setIcon(R.drawable.ic_home_fill);
+                            }else {
+                                item.setIcon(R.drawable.ic_home_fill);
+                                HomeFragment homeFragment = HomeFragment.newInstance("", "");
+                                initFragment(homeFragment,"home");
+                            }
+                        }
                     }
                     return true;
                     case R.id.navigation_search://add customer fragment
-                    {
-                        item.setIcon(R.drawable.ic_search_fill);
-                        SearchLanding searchLanding = SearchLanding.newInstance("", "");
-                        initFragment(searchLanding);
-                    }
+                        SearchLanding fragmentSearch = (SearchLanding) getSupportFragmentManager().findFragmentByTag("search");
+                        if(fragmentSearch != null&& fragmentSearch.isVisible()){
+                            item.setIcon(R.drawable.ic_search_fill);
+                        }else {
+                            item.setIcon(R.drawable.ic_search_fill);
+                            SearchLanding searchLanding = SearchLanding.newInstance("", "");
+                            initFragment(searchLanding, "search");
+                        }
                     return true;
                     case R.id.navigation_union: //employee fragment
-                    {
-                        item.setIcon(R.drawable.ic_unions_fill);
-                        UnionsFragment unionsFragment = UnionsFragment.newInstance("","");
-                        initFragment(unionsFragment);
-                    }
+                        UnionsFragment fragmentUnion = (UnionsFragment) getSupportFragmentManager().findFragmentByTag("union");
+                        if(fragmentUnion != null&& fragmentUnion.isVisible()){
+                            item.setIcon(R.drawable.ic_search_fill);
+                        }
+                        else {
+                            item.setIcon(R.drawable.ic_unions_fill);
+                            UnionsFragment unionsFragment = UnionsFragment.newInstance("","");
+                            initFragment(unionsFragment,"union");
+                        }
                     return true;
                     case R.id.navigation_bookmark: //help fragment
                     {
                         if(!isLoggedIn().isEmpty()) {
-                            item.setIcon(R.drawable.ic_bookmark_fill);
-                            BookmarkFragment bookmarkFragment = BookmarkFragment.newInstance("", "");
-                            initFragment(bookmarkFragment);
+                            Fragment fragment = getSupportFragmentManager().findFragmentByTag("bookmark");
+                            if(fragment != null&& fragment.isVisible()){
+                                item.setIcon(R.drawable.ic_bookmark_fill);
+                            }else{
+                                item.setIcon(R.drawable.ic_bookmark_fill);
+                                BookmarkFragment bookmarkFragment = BookmarkFragment.newInstance("", "");
+                                initFragment(bookmarkFragment,"bookmark");
+                            }
+
                         }else{
                             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                 @Override
@@ -118,10 +144,14 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                     return true;
                     case R.id.navigation_careers: //help fragment
                     {
-                        item.setIcon(R.drawable.ic_careers_fill);
-                        CareersFragment careersFragment = new CareersFragment();
-                        initFragment(careersFragment);
-                    }
+                        Fragment fragment = (CareersFragment) getSupportFragmentManager().findFragmentByTag("careers");
+                        if(fragment != null&& fragment.isVisible()){
+                            item.setIcon(R.drawable.ic_careers_fill);
+                        }else{
+                            item.setIcon(R.drawable.ic_careers_fill);
+                            CareersFragment careersFragment = new CareersFragment();
+                            initFragment(careersFragment,"careers");
+                    }}
                     return true;
                 }
             }catch (Exception e) {
@@ -269,6 +299,18 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         startActivity(Intent.createChooser(intent, "Send Email"));
     }
 
+    public String getUserName(){
+        boolean loggedIn = true;
+        String userName = "";
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("hmw", 0);
+        loggedIn = sharedPreferences.getBoolean("is_loggedin", false);
+        if(loggedIn)
+            userName = sharedPreferences.getString("user_name", "");
+        if(userName.isEmpty())
+            sharedPreferences.edit().putBoolean("is_loggedin", false).commit();
+        return userName;
+    }
+
     public String isLoggedIn(){
         boolean loggedIn = true;
         String userId = "";
@@ -339,7 +381,27 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         }
         navigation.setSelectedItemId(R.id.navigation_home);
         Fragment fragment = HomeFragment.newInstance("", "");
-        initFragment(fragment);
+        initFragment(fragment,"home");
+    }
+
+    public void onBackPressed() {
+        //Fragment fragment = this.getSupportFragmentManager().findFragmentById(R.id.content);
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1 && backpressedPrompt==0) {
+            finish();
+        }else if(getSupportFragmentManager().getBackStackEntryCount() == 1 && backpressedPrompt==1){
+            backpressedPrompt = backpressedPrompt -1;
+            Toasty.normal(this, "Press again to close",
+                    Toast.LENGTH_LONG).show();
+        }
+        else {
+            super.onBackPressed();
+            Fragment fragment = this.getSupportFragmentManager().findFragmentById(R.id.content);
+            if(fragment instanceof HomeFragment) navigation.setSelectedItemId(R.id.navigation_home);
+            else if(fragment instanceof SearchLanding) navigation.setSelectedItemId(R.id.navigation_search);
+            else if(fragment instanceof UnionsFragment) navigation.setSelectedItemId(R.id.navigation_union);
+            else if(fragment instanceof CareersFragment) navigation.setSelectedItemId(R.id.navigation_careers);
+            else if(fragment instanceof BookmarkFragment) navigation.setSelectedItemId(R.id.navigation_bookmark);
+        }
     }
 
     @Override

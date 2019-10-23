@@ -5,14 +5,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +55,12 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // constants for relative time
+    private static final int SECOND_MILLIS = 1000;
+    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
 
     private String empId;
     private String empName;
@@ -66,6 +77,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
 
     private ProgressBar progressBarProspective,progressBarLeads,progressBarConversions;
     private OnFragmentInteractionListener mListener;
+    private ImageView ivPopupAdmin;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -104,7 +116,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         // Inflate the layout for this fragment
         context = getActivity();
         // Get logged in user
-        if(((AdminActivity) context).isLoggedIn().isEmpty()){
+        empId = ((AdminActivity) context).isLoggedIn();
+        if(empId.isEmpty()){
             getActivity().getSupportFragmentManager().popBackStack("Dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             Fragment fragment = AdminLogin.newInstance("", "");
             ((AdminActivity) context).initFragment(fragment);
@@ -130,6 +143,37 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         progressBarProspective = rootView.findViewById(R.id.stats_progressbarProspective);
         progressBarLeads = rootView.findViewById(R.id.stats_progressbarLeads);
         progressBarConversions = rootView.findViewById(R.id.stats_progressbarConversions);
+
+        ivPopupAdmin = rootView.findViewById(R.id.admin_dashboard_menu);
+        ivPopupAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(context, v);
+                Menu m = popup.getMenu();
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.option_menu_admin, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.options_home:{
+                                getActivity().finish();
+                            }
+                            case R.id.options_logout_admin:{
+                                int count = ((AdminActivity) context).getSupportFragmentManager().getBackStackEntryCount();
+                                if (count > 0) {
+                                    ((AdminActivity) context).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                }
+                                ((AdminActivity) context).logoutAdmin();
+                                break;
+                            }
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
 
         //int leadPercentage = getProgressPercentage(currentProspetive,targetProspective);
         //Set progress using fetch data
@@ -161,7 +205,6 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setActionString("pie_data");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
-        empId = "5";  //remove
         contentValues.put("userId", empId);
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
@@ -175,7 +218,6 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setActionString("get_user");
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
-        empId = "5";  //remove
         contentValues.put("id", empId);
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
@@ -190,7 +232,6 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", empId);
-//        contentValues.put("action", "queryAction");
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
     }
@@ -204,7 +245,6 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", empId);
-//        contentValues.put("action", "queryAction");
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
     }
@@ -363,16 +403,13 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
                 }
                 else {
 
-                    // Dummy data for testing
-                    // todo : remove this
+                    targetLeads = "0";
+                    targetProspective = "0";
+                    targetConversions = "0";
 
-                    targetLeads = "40";
-                    targetProspective = "25";
-                    targetConversions = "15";
-
-                    currentLead = "30";
-                    currentProspetive = "18";
-                    currentConversions = "10";
+                    currentLead = "0";
+                    currentProspetive = "0";
+                    currentConversions = "0";
 
                     setProgressData(currentLead,targetLeads,currentProspetive,targetProspective,currentConversions,targetConversions);
 
@@ -429,6 +466,37 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         tvName.setText(name);
         tvRole.setText(userRole);
     }
+
+    // function to return relative time w.r.t to current system time
+    public static String getTimeAgo(long time) {
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        final long diff = now - time;
+        if (diff < MINUTE_MILLIS) {
+            return "just now";
+        } else if (diff < 2 * MINUTE_MILLIS) {
+            return "a minute ago";
+        } else if (diff < 50 * MINUTE_MILLIS) {
+            return diff / MINUTE_MILLIS + " minutes ago";
+        } else if (diff < 90 * MINUTE_MILLIS) {
+            return "an hour ago";
+        } else if (diff < 24 * HOUR_MILLIS) {
+            return diff / HOUR_MILLIS + " hours ago";
+        } else if (diff < 48 * HOUR_MILLIS) {
+            return "yesterday";
+        } else {
+            return diff / DAY_MILLIS + " days ago";
+        }
+    }
+
 
     public interface OnFragmentInteractionListener {
 

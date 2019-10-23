@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.AdminActivity;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.activities.ProfileImage;
@@ -563,7 +564,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
 //                shareIntent.setType("*/*");
-                String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\n";
+                String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\nhttps://www.hellomywork.com/profile.html?user_id="+userId;
                 String imgUri = imageBaseUri+profileCard;
                 Uri imgpath = Uri.parse(imgUri);
                 String shareSub = "Hello my work Invitation";
@@ -719,7 +720,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         sqlHelper.setMethod("POST");
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", us_id);
-        contentValues.put("userid", ((MainActivity) context).isLoggedIn());
+        //contentValues.put("userid", ((MainActivity) context).isLoggedIn());
         contentValues.put("pageNo",pageNo);
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(true);
@@ -803,34 +804,34 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         for (int i = 1; i <= length; i++){
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Offers-min.png")){
-                    ProfilePostModel profilePostModelOffers = modelHelper.buildProfilePostModel(jsonObject);
-                    profilePostModelOffers.setCommentsModels(getCommentList(jsonObject));
-                    profilePostModelsOffers.add(profilePostModelOffers);
-                }
-                if(jsonObject.getString("offer").equals("assets/img/icon/ic_ForSale-min.png")){
-                    ProfilePostModel profilePostModelForSale = modelHelper.buildProfilePostModel(jsonObject);
-                    profilePostModelForSale.setCommentsModels(getCommentList(jsonObject));
-                    profilePostModelsForSale.add(profilePostModelForSale);
-                }
-                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Required-min.png")){
-                    ProfilePostModel profilePostModelRequired = modelHelper.buildProfilePostModel(jsonObject);
-                    profilePostModelRequired.setCommentsModels(getCommentList(jsonObject));
-                    profilePostModelsRequired.add(profilePostModelRequired);
-                }
-                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Achievement-min.png")){
-                    ProfilePostModel profilePostModelAchievement = modelHelper.buildProfilePostModel(jsonObject);
-                    profilePostModelAchievement.setCommentsModels(getCommentList(jsonObject));
-                    profilePostModelsAchivement.add(profilePostModelAchievement);
-                }
-                if(jsonObject.getString("offer").equals("assets/img/icon/ic_Appreciations-min.png")){
-                    ProfilePostModel profilePostModelAppreciation = modelHelper.buildProfilePostModel(jsonObject);
-                    profilePostModelAppreciation.setCommentsModels(getCommentList(jsonObject));
-                    profilePostModelsAppreciation.add(profilePostModelAppreciation);
-                }
-                ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
-                profilePostModel.setCommentsModels(getCommentList(jsonObject));
-                profilePostModels.add(profilePostModel);
+                    if (jsonObject.getString("offer").equals("assets/img/icon/ic_Offers-min.png")) {
+                        ProfilePostModel profilePostModelOffers = modelHelper.buildProfilePostModel(jsonObject);
+                        profilePostModelOffers.setCommentsModels(getCommentList(jsonObject));
+                        profilePostModelsOffers.add(profilePostModelOffers);
+                    }
+                    if (jsonObject.getString("offer").equals("assets/img/icon/ic_ForSale-min.png")) {
+                        ProfilePostModel profilePostModelForSale = modelHelper.buildProfilePostModel(jsonObject);
+                        profilePostModelForSale.setCommentsModels(getCommentList(jsonObject));
+                        profilePostModelsForSale.add(profilePostModelForSale);
+                    }
+                    if (jsonObject.getString("offer").equals("assets/img/icon/ic_Required-min.png")) {
+                        ProfilePostModel profilePostModelRequired = modelHelper.buildProfilePostModel(jsonObject);
+                        profilePostModelRequired.setCommentsModels(getCommentList(jsonObject));
+                        profilePostModelsRequired.add(profilePostModelRequired);
+                    }
+                    if (jsonObject.getString("offer").equals("assets/img/icon/ic_Achievement-min.png")) {
+                        ProfilePostModel profilePostModelAchievement = modelHelper.buildProfilePostModel(jsonObject);
+                        profilePostModelAchievement.setCommentsModels(getCommentList(jsonObject));
+                        profilePostModelsAchivement.add(profilePostModelAchievement);
+                    }
+                    if (jsonObject.getString("offer").equals("assets/img/icon/ic_Appreciations-min.png")) {
+                        ProfilePostModel profilePostModelAppreciation = modelHelper.buildProfilePostModel(jsonObject);
+                        profilePostModelAppreciation.setCommentsModels(getCommentList(jsonObject));
+                        profilePostModelsAppreciation.add(profilePostModelAppreciation);
+                    }
+                    ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModel.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModels.add(profilePostModel);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

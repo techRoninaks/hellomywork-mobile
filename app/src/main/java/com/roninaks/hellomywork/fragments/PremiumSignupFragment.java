@@ -312,6 +312,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 }
             }
         }catch(Exception e){
+            e.printStackTrace();
             Toast.makeText(context, context.getString(R.string.response_error), Toast.LENGTH_SHORT).show();
         }
     }
@@ -436,7 +437,8 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
 
     private void loadUserDetails(){
         SqlHelper sqlHelper = new SqlHelper(context, PremiumSignupFragment.this);
-        sqlHelper.setExecutePath("getprofilepre.php");
+        //sqlHelper.setExecutePath("getprofilepre.php");
+        sqlHelper.setExecutePath("getprofilecard.php");
         sqlHelper.setMethod("POST");
         sqlHelper.setActionString("user");
         ContentValues params = new ContentValues();

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tV_item_more_option"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Manage Customer"
+    android:textSize="20sp"
+    android:layout_marginStart="@dimen/standard_gap_medium"
+    android:layout_marginEnd="@dimen/standard_gap_medium"
+    android:layout_marginBottom="@dimen/standard_gap_medium"
+    android:layout_marginTop="@dimen/standard_gap_medium"
+    android:textColor="@color/colorTextBlackPrimary"
+    android:padding="@dimen/standard_gap_medium"/>
