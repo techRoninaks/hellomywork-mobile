@@ -63,6 +63,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/admin_dashboard_menu"
                 android:layout_width="0dp"
                 android:paddingStart="@dimen/standard_gap_small"
                 android:paddingEnd="@dimen/standard_gap_small"

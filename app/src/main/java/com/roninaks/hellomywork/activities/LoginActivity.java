@@ -97,9 +97,13 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                             if (userPhone.length() > 9) {
                                 String genOtp =generateOtp();
                                 checkNumber(genOtp, "OTP for verification is ", userPhone);
-                                SharedPreferences sharedPreferences  = LoginActivity.this.getSharedPreferences("hwm",0);
-                                sharedPreferences.edit().putString("otp",genOtp).commit();
+//                                SharedPreferences sharedPreferences  = LoginActivity.this.getSharedPreferences("hwm",0);
+//                                sharedPreferences.edit().putString("otp",genOtp).commit();
                                 Intent intent = new Intent(LoginActivity.this, verifyOtpActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("phone", editTextPhoneNumber.getText().toString());
+                                bundle.putString("otp", genOtp);
+                                intent.putExtra("bundle", bundle);
                                 intent.putExtra("change_pass", true);
                                 startActivity(intent);
                             }
@@ -295,11 +299,10 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
             SqlHelper sqlHelper = new SqlHelper(LoginActivity.this, LoginActivity.this);
             sqlHelper.setExecutePath("test.php");
             sqlHelper.setActionString("otp");
-            String verOtp = String.valueOf(verifyOtp);
             ContentValues contentValues = new ContentValues();
             contentValues.put("message",message);
             contentValues.put("number",userPhone);
-            contentValues.put("OTP",verOtp);
+            contentValues.put("OTP",verifyOtp);
             sqlHelper.setParams(contentValues);
             sqlHelper.setMethod(getString(R.string.method_post));
             sqlHelper.executeUrl(true);
@@ -317,20 +320,24 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
             switch (sqlHelper.getActionString()){
                 case "login": {
                     JSONObject jsonObject = sqlHelper.getJSONResponse();
-                    String response = "";
+                    String responseUserId = "";
+                    String responseUserName = "";
                     try {
-                        response = jsonObject.getString("userId");
+                        responseUserId = jsonObject.getString("userId");
+                        responseUserName = jsonObject.getString("userName");
                     } catch (Exception e) {
-                        response = "unsuccessful";
+                        responseUserId = "unsuccessful";
                     }
-                    if (!(response.equals("unsuccessful"))) {
+                    if (!(responseUserId.equals("unsuccessful"))) {
                         SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
-                        sharedPreferences.edit().putString("user_id", response)
+                        sharedPreferences.edit().putString("user_id", responseUserId)
+                                .commit();
+                        sharedPreferences.edit().putString("user_name", responseUserName)
                                 .commit();
                         sharedPreferences.edit().putBoolean("is_loggedin",true).commit();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
-                    } else if (response.equals("unsuccessful")) {
+                    } else if (responseUserId.equals("unsuccessful")) {
                         editTextPassword.setText("");
                         editTextPhoneNumber.setText("");
                         if (errorCount % ERROR_THRESHOLD == 0) {
@@ -359,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                             errorCount++;
                             Toasty.error(LoginActivity.this, R.string.invalid_cred, Toast.LENGTH_SHORT, false).show();
                         }
-                    } else if (response.equals(getString(R.string.exception))) {
+                    } else if (responseUserId.equals(getString(R.string.exception))) {
                         Toast.makeText(LoginActivity.this, getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
                     }
                     break;

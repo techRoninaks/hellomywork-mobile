@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,6 +141,10 @@ public class AdminLogin extends Fragment implements SqlDelegate {
                         sharedPreferences.edit().putBoolean("is_loggedin_admin", true).commit();
                         sharedPreferences.edit().putString("emp_id", jsonObject.getString("userId")).commit();
                         sharedPreferences.edit().putString("emp_name", jsonObject.getString("userName")).commit();
+                        int count = ((AdminActivity) context).getSupportFragmentManager().getBackStackEntryCount();
+                        if (count > 0) {
+                            ((AdminActivity) context).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        }
                         Fragment fragment = DashboardFragment.newInstance(jsonObject.getString("userId"), jsonObject.getString("userName"));
                         ((AdminActivity) context).initFragment(fragment, "Dashboard");
                     }
@@ -192,15 +197,20 @@ public class AdminLogin extends Fragment implements SqlDelegate {
     }
 
     private void attemptSignup(){
-        SqlHelper sqlHelper = new SqlHelper(context, AdminLogin.this);
-        sqlHelper.setMasterUrl(context.getString(R.string.master_url));
-        sqlHelper.setExecutePath("admin/login/assets/php/login.php");
-        sqlHelper.setMethod("POST");
-        sqlHelper.setActionString("login");
-        ContentValues params = new ContentValues();
-        params.put("userEmail", etEmail.getText().toString());
-        params.put("userPassword", etPassword.getText().toString());
-        sqlHelper.setParams(params);
-        sqlHelper.executeUrl(true);
-    }
+        try {
+            SqlHelper sqlHelper = new SqlHelper(context, AdminLogin.this);
+            sqlHelper.setMasterUrl(context.getString(R.string.master_url));
+            sqlHelper.setExecutePath("admin/login/assets/php/login.php");
+            sqlHelper.setMethod("POST");
+            sqlHelper.setActionString("login");
+            ContentValues params = new ContentValues();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userEmail", etEmail.getText().toString());
+            jsonObject.put("userPassword", etPassword.getText().toString());
+            params.put("jsonObj", jsonObject.toString());
+            sqlHelper.setParams(params);
+            sqlHelper.executeUrl(true);
+        }
+        catch(Exception e){}
+        }
 }

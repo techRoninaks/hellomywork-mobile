@@ -244,6 +244,10 @@ HELLOmywork is determinant to provide to our service providers the best possible
     <string name="invalid_pass">Minimum 6 characters required.</string>
     <string name="invalid_user">Minimum 3 charaters required</string>
     <string name="view_more_comments">View more</string>
+    <string name="admin_login_email_hint">Email</string>
+    <string name="admin_login_password_hint">Password</string>
+    <string name="back_to_home">Back to home</string>
+    <string name="options_logout">Logout</string>
     <string-array name="org_array">
         <item>Organisation</item>
         <item>Private</item>

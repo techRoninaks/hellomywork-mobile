@@ -157,10 +157,17 @@ public class RatingsDialog extends DialogFragment implements SqlDelegate {
                 case "ratings-get":{
                     JSONObject jsonObject = new JSONObject(sqlHelper.getStringResponse());
                     JSONObject master = jsonObject.getJSONObject("master");
-                    tvMainRating.setText("" + (int) Float.parseFloat(master.getString("avg_rating")));
-                    rbRatings.setRating((int) Float.parseFloat(master.getString("rating")));
-                    tvTotalRatings.setText(master.getString("total_ratings") + " people rated");
-                    tvTotalReviews.setText(master.getString("total_reviews") + " reviews");
+                   if(master.getString("count").equals("0")) {
+                       tvMainRating.setText("0");
+                       rbRatings.setRating(0);
+                       tvTotalRatings.setText("0 people watched");
+                       tvTotalReviews.setText("0 reviews");
+                   }else {
+                       tvMainRating.setText("" + (int) Float.parseFloat(master.getString("avg_rating")));
+                       rbRatings.setRating((int) Float.parseFloat(master.getString("rating")));
+                       tvTotalRatings.setText(master.getString("total_ratings") + " people rated");
+                       tvTotalReviews.setText(master.getString("total_reviews") + " reviews");
+                   }
                     buildRatings(jsonObject.getJSONArray("data"));
                     break;
                 }
@@ -173,7 +180,7 @@ public class RatingsDialog extends DialogFragment implements SqlDelegate {
                 }
             }
         }catch (Exception e){
-            Toast.makeText(context, context.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, context.getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
         }
     }
 

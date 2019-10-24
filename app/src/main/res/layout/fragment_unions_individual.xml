@@ -66,8 +66,10 @@
                 >
 
                 <Button
+                    android:id="@+id/unions_btn_random"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:alpha="1"
                     android:text="RANDOM"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
@@ -75,32 +77,40 @@
                     android:background="@drawable/profile_postfilter_color_purple"/>
 
                 <Button
+                    android:id="@+id/unions_btn_forsale"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:alpha="0.5"
                     android:text="FOR SALE"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorTextWhitePrimary"
                     android:background="@drawable/profile_postfilter_color_blood"/>
 
                 <Button
+                    android:id="@+id/unions_btn_required"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:alpha="0.5"
                     android:text="REQUIRED"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorTextWhitePrimary"
                     android:background="@drawable/profile_postfilter_color_mint"/>
 
                 <Button
+                    android:id="@+id/unions_btn_offers"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:alpha="0.5"
                     android:text="OFFERES"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorTextWhitePrimary"
                     android:background="@drawable/profile_postfilter_color_yellow"/>
 
                 <Button
+                    android:id="@+id/unions_btn_appreciation"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:alpha="0.5"
                     android:text="APPRECIATION"
                     android:layout_marginRight="10dp"
                     android:paddingLeft="8dp"
@@ -109,8 +119,10 @@
                     android:background="@drawable/profile_postfilter_color_green"/>
 
                 <Button
+                    android:id="@+id/unions_btn_achivement"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:alpha="0.5"
                     android:text="ACHIEVEMENT"
                     android:layout_marginRight="20dp"
                     android:paddingLeft="8dp"

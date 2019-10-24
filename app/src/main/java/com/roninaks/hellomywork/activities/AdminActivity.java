@@ -24,6 +24,7 @@ import com.roninaks.hellomywork.fragments.HomeFragment;
 import com.roninaks.hellomywork.fragments.ManageCustomerFragment;
 import com.roninaks.hellomywork.fragments.ManageEmployeesFragment;
 import com.roninaks.hellomywork.fragments.ManageRolesFragment;
+import com.roninaks.hellomywork.fragments.MoreOptionsFragment;
 import com.roninaks.hellomywork.fragments.PremiumSignupFragment;
 import com.roninaks.hellomywork.fragments.SearchLanding;
 import com.roninaks.hellomywork.fragments.UnionsFragment;
@@ -63,14 +64,14 @@ public class AdminActivity extends AppCompatActivity {
                     return true;
                     case R.id.navigation_search://add customer fragment
                     {
-                        item.setIcon(R.drawable.ic_search_fill);
+                        item.setIcon(R.drawable.manage_customer_filled);
                         ManageCustomerFragment manageCustomerFragment = ManageCustomerFragment.newInstance("", "");
                         initFragment(manageCustomerFragment);
                     }
                     return true;
                     case R.id.navigation_union: //employee fragment
                     {
-                        item.setIcon(R.drawable.ic_unions_fill);
+                        item.setIcon(R.drawable.manage_employee_filled);
                         ManageEmployeesFragment manageEmployeesFragment = ManageEmployeesFragment.newInstance("","");
                         initFragment(manageEmployeesFragment);
                     }
@@ -78,11 +79,13 @@ public class AdminActivity extends AppCompatActivity {
                     case R.id.navigation_bookmark: //help fragment
                     {
                         item.setIcon(R.drawable.ic_bookmark_fill);
+                        MoreOptionsFragment moreOptionsFragment = MoreOptionsFragment.newInstance("","");
+                        initFragment(moreOptionsFragment);
                     }
                     return true;
                     case R.id.navigation_careers: //help fragment
                     {
-                        item.setIcon(R.drawable.ic_careers_fill);
+                        item.setIcon(R.drawable.manage_roles_filled);
                         ManageRolesFragment manageRolesFragment = ManageRolesFragment.newInstance("","");
                         initFragment(manageRolesFragment);
                     }
@@ -104,10 +107,11 @@ public class AdminActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
 
-        navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation_bar_admin);
         floatActionAddUser = findViewById(R.id.add_user_fab);
-//        if(isLoggedIn().isEmpty())
-//            floatActionAddUser.setVisibility(View.GONE);
+        if(isLoggedIn().isEmpty())
+            floatActionAddUser.hide();
+        else floatActionAddUser.show();
         //Floating Action Button Onclick
         floatActionAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +144,17 @@ public class AdminActivity extends AppCompatActivity {
         fragment.show(getSupportFragmentManager(), "PostAdsFragment");
     }
 
+    public void logoutAdmin(){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
+        sharedPreferences.edit().putString("emp_id", "")
+                .commit();
+        sharedPreferences.edit().putBoolean("is_loggedin_admin",false).commit();
+
+        Fragment fragment = AdminLogin.newInstance("", "");
+        initFragment(fragment);
+        floatActionAddUser.hide();
+    }
+
     public String isLoggedIn(){
         boolean loggedIn = true;
         String userId = "";
@@ -147,6 +162,7 @@ public class AdminActivity extends AppCompatActivity {
         loggedIn = sharedPreferences.getBoolean("is_loggedin_admin", false);
         if(loggedIn)
             userId = sharedPreferences.getString("emp_id", "");
+            floatActionAddUser.show();
         if(userId.isEmpty())
             sharedPreferences.edit().putBoolean("is_loggedin_admin", false).commit();
         return userId;
@@ -154,24 +170,24 @@ public class AdminActivity extends AppCompatActivity {
 
     private void setDefaultIcon(MenuItem menuItem){
         switch (menuItem.getItemId()){
-            case R.id.navigation_home: //home fragment
+            case R.id.navigation_home: //dashboard fragment
             {
                 menuItem.setIcon(R.drawable.ic_home);
             }
             break;
-            case R.id.navigation_search://search fragment
+            case R.id.navigation_search://manage customer fragment
             {
-                menuItem.setIcon(R.drawable.ic_search);
+                menuItem.setIcon(R.drawable.manage_customer);
             }
             break;
-            case R.id.navigation_union: //union fragment
+            case R.id.navigation_union: //manage employees fragment
             {
-                menuItem.setIcon(R.drawable.ic_unions);
+                menuItem.setIcon(R.drawable.manage_employee);
             }
             break;
-            case R.id.navigation_careers: //careers fragment
+            case R.id.navigation_careers: //manage roles fragment
             {
-                menuItem.setIcon(R.drawable.ic_careers_);
+                menuItem.setIcon(R.drawable.manage_roles);
             }
             break;
             case R.id.navigation_bookmark: //bookmark fragment
@@ -179,6 +195,14 @@ public class AdminActivity extends AppCompatActivity {
                 menuItem.setIcon(R.drawable.ic_bookmark);
             }
             break;
+        }
+    }
+
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            finish();
+        } else {
+            super.onBackPressed();
         }
     }
 

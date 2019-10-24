@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,7 +50,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
-    private ArrayList<ProfilePostModel> profilePostModels;
+    private ArrayList<ProfilePostModel> profilePostModels,profilePostModelsOffers,profilePostModelsForSale,profilePostModelsRequired,profilePostModelsAchivement,profilePostModelsAppreciation;
     private Context context;
     private TextView unionName;
     private ActivityFeedAdapter activityFeedAdapter;
@@ -60,6 +61,8 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
     private EditText writeComments;
     private TextView sendComment;
     private TextView viewMoreComments;
+
+    private Button btnUnionRandom,btnUnionForsale,btnUnionOffers,btnUnionRequired,btnUnionAppreciation,btnUnionAchivement;
 
     public UnionsIndividualFragment() {
         // Required empty public constructor
@@ -107,6 +110,19 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         viewMoreComments = rootView.findViewById(R.id.view_more_comments);
         sendComment = rootView.findViewById(R.id.addComment);
 
+        btnUnionRandom = rootView.findViewById(R.id.unions_btn_random);
+        btnUnionForsale = rootView.findViewById(R.id.unions_btn_forsale);
+        btnUnionRequired = rootView.findViewById(R.id.unions_btn_required);
+        btnUnionOffers = rootView.findViewById(R.id.unions_btn_offers);
+        btnUnionAchivement = rootView.findViewById(R.id.unions_btn_achivement);
+        btnUnionAppreciation = rootView.findViewById(R.id.unions_btn_appreciation);
+
+        profilePostModelsOffers = new ArrayList<>();
+        profilePostModelsForSale = new ArrayList<>();
+        profilePostModelsAchivement = new ArrayList<>();
+        profilePostModelsAppreciation = new ArrayList<>();
+        profilePostModelsRequired = new ArrayList<>();
+
         fetchProfilePostInfo(context, mParam1);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +131,51 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
                 ((MainActivity) context).onBackPressed();
             }
         });
+
+
+        btnUnionRandom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonActive(btnUnionRandom);
+                filterPost(profilePostModels);
+            }
+        });
+        btnUnionForsale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonActive(btnUnionForsale);
+                filterPost(profilePostModelsForSale);
+            }
+        });
+        btnUnionOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonActive(btnUnionOffers);
+                filterPost(profilePostModelsOffers);
+            }
+        });
+        btnUnionRequired.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonActive(btnUnionRequired);
+                filterPost(profilePostModelsRequired);
+            }
+        });
+        btnUnionAppreciation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonActive(btnUnionAppreciation);
+                filterPost(profilePostModelsAppreciation);
+            }
+        });
+        btnUnionAchivement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonActive(btnUnionAchivement);
+                filterPost(profilePostModelsAchivement);
+            }
+        });
+
         return rootView;
     }
 
@@ -135,6 +196,16 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         contentValues.put("action", "queryAction");
         sqlHelper.setParams(contentValues);
         sqlHelper.executeUrl(false);
+    }
+
+    private void setButtonActive(Button button) {
+        btnUnionRandom.setAlpha(0.5f);
+        btnUnionForsale.setAlpha(0.5f);
+        btnUnionRequired.setAlpha(0.5f);
+        btnUnionOffers.setAlpha(0.5f);
+        btnUnionAppreciation.setAlpha(0.5f);
+        btnUnionAchivement.setAlpha(0.5f);
+        button.setAlpha(1);
     }
 
 
@@ -185,6 +256,49 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         }
     }
 
+    private void initTagList(JSONArray jsonArray, int length) {
+        ModelHelper modelHelper = new ModelHelper(this.context);
+        for (int i = 1; i <= length; i++) {
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.getString("offer").equals("assets/img/icon/ic_Offers-min.png")) {
+                    ProfilePostModel profilePostModelOffers = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelOffers.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsOffers.add(profilePostModelOffers);
+                }
+                if (jsonObject.getString("offer").equals("assets/img/icon/ic_ForSale-min.png")) {
+                    ProfilePostModel profilePostModelForSale = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelForSale.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsForSale.add(profilePostModelForSale);
+                }
+                if (jsonObject.getString("offer").equals("assets/img/icon/ic_Required-min.png")) {
+                    ProfilePostModel profilePostModelRequired = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelRequired.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsRequired.add(profilePostModelRequired);
+                }
+                if (jsonObject.getString("offer").equals("assets/img/icon/ic_Achievement-min.png")) {
+                    ProfilePostModel profilePostModelAchievement = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelAchievement.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsAchivement.add(profilePostModelAchievement);
+                }
+                if (jsonObject.getString("offer").equals("assets/img/icon/ic_Appreciations-min.png")) {
+                    ProfilePostModel profilePostModelAppreciation = modelHelper.buildProfilePostModel(jsonObject);
+                    profilePostModelAppreciation.setCommentsModels(getCommentList(jsonObject));
+                    profilePostModelsAppreciation.add(profilePostModelAppreciation);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void filterPost(ArrayList<ProfilePostModel> profPostModels){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        activityFeedAdapter = new ActivityFeedAdapter(context, profPostModels,rootView);
+        recyclerView.setAdapter(activityFeedAdapter);
+    }
+
     private void inntRecyclerView(JSONArray jsonArray, int length) {
 
         ModelHelper modelHelper = new ModelHelper(this.context);
@@ -193,10 +307,12 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
                 profilePostModel.setCommentsModels(getCommentList(jsonObject));
+                initTagList(jsonArray,length);
                 profilePostModels.add(profilePostModel);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            filterPost(profilePostModels);
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);

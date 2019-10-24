@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/options_home"
+        android:title="@string/back_to_home"/>
+    <item
+        android:id="@+id/options_logout_admin"
+        android:title="@string/options_logout"/>
+</menu>

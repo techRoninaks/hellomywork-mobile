@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/nav_home"/>
+
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/manage_customer"
+        android:title="@string/nav_search" />
+
+
+    <item
+        android:id="@+id/navigation_union"
+        android:icon="@drawable/manage_employee"
+        android:title="@string/nav_union" />
+
+    <item
+        android:id="@+id/navigation_careers"
+        android:icon="@drawable/manage_roles"
+        android:title="@string/nav_career" />
+
+    <item
+        android:id="@+id/navigation_bookmark"
+        android:icon="@drawable/ic_bookmark"
+        android:title="@string/nav_bookmark" />
+
+</menu>
