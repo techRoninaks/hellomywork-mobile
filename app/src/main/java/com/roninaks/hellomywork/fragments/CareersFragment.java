@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.parse.ParseFile;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.helpers.EmailHelper;
@@ -62,6 +63,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
     Context context = getContext();
     private static final int READ_REQUEST_CODE = 42;
     boolean resumeUploaded = false;
+    private ParseFile parseFileResume;
 
 
     private OnFragmentInteractionListener mListener;
@@ -144,7 +146,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
 
         // Filter to only show results that can be "opened", such as a
         // file (as opposed to a list of contacts or timezones)
-        intent.setType("images/*");
+        intent.setType("application/pdf");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, READ_REQUEST_CODE);
 
@@ -295,55 +297,43 @@ public class CareersFragment extends Fragment implements SqlDelegate {
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK&& resultData != null) {
 
-        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-        // response to some other intent, and the code below shouldn't run at all.
+            Uri selectedPdf = resultData.getData();
+            try {
 
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // The document selected by the user won't be returned in the intent.
-            // Instead, a URI to that document will be contained in the return intent
-            // provided to this method as a parameter.
-            // Pull that URI using resultData.getData().
-            Uri uri = null;
-            StringTokenizer tokens;
-            String first,file_1;
-            if (resultData != null) {
-                uri = resultData.getData();
-//                Log.i(TAG, "Uri: " + uri.toString());
-                //String imgUrl = uri.toString();
-                //File file = new File(uri.getPath().toString());
+                InputStream iStream = ((MainActivity) context).getContentResolver().openInputStream(selectedPdf);
+                byte[] inputData = getBytes(iStream);
 
+                long fileSizeInBytes = inputData.length;
+                long fileSizeInKB = fileSizeInBytes / 1024;
+                long fileSizeInMB = fileSizeInKB / 1024;
 
-                //working image
-                InputStream inputStream = null;
-                try {
-                    inputStream = context.getContentResolver().openInputStream(uri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                bitmap = BitmapFactory.decodeStream(inputStream);
-               // String encSt = encodeFileToBase64Binary(file);
-                String imgencoded = encodeTobase64(bitmap);
-                upload(imgencoded,"resume_id");
-//                String uploadedFileName = file.getName().toString();
-//                tokens = new StringTokenizer(uploadedFileName, ":");
-//                first = tokens.nextToken();
-//                file_1 = tokens.nextToken().trim();
-//                txt_file_name_1.setText(file_1);
-
-
-                //last try
-//                String uriString = uri.toString();
-//                File myFile = new File(uriString);
-//                String path = myFile.getAbsolutePath();
-//                //filepath =path;
-//                String iup = getStringFile(myFile);
-//                upload(iup,"nameImage");
-
+                ParseFile resumes  = new ParseFile("image.pdf",
+                        inputData);
+                getPdf(resumes);
+            } catch (IOException e) {
+                e.printStackTrace();
 
             }
         }
+    }
+
+    private void getPdf(ParseFile resume){
+        parseFileResume = resume;
+    }
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     public static String encodeTobase64(Bitmap image) {

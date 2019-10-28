@@ -256,11 +256,9 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
         }
     }
 
-    private void initTagList(JSONArray jsonArray, int length) {
+    private void initTagList(JSONObject jsonObject) {
         ModelHelper modelHelper = new ModelHelper(this.context);
-        for (int i = 1; i <= length; i++) {
             try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getString("offer").equals("assets/img/icon/ic_Offers-min.png")) {
                     ProfilePostModel profilePostModelOffers = modelHelper.buildProfilePostModel(jsonObject);
                     profilePostModelOffers.setCommentsModels(getCommentList(jsonObject));
@@ -289,7 +287,6 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
     }
 
     private void filterPost(ArrayList<ProfilePostModel> profPostModels){
@@ -307,7 +304,7 @@ public class UnionsIndividualFragment extends Fragment implements SqlDelegate {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ProfilePostModel profilePostModel = modelHelper.buildProfilePostModel(jsonObject);
                 profilePostModel.setCommentsModels(getCommentList(jsonObject));
-                initTagList(jsonArray,length);
+                initTagList(jsonObject);
                 profilePostModels.add(profilePostModel);
             } catch (JSONException e) {
                 e.printStackTrace();

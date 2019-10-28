@@ -239,6 +239,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         }else{
             llpostMaster.setVisibility(View.GONE);
             buttonEdit.setVisibility(View.GONE);
+            ivSettings.setVisibility(View.GONE);
         }
 
         buttonPost.setOnClickListener(new View.OnClickListener() {
@@ -507,7 +508,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Oho!, You are not Logged In");
-                    builder.setMessage("You need to login to make calls").setPositiveButton("Go to login?", dialogClickListener)
+                    builder.setMessage("You need to login to see the whatsApp number").setPositiveButton("Go to login?", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
                 }
                 else {

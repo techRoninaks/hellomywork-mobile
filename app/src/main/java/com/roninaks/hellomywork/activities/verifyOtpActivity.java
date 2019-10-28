@@ -54,7 +54,7 @@ public class verifyOtpActivity extends AppCompatActivity implements SqlDelegate 
         backBtn = findViewById(R.id.imageViewBackOtp);
         resendOtp = findViewById(R.id.textView_ResendOtp);
         sharedPreferences = verifyOtpActivity.this.getSharedPreferences("hmw", 0);
-
+//        verificationOtp = sharedPreferences.getString("otp","");
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +113,7 @@ public class verifyOtpActivity extends AppCompatActivity implements SqlDelegate 
     private void resendOtp(String otp,String message, String phone){
         try {
             SqlHelper sqlHelper = new SqlHelper(verifyOtpActivity.this, verifyOtpActivity.this);
-            sqlHelper.setExecutePath("test.php");
+            sqlHelper.setExecutePath("test1.php");
             sqlHelper.setActionString("resend");
             ContentValues contentValues = new ContentValues();
             contentValues.put("message",message);

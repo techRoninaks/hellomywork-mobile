@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
                             break;
 
                         case R.id.textView_SignUp:
-                            if(!from_home) {
+                            if(from_home) {
                                 onBackPressed();
                                 finish();
                             }
@@ -174,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
     }
 
 
-    public static String generateOtp(){
+    private static String generateOtp(){
         double randomOtp;
         randomOtp = Math.floor(100000 + Math.random() * 900000);
         int x = (int) randomOtp;

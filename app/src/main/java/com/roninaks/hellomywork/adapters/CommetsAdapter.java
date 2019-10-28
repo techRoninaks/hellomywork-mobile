@@ -2,6 +2,8 @@ package com.roninaks.hellomywork.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
@@ -45,11 +49,34 @@ public class CommetsAdapter extends RecyclerView.Adapter<CommetsAdapter.ViewHold
         holder.postCommentReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(((MainActivity) context).isLoggedIn().isEmpty()){
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    Intent myIntent = new Intent(context, LoginActivity.class);
+                                    context.startActivity(myIntent);
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Oho!, You are not Logged In");
+                    builder.setMessage("You need to login to report").setPositiveButton("Go to login?", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }else{
                 reportComment();
                 //                holder.commentMaster.setVisibility(View.GONE);
                 commentsModels.remove(position);
                 notifyDataSetChanged();
-            }
+            }}
 
             private void reportComment() {
                 SqlHelper sqlHelper = new SqlHelper(context, CommetsAdapter.this);

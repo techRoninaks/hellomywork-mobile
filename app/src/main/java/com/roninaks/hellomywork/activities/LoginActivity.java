@@ -30,8 +30,6 @@ import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
 
-import static com.roninaks.hellomywork.activities.RegisterActivity.generateOtp;
-
 public class LoginActivity extends AppCompatActivity implements SqlDelegate {
 
     //This is a test commit
@@ -96,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         try{
                             if (userPhone.length() > 9) {
                                 String genOtp =generateOtp();
-                                checkNumber(genOtp, "OTP for verification is ", userPhone);
+                                checkNumber(genOtp, "OTP for verification is " + genOtp, userPhone);
 //                                SharedPreferences sharedPreferences  = LoginActivity.this.getSharedPreferences("hwm",0);
 //                                sharedPreferences.edit().putString("otp",genOtp).commit();
                                 Intent intent = new Intent(LoginActivity.this, verifyOtpActivity.class);
@@ -149,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                 try {
                     switch (view.getId()) {
                         case R.id.textView_SignUp:
+                            finish();
                             Intent myIntent = new Intent(LoginActivity.this,RegisterActivity.class);
                             startActivity(myIntent);
                             break;
@@ -297,7 +296,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
     private void checkNumber(String verifyOtp,String message,String userPhone){
         try {
             SqlHelper sqlHelper = new SqlHelper(LoginActivity.this, LoginActivity.this);
-            sqlHelper.setExecutePath("test.php");
+            sqlHelper.setExecutePath("test1.php");
             sqlHelper.setActionString("otp");
             ContentValues contentValues = new ContentValues();
             contentValues.put("message",message);
@@ -402,6 +401,9 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         alertDialog.setNegativeButton(R.string.confirmation_no, dialogClickListener);
                         alertDialog.show();
                     }
+                    else{
+
+                    }
 
                 }break;
 
@@ -430,6 +432,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
         editTextPassword.setVisibility(View.VISIBLE);
         editTextPassword.setHint("Re-enter password");
         editTextPassword.setText("");
+        tvForgotPassword.setVisibility(View.GONE);
         btnLogIn.setText(getString(R.string.save_password));
 
     }
@@ -442,6 +445,13 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
         editTextPassword.setText("");
         tvForgotPassword.setVisibility(View.VISIBLE);
         btnLogIn.setText(getString(R.string.login_button));
+    }
+
+    private static String generateOtp(){
+        double randomOtp;
+        randomOtp = Math.floor(100000 + Math.random() * 900000);
+        int x = (int) randomOtp;
+        return String.valueOf(x);
     }
 
 }
