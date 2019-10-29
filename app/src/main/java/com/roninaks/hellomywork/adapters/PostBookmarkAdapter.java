@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.roninaks.hellomywork.BuildConfig;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
@@ -26,6 +29,10 @@ import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 import com.roninaks.hellomywork.models.ProfilePostModel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +44,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.roninaks.hellomywork.adapters.ActivityFeedAdapter.viewToBitmap;
 
 public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapter.ViewHolder> implements SqlDelegate {
 
@@ -223,7 +232,34 @@ public class PostBookmarkAdapter extends RecyclerView.Adapter<PostBookmarkAdapte
             holder.ivShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Bitmap bitmap = viewToBitmap(holder.ivBookmarkPostImage, holder.ivBookmarkPostImage.getWidth(), holder.ivBookmarkPostImage.getHeight());
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("*/*");
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    File file = new File(Environment.getExternalStorageDirectory() +
+                            File.separator + "image.jpg");
+                    try {
+                        file.createNewFile();
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        fileOutputStream.write(byteArrayOutputStream.toByteArray());
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String messageBody = profilePostModels.get(position).getDescription();
+                    String messageUser = profilePostModels.get(position).getName();
+//                        String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\nhttps://www.hellomywork.com/";
+                    String shareBody = messageBody + "\n\n"+"From "+messageUser+"\n\n"+"Only on HelloMyWork App\n\nInstall the app for the best offers near you\n\n" + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+//                        String imgUri = imageBaseUri+profilePostModels.get(position).getImageUri();
+//                        Uri imgpath = Uri.parse(imgUri);
+                    String shareSub = "Hello my work Invitation";
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() +
+                            File.separator + "image.jpg"));
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ((MainActivity) context).startActivityForResult(Intent.createChooser(shareIntent, "Share using"), 0);
                 }
             });
 

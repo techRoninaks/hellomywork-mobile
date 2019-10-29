@@ -40,24 +40,25 @@
                 android:layout_alignParentTop="true"/>
 
             <ImageView
-                android:layout_width="@dimen/icon_header_back"
-                android:layout_height="@dimen/icon_header_back"
-                android:src="@drawable/hmw_profile_settings"
                 android:id="@+id/profile_settings"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="@dimen/standard_gap_large"/>
-            <ImageView
                 android:layout_width="@dimen/icon_header_back"
                 android:layout_height="@dimen/icon_header_back"
-                android:src="@drawable/ic_star_black"
-                android:id="@+id/profile_ratings"
+                android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
-                android:layout_toStartOf="@+id/profile_settings"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="@dimen/standard_gap_large"/>
+                android:layout_marginLeft="@dimen/standard_gap_large"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/hmw_profile_settings"/>
+
+            <ImageView
+                android:id="@+id/profile_ratings"
+                android:layout_width="@dimen/icon_header_back"
+                android:layout_height="@dimen/icon_header_back"
+                android:layout_alignEnd="@+id/profileMainName"
+                android:layout_marginEnd="56dp"
+                android:layout_marginLeft="@dimen/standard_gap_large"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_star_black" />
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"

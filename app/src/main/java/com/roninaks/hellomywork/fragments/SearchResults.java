@@ -99,6 +99,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
     private Parcelable recyclerViewState;
 
     private Handler handler;
+    private boolean endofresults;
 
     public SearchResults() {
         // Required empty public constructor
@@ -182,6 +183,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
         srUnionNav = (View) rootView.findViewById(R.id.srUnionNav);
         switchPremium = (SwitchCompat) rootView.findViewById(R.id.switch_Premium);
 
+        endofresults = false;
         //Default Tabs
 
         toggleTabs(default_load == null || default_load.isEmpty() ? "services" : default_load);
@@ -323,7 +325,16 @@ public class SearchResults extends Fragment implements SqlDelegate{
         switchPremium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                filterList(isChecked,0);
+//                filterList(isChecked,0);
+                if(isChecked){
+                    serviceProviderModelsFiltered.clear();
+                    endofresults =false;
+                    loadProfiles("1",true);
+                }else{
+                    endofresults =false;
+                    serviceProviderModels.clear();
+                    loadProfiles("1",false);
+                }
             }
         });
         return rootView;
@@ -382,8 +393,8 @@ public class SearchResults extends Fragment implements SqlDelegate{
                     break;
                 }
                 case "profiles":{
-                    if(sqlHelper.getStringResponse().equals("0")){
-                        Toast.makeText(context, "Sorry. No results", Toast.LENGTH_SHORT).show();
+                    if(sqlHelper.getStringResponse().equals("0") || endofresults){
+                        Toast.makeText(context, "Sorry. No more results", Toast.LENGTH_SHORT).show();
                     }else{
                         JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
                         buildProfiles(jsonArray);
@@ -393,6 +404,9 @@ public class SearchResults extends Fragment implements SqlDelegate{
                     JSONArray jsonArray = new JSONArray(sqlHelper.getStringResponse());
                     if(jsonArray.length() >= 1){
                         buildSearchList(jsonArray);
+                    }
+                    else{
+                        Toast.makeText(context, "No more results", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 }
@@ -615,15 +629,37 @@ public class SearchResults extends Fragment implements SqlDelegate{
 
     private void buildProfiles(JSONArray jsonArray){
         try{
-            int scrollPos = serviceProviderModels.size();
-            for(int i = 1; i < jsonArray.length(); i++){
-                ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
-                serviceProviderModels.add(serviceProviderModel);
-                if(serviceProviderModel.isPremium())
+            if(switchPremium.isChecked()){
+                int totalcount = Integer.parseInt(jsonArray.getJSONObject(0).getString("count"));
+                int totalpageno = (int) Math.floor((double) totalcount / SEARCH_RESULT_LIMIT);
+                if (totalpageno != 1) {
+                    endofresults = true;
+                }
+                int scrollPos = serviceProviderModels.size();
+                for (int i = 1; i < jsonArray.length(); i++) {
+                    ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
                     serviceProviderModelsFiltered.add(serviceProviderModel);
+                }
+                filterList(switchPremium.isChecked(), scrollPos);
             }
-            filterList(switchPremium.isChecked(),scrollPos);
-            //rvProfiles.scrollToPosition(serviceProviderModels.size() - SEARCH_RESULT_LIMIT);
+            else {
+                int totalcount = Integer.parseInt(jsonArray.getJSONObject(0).getString("count"));
+                int endofpage = (int) Math.floor((double) totalcount / SEARCH_RESULT_LIMIT);
+                if (endofpage != 1) {
+//                Toast.makeText(context,"End of results",Toast.LENGTH_SHORT).show();
+                    endofresults = true;
+                }
+                int scrollPos = serviceProviderModels.size();
+                for (int i = 1; i < jsonArray.length(); i++) {
+                    ServiceProviderModel serviceProviderModel = new ModelHelper().buildServiceProviderModel(jsonArray.getJSONObject(i), "search_profiles");
+                    serviceProviderModels.add(serviceProviderModel);
+//                if (serviceProviderModel.isPremium())
+//                    serviceProviderModelsFiltered.add(serviceProviderModel);
+                }
+                //String totalpageno = jsonArray.getJSONObject(0).getString("totalpageNo");
+                filterList(switchPremium.isChecked(), scrollPos);
+                //rvProfiles.scrollToPosition(serviceProviderModels.size() - SEARCH_RESULT_LIMIT);
+            }
         }catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -647,33 +683,36 @@ public class SearchResults extends Fragment implements SqlDelegate{
         final SearchProfileAdapter adapter;
         if(isChecked){
             adapter = new SearchProfileAdapter(context, serviceProviderModelsFiltered, rootView,rvProfiles,false);
-
         }else{
             adapter = new SearchProfileAdapter(context, serviceProviderModels, rootView,rvProfiles,false);
         }
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
         rvProfiles.setLayoutManager(layoutManager);
         rvProfiles.setAdapter(adapter);
-        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        int index ;
-                        if(!isChecked){
-                            index = (int)Math.ceil(((double)serviceProviderModels.size() / SEARCH_RESULT_LIMIT)) + 1;
-                            loadProfiles(String.valueOf(index),false);
-                        }
-                        else {
-                            index = (int)Math.ceil(((double) serviceProviderModelsFiltered.size() / SEARCH_RESULT_LIMIT)) + 1;
-                            loadProfiles(String.valueOf(index),false);
-                        }
+        if(!endofresults) {
+            adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore() {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            int index;
+                            if (!isChecked) {
+                                index = (int) Math.ceil(((double) serviceProviderModels.size() / SEARCH_RESULT_LIMIT)) + 1;
+                                loadProfiles(String.valueOf(index), false);
+                            } else {
+                                index = (int) Math.ceil(((double) serviceProviderModelsFiltered.size() / SEARCH_RESULT_LIMIT)) + 1;
+                                loadProfiles(String.valueOf(index), true);
+                            }
 
-                    }
-                },1000);
-            }
-        });
+                        }
+                    }, 1000);
+                }
+            });
+        }
+        else {
+            Toast.makeText(context,"No more result",Toast.LENGTH_SHORT).show();
+        }
         adapter.notifyItemRangeChanged(0, adapter.getItemCount());
         rvProfiles.scrollToPosition(scrollPos-6);
     }

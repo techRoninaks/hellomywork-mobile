@@ -109,9 +109,6 @@ public class AdminActivity extends AppCompatActivity {
 
         navigation = findViewById(R.id.navigation_bar_admin);
         floatActionAddUser = findViewById(R.id.add_user_fab);
-        if(isLoggedIn().isEmpty())
-            floatActionAddUser.hide();
-        else floatActionAddUser.show();
         //Floating Action Button Onclick
         floatActionAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +131,10 @@ public class AdminActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content, fragment, tag).addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public void hideFab(){
+        floatActionAddUser.hide();
     }
 
     public void initFragment(Fragment fragment){

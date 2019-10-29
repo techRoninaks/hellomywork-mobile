@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +79,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
     private ProgressBar progressBarProspective,progressBarLeads,progressBarConversions;
     private OnFragmentInteractionListener mListener;
     private ImageView ivPopupAdmin;
+    private LinearLayout llBackground;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -140,6 +142,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
         getAnnouncements(context);
         getPieData(context);
 
+        llBackground = rootView.findViewById(R.id.llwhitebg);
         progressBarProspective = rootView.findViewById(R.id.stats_progressbarProspective);
         progressBarLeads = rootView.findViewById(R.id.stats_progressbarLeads);
         progressBarConversions = rootView.findViewById(R.id.stats_progressbarConversions);
@@ -402,7 +405,7 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
                     setProgressData(currentLead,targetLeads,currentProspetive,targetProspective,currentConversions,targetConversions);
                 }
                 else {
-
+                    llBackground.setVisibility(View.INVISIBLE);
                     targetLeads = "0";
                     targetProspective = "0";
                     targetConversions = "0";
@@ -412,8 +415,6 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
                     currentConversions = "0";
 
                     setProgressData(currentLead,targetLeads,currentProspetive,targetProspective,currentConversions,targetConversions);
-
-
                 }
 
             } catch (JSONException e) {

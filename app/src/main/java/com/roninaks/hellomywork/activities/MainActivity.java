@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                     case R.id.navigation_union: //employee fragment
                         UnionsFragment fragmentUnion = (UnionsFragment) getSupportFragmentManager().findFragmentByTag("union");
                         if(fragmentUnion != null&& fragmentUnion.isVisible()){
-                            item.setIcon(R.drawable.ic_search_fill);
+                            item.setIcon(R.drawable.ic_unions_fill);
                         }
                         else {
                             item.setIcon(R.drawable.ic_unions_fill);

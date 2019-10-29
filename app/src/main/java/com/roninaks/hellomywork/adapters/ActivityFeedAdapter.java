@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +38,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.roninaks.hellomywork.BuildConfig;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.LoginActivity;
 import com.roninaks.hellomywork.activities.MainActivity;
@@ -55,6 +58,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -68,6 +75,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         private String baseImagePostUrl, userName;
         private int lastVisibleItem, totalItemCount;
         private boolean loading;
+        private boolean allcomments = false;
         private OnLoadMoreListener onLoadMoreListener;
         String imageBaseUri = "https://www.hellomywork.com/",profileCard;
 
@@ -198,7 +206,27 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                                 switch (menuItem.getItemId()){
                                     case R.id.post_option_report:{
                                         if(((MainActivity) context).isLoggedIn().isEmpty()){
-                                            context.startActivity(new Intent(context, LoginActivity.class));
+                                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    switch (which){
+                                                        case DialogInterface.BUTTON_POSITIVE:
+                                                            Intent myIntent = new Intent(context, LoginActivity.class);
+                                                            context.startActivity(myIntent);
+                                                            break;
+                                                        case DialogInterface.BUTTON_NEGATIVE:
+                                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                                            break;
+                                                        default:
+                                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                                            break;
+                                                    }
+                                                }
+                                            };
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                            builder.setTitle("Oho!, You are not Logged In");
+                                            builder.setMessage("You need to login to report the post").setPositiveButton("Go to login?", dialogClickListener)
+                                                    .setNegativeButton("No", dialogClickListener).show();
                                         }else{
                                             reportPost(profilePostModels.get(position).getId());
                                             profilePostModels.remove(position);
@@ -208,7 +236,27 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                                     }
                                     case R.id.post_option_delete:{
                                         if(((MainActivity) context).isLoggedIn().isEmpty()){
-                                            context.startActivity(new Intent(context, RegisterActivity.class));
+                                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    switch (which){
+                                                        case DialogInterface.BUTTON_POSITIVE:
+                                                            Intent myIntent = new Intent(context, LoginActivity.class);
+                                                            context.startActivity(myIntent);
+                                                            break;
+                                                        case DialogInterface.BUTTON_NEGATIVE:
+                                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                                            break;
+                                                        default:
+                                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                                            break;
+                                                    }
+                                                }
+                                            };
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                            builder.setTitle("Oho!, You are not Logged In");
+                                            builder.setMessage("You need to login to delete the post").setPositiveButton("Go to login?", dialogClickListener)
+                                                    .setNegativeButton("No", dialogClickListener).show();
                                         }else{
                                             if(user_id != ((MainActivity) context).isLoggedIn()){
                                                 Toast.makeText(context, "You can't delete this post", Toast.LENGTH_SHORT).show();
@@ -340,22 +388,22 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 holder.viewMoreComments.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        holder.viewMoreComments.setVisibility(View.GONE);
-                        String post_id = profilePostModels.get(position).getId();
-                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                        sqlHelper.setExecutePath("getcomments.php");
-                        sqlHelper.setActionString("postComments");
-                        sqlHelper.setMethod("POST");
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("id", post_id);
-                        sqlHelper.setParams(contentValues);
-                        HashMap<String, String> extras = new HashMap<>();
-                        extras.put("position", "" + position);
-                        sqlHelper.setExtras(extras);
-                        sqlHelper.executeUrl(true);
-                        holder.loadAllComments = true;
-
-                    }
+                            holder.loadAllComments = true;
+                            String post_id = profilePostModels.get(position).getId();
+                            SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                            sqlHelper.setExecutePath("getcomments.php");
+                            sqlHelper.setActionString("postComments");
+                            sqlHelper.setMethod("POST");
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put("id", post_id);
+                            sqlHelper.setParams(contentValues);
+                            HashMap<String, String> extras = new HashMap<>();
+                            extras.put("position", "" + position);
+                            sqlHelper.setExtras(extras);
+                            sqlHelper.executeUrl(true);
+                            holder.viewMoreComments.setVisibility(View.GONE);
+//                            notifyDataSetChanged();
+                        }
                 });
 
                 holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
@@ -422,16 +470,33 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 holder.ivShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Bitmap bitmap = viewToBitmap(holder.ivPostProfileImage, holder.ivPostProfileImage.getWidth(), holder.ivPostProfileImage.getHeight());
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setType("text/plain");
+                        shareIntent.setType("*/*");
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        File file = new File(Environment.getExternalStorageDirectory() +
+                                File.separator + "image.jpg");
+                        try {
+                            file.createNewFile();
+                            FileOutputStream fileOutputStream = new FileOutputStream(file);
+                            fileOutputStream.write(byteArrayOutputStream.toByteArray());
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        String messageBody = profilePostModels.get(position).getDescription();
+                        String messageUser = profilePostModels.get(position).getName();
                         //String postuser = profilePostModels.get(position).get; //todo : get userid of post
-                        String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\nhttps://www.hellomywork.com/";
-                        String imgUri = imageBaseUri+profileCard;
-                        Uri imgpath = Uri.parse(imgUri);
+//                        String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\nhttps://www.hellomywork.com/";
+                        String shareBody = messageBody + "\n\n"+"From "+messageUser+"\n\n"+"Only on HelloMyWork App\n\nInstall the app for the best offers near you\n\n" + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+//                        String imgUri = imageBaseUri+profilePostModels.get(position).getImageUri();
+//                        Uri imgpath = Uri.parse(imgUri);
                         String shareSub = "Hello my work Invitation";
                         shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
                         shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, imgpath);
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() +
+                                File.separator + "image.jpg"));
                         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         ((MainActivity) context).startActivityForResult(Intent.createChooser(shareIntent, "Share using"), 0);
 
@@ -466,7 +531,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                             builder.setMessage("You need to login to make a comment").setPositiveButton("Go to login?", dialogClickListener)
                                     .setNegativeButton("No", dialogClickListener).show();
                         }else{
-                            commentRecyclerView = holder.commentrecyclerView;
+//                            commentRecyclerView = holder.commentrecyclerView;
                             String comment = holder.writeComments.getText().toString();
                             if(comment.trim().isEmpty()){
 
@@ -502,8 +567,32 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         boolean handled = false;
                         if (actionId == EditorInfo.IME_ACTION_SEND) {
-                            sendMessage();
-                            handled = true;
+                            if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which){
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                Intent myIntent = new Intent(context, LoginActivity.class);
+                                                context.startActivity(myIntent);
+                                                break;
+                                            case DialogInterface.BUTTON_NEGATIVE:
+                                                Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                                break;
+                                            default:
+                                                Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                };
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setTitle("Oho!, You are not Logged In");
+                                builder.setMessage("You need to login to make a comment").setPositiveButton("Go to login?", dialogClickListener)
+                                        .setNegativeButton("No", dialogClickListener).show();
+                            }else {
+                                sendMessage();
+                                handled = true;
+                            }
                         }
                         return handled;
                     }
@@ -560,6 +649,15 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
 
     public void setLoaded() {
         loading = false;
+    }
+
+
+    public static Bitmap viewToBitmap(View view, int width, int height){
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
@@ -621,9 +719,10 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
-                    commentsModels.clear();
+                    profilePostModels.get(pos).getCommentsModels().clear();
                     getCommentList(jsonArray,pos);
-                    notifyItemChanged(pos);
+//                    notifyItemChanged(pos);
+                    notifyDataSetChanged();
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -633,19 +732,17 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
 
     private void getCommentList(JSONArray jsonArray,int pos) {
         try {
-            for (int i= 3;i< jsonArray.length(); i++) {
-                if(!(jsonArray.getJSONObject(i).getString("IsReported").equals("1"))){
-                    CommentsModel commentsModel = new CommentsModel();
-                    commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
-                    commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
-                    commentsModel.setCommentId(jsonArray.getJSONObject(i).getString("id"));
-                    commentsModel.setCommentU_Id(jsonArray.getJSONObject(i).getString("u_id"));
-                    commentsModel.setCommentP_Id(jsonArray.getJSONObject(i).getString("p_id"));
-                    commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
-                    commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
-                    commentsModels.add(commentsModel);
-                    profilePostModels.get(pos).getCommentsModels().add(commentsModel);
-                }
+            for (int i= 0;i<= jsonArray.length(); i++) {
+                CommentsModel commentsModel = new CommentsModel();
+                commentsModel.setComment(jsonArray.getJSONObject(i).getString("comment"));
+                commentsModel.setCommentName(jsonArray.getJSONObject(i).getString("name"));
+                commentsModel.setCommentId(jsonArray.getJSONObject(i).getString("id"));
+                commentsModel.setCommentU_Id(jsonArray.getJSONObject(i).getString("u_id"));
+                commentsModel.setCommentP_Id(jsonArray.getJSONObject(i).getString("p_id"));
+                commentsModel.setCommentIsReported(jsonArray.getJSONObject(i).getString("IsReported"));
+                commentsModel.setCommentIsActive(jsonArray.getJSONObject(i).getString("IsActive"));
+                //commentsModels.add(commentsModel);
+                profilePostModels.get(pos).getCommentsModels().add(commentsModel);
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -90,6 +90,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
             Fragment fragment = DashboardFragment.newInstance(sharedPreferences.getString("emp_id", ""), sharedPreferences.getString("emp_name", ""));
             ((AdminActivity) context).initFragment(fragment, "Dashboard");
         }
+        ((AdminActivity) context).hideFab();
         etEmail = (EditText) rootView.findViewById(R.id.etEmail);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
         btnSubmit = (Button) rootView.findViewById(R.id.btn_submit);
