@@ -160,7 +160,8 @@ public class DashboardFragment extends Fragment implements SqlDelegate {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.options_home:{
-                                getActivity().finish();
+                                ((AdminActivity) context).finish();
+                                break;
                             }
                             case R.id.options_logout_admin:{
                                 int count = ((AdminActivity) context).getSupportFragmentManager().getBackStackEntryCount();

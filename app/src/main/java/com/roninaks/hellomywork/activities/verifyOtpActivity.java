@@ -58,6 +58,7 @@ public class verifyOtpActivity extends AppCompatActivity implements SqlDelegate 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 onBackPressed();
             }
         });

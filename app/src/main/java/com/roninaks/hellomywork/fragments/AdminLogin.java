@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
@@ -44,6 +45,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
     //Private Members
     private EditText etEmail, etPassword;
     private Button btnSubmit;
+    private ImageView btnBack;
     private View rootView;
     private Context context;
     private OnFragmentInteractionListener mListener;
@@ -93,6 +95,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
         ((AdminActivity) context).hideFab();
         etEmail = (EditText) rootView.findViewById(R.id.etEmail);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
+        btnBack = rootView.findViewById(R.id.imgBack);
         btnSubmit = (Button) rootView.findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +103,12 @@ public class AdminLogin extends Fragment implements SqlDelegate {
                 if(validate()){
                     attemptSignup();
                 }
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AdminActivity) context).onBackPressed();
             }
         });
         return rootView;
