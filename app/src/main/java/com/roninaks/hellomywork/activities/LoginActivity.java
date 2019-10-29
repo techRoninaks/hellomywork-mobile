@@ -379,31 +379,31 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         response = "null";
                     }
 
-                    if (response.equals("null")) {
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                                        break;
-
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        dialog.dismiss();
-                                        break;
-                                }
-                            }
-                        };
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
-                        alertDialog.setTitle("Register");
-                        alertDialog.setMessage("Number does not exist in database.Do you want to register?");
-                        alertDialog.setPositiveButton(R.string.confirmation_yes, dialogClickListener);
-                        alertDialog.setNegativeButton(R.string.confirmation_no, dialogClickListener);
-                        alertDialog.show();
-                    }
-                    else{
-
-                    }
+//                    if (response.equals("null")) {
+//                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                switch (which) {
+//                                    case DialogInterface.BUTTON_POSITIVE:
+//                                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+//                                        break;
+//
+//                                    case DialogInterface.BUTTON_NEGATIVE:
+//                                        dialog.dismiss();
+//                                        break;
+//                                }
+//                            }
+//                        };
+//                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+//                        alertDialog.setTitle("Register");
+//                        alertDialog.setMessage("Number does not exist in database.Do you want to register?");
+//                        alertDialog.setPositiveButton(R.string.confirmation_yes, dialogClickListener);
+//                        alertDialog.setNegativeButton(R.string.confirmation_no, dialogClickListener);
+//                        alertDialog.show();
+//                    }
+//                    else{
+//
+//                    }
 
                 }break;
 
