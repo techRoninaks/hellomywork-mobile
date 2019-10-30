@@ -226,6 +226,10 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         fragment.show(getSupportFragmentManager(), tag);
     }
 
+    public void showfab(){
+        floatActionButton.setVisibility(View.VISIBLE);
+    }
+
     private void setDefaultIcon(MenuItem menuItem){
         switch (menuItem.getItemId()){
             case R.id.navigation_home: //home fragment
