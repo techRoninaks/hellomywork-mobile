@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +53,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 //import es.dmoral.toasty.Toasty;
@@ -224,6 +230,7 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             ivRatings.setVisibility(View.GONE);
         }
         if(userId.equals(((MainActivity) context).isLoggedIn())){
+            ((MainActivity) context).showfab();
             ivRatings.setVisibility(View.GONE);
             if(((MainActivity) context).isLoggedIn().equals(us_id)){
                 buttonEdit.setVisibility(View.VISIBLE);
@@ -562,8 +569,21 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         profileShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap bitmap = viewToBitmap(masterProfilePster, masterProfilePster.getWidth(), masterProfilePster.getHeight());
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
+                shareIntent.setType("*/*");
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                File file = new File(Environment.getExternalStorageDirectory() +
+                        File.separator + "imageCard"+userId+".jpg");
+                try {
+                    file.createNewFile();
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(byteArrayOutputStream.toByteArray());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
 //                shareIntent.setType("*/*");
                 String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\nhttps://www.hellomywork.com/profile.html?user_id="+userId;
                 String imgUri = imageBaseUri+profileCard;
@@ -571,7 +591,8 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
                 String shareSub = "Hello my work Invitation";
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, imgpath);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() +
+                        File.separator + "imageCard"+userId+".jpg"));
                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 //                shareIntent.setType("image/png");
                 startActivityForResult(Intent.createChooser(shareIntent, "Share using"), 0);
@@ -700,6 +721,13 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             buttonOffers2.setAlpha(0.5f);
             buttonAppreciations2.setAlpha(0.5f);
         }
+    }
+
+    private static Bitmap viewToBitmap(View view, int width, int height){
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
     }
 
 
@@ -917,8 +945,8 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
             Glide.with(context)
                     .setDefaultRequestOptions(requestOptions
 //                            .placeholder(R.drawable.icon_image)
-//                            .error(R.drawable.icon_image)
-                            .fitCenter()
+                                    .error(R.drawable.profile_default)
+                                    .fitCenter()
                     )
                     .asBitmap()
                     .load(imageBaseUri+jsonObject.getString("card"))

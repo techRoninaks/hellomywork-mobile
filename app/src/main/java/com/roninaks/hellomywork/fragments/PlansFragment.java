@@ -112,8 +112,8 @@ public class PlansFragment extends Fragment implements SqlDelegate {
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
-                                        saveUserPlan();
                                         planType = "free";
+                                        saveUserPlan();
                                         break;
                                     case DialogInterface.BUTTON_NEGATIVE:
                                         break;
