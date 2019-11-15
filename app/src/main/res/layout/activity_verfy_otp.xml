@@ -14,15 +14,16 @@
         android:background="@color/colorNavigationBarBkg"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageViewBackOtp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="@dimen/icon_back"
+            android:layout_height="@dimen/icon_back"
+            android:padding="@dimen/standard_gap_small"
             app:srcCompat="@drawable/ic_back_white" />
 
         <TextView

@@ -552,9 +552,9 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 etAddress.setText(address);
             if(!(serviceProviderModel.getPincode().equals("null") || serviceProviderModel.getPincode().isEmpty()))
                 etPincode.setText(serviceProviderModel.getPincode());
-            if(!(serviceProviderModel.getEmail().equals("null") || serviceProviderModel.getEmail().isEmpty()))
+            if(!(serviceProviderModel.getEmail().equals("null") || serviceProviderModel.getEmail().isEmpty() || serviceProviderModel.getEmail().equals("No Email") ))
                 etEmail.setText(serviceProviderModel.getEmail());
-            if(!(serviceProviderModel.getPhone().equals("null") || serviceProviderModel.getPhone().isEmpty()))
+            if(!(serviceProviderModel.getPhone().equals("null") || serviceProviderModel.getPhone().isEmpty() || serviceProviderModel.getPhone().equals("No Number")))
                 etPrimaryPhone.setText(serviceProviderModel.getPhone());
             if(!(serviceProviderModel.getPhone2().equals("null") || serviceProviderModel.getPhone2().isEmpty()))
                 etSecondaryContacts.setText(serviceProviderModel.getPhone2());

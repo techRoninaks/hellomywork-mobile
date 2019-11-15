@@ -464,7 +464,9 @@ public class HomeFragment extends Fragment implements SqlDelegate {
         acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
+                String searchString = acSearch.getText().toString();
+                String[] search = searchString.split("\\[");
+                Fragment fragment = SearchResults.newInstance(search[0].trim(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
                 ((MainActivity) context).initFragment(fragment);
             }
         });

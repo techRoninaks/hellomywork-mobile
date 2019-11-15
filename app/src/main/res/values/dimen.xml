@@ -46,6 +46,9 @@
     <!-- About Page -->
     <dimen name="about_logo">48dp</dimen>
 
+    <!-- Back Button -->
+    <dimen name="icon_back">40dp</dimen>
+
     <!-- General -->
     <dimen name="icon_header_back">20dp</dimen>
     <dimen name="icon_contact">18dp</dimen>

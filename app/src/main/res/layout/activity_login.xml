@@ -12,15 +12,16 @@
         android:background="@color/colorNavigationBarBkg"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         ​
         <ImageView
             android:id="@+id/imageViewBackLogin"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="@dimen/icon_back"
+            android:layout_height="@dimen/icon_back"
+            android:padding="@dimen/standard_gap_small"
             app:srcCompat="@drawable/ic_back_white" />
         ​
         <TextView
@@ -167,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="29dp"
-                android:padding="5dp"
+                android:padding="8dp"
                 android:text="@string/login_forgot_password"
                 android:textColor="@color/colorNavigationBarBkg"
                 app:layout_constraintEnd_toEndOf="parent"

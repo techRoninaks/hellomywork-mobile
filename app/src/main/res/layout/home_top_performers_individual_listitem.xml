@@ -59,7 +59,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_star_black"/>
+                android:src="@drawable/ic_star_orange"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

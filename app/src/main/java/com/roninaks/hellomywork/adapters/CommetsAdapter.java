@@ -72,10 +72,16 @@ public class CommetsAdapter extends RecyclerView.Adapter<CommetsAdapter.ViewHold
                     builder.setMessage("You need to login to report").setPositiveButton("Go to login?", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
                 }else{
-                reportComment();
-                //                holder.commentMaster.setVisibility(View.GONE);
-                commentsModels.remove(position);
-                notifyDataSetChanged();
+                    String currentUser = ((MainActivity) context).isLoggedIn();
+                    if(commentsModels.get(position).getCommentU_Id().equals(currentUser)){
+                        Toast.makeText(context,"You cannot report your own comment!",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        reportComment();
+                        //                holder.commentMaster.setVisibility(View.GONE);
+                        commentsModels.remove(position);
+                        notifyDataSetChanged();
+                    }
             }}
 
             private void reportComment() {

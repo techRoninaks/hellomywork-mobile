@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -239,7 +240,9 @@ public class SearchLanding extends Fragment implements SqlDelegate {
         acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
+                String searchString = acSearch.getText().toString();
+                String[] search = searchString.split("\\[");
+                Fragment fragment = SearchResults.newInstance(search[0].trim(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
                 ((MainActivity) context).initFragment(fragment);
             }
         });

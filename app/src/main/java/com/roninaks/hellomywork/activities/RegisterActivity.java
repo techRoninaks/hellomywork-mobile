@@ -6,8 +6,11 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.helpers.EmailHelper;
 import com.roninaks.hellomywork.helpers.SqlHelper;
@@ -83,7 +89,21 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
                                 message = "Your OTP for verification is " + verifyOtp;
                                 userPhone = editTextPhoneNumberRegister.getText().toString();
                                 userName = editTextNameRegister.getText().toString();
-                                verifyUser(message, userPhone, verifyOtp);
+                                Task<Void> task = SmsRetriever.getClient(RegisterActivity.this).startSmsUserConsent(null);
+                                task.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> listener) {
+                                        if (listener.isSuccessful()) {
+                                            // Task completed successfully
+                                            verifyUser(message, userPhone, verifyOtp);
+                                        } else {
+                                            // Task failed with an exception
+                                            Exception exception = listener.getException();
+                                            exception.printStackTrace();
+                                        }
+                                    }
+                                });
+
 
                             }
                             break;

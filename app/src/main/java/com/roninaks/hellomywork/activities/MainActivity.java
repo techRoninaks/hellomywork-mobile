@@ -208,10 +208,20 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
 //        fragmentTransaction.commit();
     }
 
+    public void initFragment(Fragment fragment, String tag,boolean addToBackStack){
+        if(addToBackStack) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content, fragment, tag).addToBackStack(null);
+            fragmentTransaction.commit();
+        }else {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content, fragment, tag);
+            fragmentTransaction.commit();
+        }
+    }
+
     public void initFragment(Fragment fragment, String tag){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content, fragment, tag).addToBackStack(null);
-        fragmentTransaction.commit();
+        initFragment(fragment,tag,true);
     }
 
     public void initFragment(Fragment fragment){

@@ -61,5 +61,7 @@ dependencies {
     //Sliding Pager
     implementation 'com.jpardogo.materialtabstrip:library:1.1.1'
 
-    implementation 'com.parse:parse-android:1.10.1'
+    //For Auto SMS read consent
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.1.0'
 }
