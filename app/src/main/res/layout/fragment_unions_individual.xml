@@ -21,12 +21,12 @@
 
             <ImageView
                 android:id="@+id/imgBack"
-                android:layout_width="18dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/icon_back"
+                android:layout_height="@dimen/icon_back"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/standard_gap_large"
-                android:layout_marginTop="5dp"
+                android:padding="@dimen/standard_gap_small"
                 android:src="@drawable/ic_back_white" />
             <!--<ImageView-->
                 <!--android:layout_width="match_parent"-->
@@ -34,20 +34,24 @@
                 <!--android:scaleType="centerCrop"-->
                 <!--android:src="@drawable/union_banner_photo"/>-->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/union_indi_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_toEndOf="@+id/imgBack"
+                android:lines="2"
                 android:text="UNION NAME"
+                android:textAlignment="center"
+                android:gravity="center"
                 android:textAllCaps="true"
                 android:textColor="@color/colorTextWhitePrimary"
-                android:textStyle="bold"
                 android:textSize="@dimen/font_page_title"
-                android:textAlignment="center"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp"
-                android:lines="2"
-                android:id="@+id/union_indi_name"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"/>
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -74,7 +78,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/colorTextWhitePrimary"
-                    android:background="@drawable/profile_postfilter_color_purple"/>
+                    android:background="@drawable/profile_postfilter_color_black"/>
 
                 <Button
                     android:id="@+id/unions_btn_forsale"
@@ -84,7 +88,7 @@
                     android:text="FOR SALE"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorTextWhitePrimary"
-                    android:background="@drawable/profile_postfilter_color_blood"/>
+                    android:background="@drawable/profile_postfilter_color_yellow"/>
 
                 <Button
                     android:id="@+id/unions_btn_required"
@@ -104,7 +108,7 @@
                     android:text="OFFERES"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorTextWhitePrimary"
-                    android:background="@drawable/profile_postfilter_color_yellow"/>
+                    android:background="@drawable/profile_postfilter_color_blood"/>
 
                 <Button
                     android:id="@+id/unions_btn_appreciation"
@@ -116,7 +120,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:textColor="@color/colorTextWhitePrimary"
-                    android:background="@drawable/profile_postfilter_color_green"/>
+                    android:background="@drawable/profile_postfilter_color_purple"/>
 
                 <Button
                     android:id="@+id/unions_btn_achivement"
@@ -128,7 +132,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:textColor="@color/colorTextWhitePrimary"
-                    android:background="@drawable/profile_postfilter_color_black"/>
+                    android:background="@drawable/profile_postfilter_color_green"/>
 
             </LinearLayout>
         </HorizontalScrollView>

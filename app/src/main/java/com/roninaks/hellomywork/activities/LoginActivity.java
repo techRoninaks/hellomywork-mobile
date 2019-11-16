@@ -94,11 +94,12 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         try{
                             if (userPhone.length() > 9) {
                                 String genOtp =generateOtp();
-                                checkNumber(genOtp, "OTP for verification is " + genOtp, userPhone);
+//                                checkNumber(genOtp, "OTP for verification is " + genOtp, userPhone);
 //                                SharedPreferences sharedPreferences  = LoginActivity.this.getSharedPreferences("hwm",0);
 //                                sharedPreferences.edit().putString("otp",genOtp).commit();
                                 Intent intent = new Intent(LoginActivity.this, verifyOtpActivity.class);
                                 Bundle bundle = new Bundle();
+                                bundle.putString("name","$%5login5%$");
                                 bundle.putString("phone", editTextPhoneNumber.getText().toString());
                                 bundle.putString("otp", genOtp);
                                 intent.putExtra("bundle", bundle);

@@ -19,6 +19,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/llIdCard"
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:background="@drawable/id_card_thumpnail_green"

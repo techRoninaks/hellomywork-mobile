@@ -20,8 +20,9 @@
 
             <ImageView
                 android:id="@+id/imgBack"
-                android:layout_width="@dimen/icon_contact"
-                android:layout_height="@dimen/icon_contact"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/standard_gap_small"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/standard_gap_large"
@@ -30,8 +31,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/imgBack"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
+                android:layout_marginStart="-3dp"
+                android:layout_marginTop="-28dp"
                 android:text="@string/plans_heading"
                 android:textAlignment="center"
                 android:textAllCaps="true"

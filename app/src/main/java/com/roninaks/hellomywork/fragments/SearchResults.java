@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -186,7 +187,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
         endofresults = false;
         //Default Tabs
 
-        toggleTabs(default_load == null || default_load.isEmpty() ? "services" : default_load);
+        toggleTabs(default_load == null || default_load.isEmpty() ? "profiles" : default_load);
         acSearch.setText(searchKey);
 
         handler = new Handler();
@@ -220,8 +221,8 @@ public class SearchResults extends Fragment implements SqlDelegate{
             @Override
             public void onClick(View v) {
 
-                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "1", "");
-                ((MainActivity) context).initFragment(fragment);
+                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), ((MainActivity) context).getDefaultLocation(), "");
+                ((MainActivity) context).initFragment(fragment,"",false);
             }
         });
         ivOptions.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +292,7 @@ public class SearchResults extends Fragment implements SqlDelegate{
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
                     Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), ((MainActivity) context).getDefaultLocation(), "");
-                    ((MainActivity) context).initFragment(fragment);
+                    ((MainActivity) context).initFragment(fragment,"",false);
                 }
                 return true;
             }
@@ -318,8 +319,10 @@ public class SearchResults extends Fragment implements SqlDelegate{
         acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = SearchResults.newInstance(acSearch.getText().toString(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
-                ((MainActivity) context).initFragment(fragment);
+                String searchString = acSearch.getText().toString();
+                String[] search = searchString.split("\\[");
+                Fragment fragment = SearchResults.newInstance(search[0].trim(), "" + searchSuggestionsModels.get(position).getLocationId(), "" + searchSuggestionsModels.get(position).getCategoryId());
+                ((MainActivity) context).initFragment(fragment,"",false);
             }
         });
         switchPremium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

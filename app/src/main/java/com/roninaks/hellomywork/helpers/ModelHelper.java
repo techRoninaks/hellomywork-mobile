@@ -181,6 +181,10 @@ public class ModelHelper {
                     serviceProviderModel.setCardUrl(jsonObject.getString("card"));
                     serviceProviderModel.setPremium(jsonObject.getString("premium").equals("1"));
                     serviceProviderModel.setBookmarked(jsonObject.getString("is_bookmarked").equals("1"));
+                    try {
+                        serviceProviderModel.setOrgType(jsonObject.getString("org_type"));
+                    }catch (Exception e){}
+                    break;
                 }
             }
             return serviceProviderModel;

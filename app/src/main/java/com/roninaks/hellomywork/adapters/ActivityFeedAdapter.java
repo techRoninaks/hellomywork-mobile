@@ -75,7 +75,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         private String baseImagePostUrl, userName;
         private int lastVisibleItem, totalItemCount;
         private boolean loading;
-        private boolean allcomments = false;
         private OnLoadMoreListener onLoadMoreListener;
         String imageBaseUri = "https://www.hellomywork.com/",profileCard;
 
@@ -228,9 +227,14 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                                             builder.setMessage("You need to login to report the post").setPositiveButton("Go to login?", dialogClickListener)
                                                     .setNegativeButton("No", dialogClickListener).show();
                                         }else{
-                                            reportPost(profilePostModels.get(position).getId());
-                                            profilePostModels.remove(position);
-                                            notifyDataSetChanged();
+                                            if(profilePostModels.get(position).getName().equals(((MainActivity) context).getUserName())){
+                                                Toast.makeText(context,"You cannot report your own post",Toast.LENGTH_SHORT).show();
+                                            }
+                                            else {
+                                                reportPost(profilePostModels.get(position).getId());
+                                                profilePostModels.remove(position);
+                                                notifyDataSetChanged();
+                                            }
                                         }
                                         break;
                                     }
@@ -300,22 +304,22 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 });
 
                 switch (label){
-                    case "assets/img/icon/ic_Random-min.png":
+                    case "assets/img/icon/ic_random-min.png":
                         holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
                         break;
-                    case "assets/img/icon/ic_ForSale-min.png":
+                    case "assets/img/icon/ic_for_sale-min.png":
                         holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_for_sale_min));
                         break;
-                    case "assets/img/icon/ic_Required-min.png":
+                    case "assets/img/icon/ic_required-min.png":
                         holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_required_min));
                         break;
-                    case "assets/img/icon/ic_Achievement-min.png":
+                    case "assets/img/icon/ic_achievement-min.png":
                         holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_achievement_min));
                         break;
-                    case "assets/img/icon/ic_Appreciations-min.png":
+                    case "assets/img/icon/ic_appreciation-min.png":
                         holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_appreciation_min));
                         break;
-                    case "assets/img/icon/ic_Offers-min.png":
+                    case "assets/img/icon/ic_offers-min.png":
                         holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_offers_min));
                         break;
                     default:
@@ -354,14 +358,18 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                                 holder.filled = false;
                                 int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
                                 likeCount = likeCount - 1;
-                                holder.tvPostLikeCount.setText(Integer.toString(likeCount));
+                                holder.tvPostLikeCount.setText(String.valueOf(likeCount));
+                                profilePostModels.get(position).setLikeCount(String.valueOf(likeCount));
+                                profilePostModels.get(position).setIsLiked("1");
                                 updateLike("delete");
                             } else {
                                 holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
                                 holder.filled = true;
                                 int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
                                 likeCount =likeCount + 1;
-                                holder.tvPostLikeCount.setText(Integer.toString(likeCount));
+                                holder.tvPostLikeCount.setText(String.valueOf(likeCount));
+                                profilePostModels.get(position).setLikeCount(String.valueOf(likeCount));
+                                profilePostModels.get(position).setIsLiked("0");
                                 updateLike("add");
                             }
                         }
@@ -381,7 +389,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                     }
                 });
 
-                if (Integer.valueOf(profilePostModels.get(position).getCommentCount()) <= 3){
+                holder.viewMoreComments.setVisibility(View.VISIBLE);
+                if (Integer.valueOf(profilePostModels.get(position).getCommentCount()) <= 3 || holder.loadAllComments || profilePostModels.get(position).isCommentLoaded()){
                     holder.viewMoreComments.setVisibility(View.GONE);
                 }
 
@@ -402,6 +411,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                             sqlHelper.setExtras(extras);
                             sqlHelper.executeUrl(true);
                             holder.viewMoreComments.setVisibility(View.GONE);
+                            profilePostModels.get(position).setCommentLoaded(true);
 //                            notifyDataSetChanged();
                         }
                 });
@@ -550,12 +560,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                                 extras.put("position", ""+position);
                                 sqlHelper.setExtras(extras);
                                 sqlHelper.setParams(contentValues);
-                                sqlHelper.executeUrl(false);
+                                sqlHelper.executeUrl(true);
                                 holder.writeComments.clearFocus();
                                 holder.writeComments.setText("");
                                 int  commentCount =Integer.parseInt(holder.tvPostCommentCount.getText().toString());
                                 commentCount = commentCount+1;
-                                holder.tvPostCommentCount.setText(Integer.toString(commentCount));
+                                holder.tvPostCommentCount.setText(String.valueOf(commentCount));
+                                profilePostModels.get(position).setCommentCount(String.valueOf(commentCount));
                                 InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                              }
@@ -617,12 +628,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                             extras.put("position", ""+position);
                             sqlHelper.setExtras(extras);
                             sqlHelper.setParams(contentValues);
-                            sqlHelper.executeUrl(false);
+                            sqlHelper.executeUrl(true);
                             holder.writeComments.clearFocus();
                             holder.writeComments.setText("");
                             int  commentCount =Integer.parseInt(holder.tvPostCommentCount.getText().toString());
                             commentCount = commentCount+1;
-                            holder.tvPostCommentCount.setText(Integer.toString(commentCount));
+                            holder.tvPostCommentCount.setText(String.valueOf(commentCount));
+                            profilePostModels.get(position).setCommentCount(String.valueOf(commentCount));
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                         }
@@ -631,7 +643,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 });
                 commentsModels = profilePostModels.get(position).getCommentsModels();
                 commentRecyclerView = holder.commentrecyclerView;
-                populateRecycler(holder.commentrecyclerView, profilePostModels.get(position).getCommentsModels());
+                populateRecycler(commentRecyclerView, commentsModels);
 
             }catch (Exception e){
 //            EmailHelper emailHelper = new EmailHelper(context, EmailHelper.TECH_SUPPORT, "Error: ActorAdapter", StringHelper.convertStackTrace(e));
@@ -686,11 +698,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                 commentsModel.setCommentU_Id(userId);
                 commentsModel.setCommentP_Id(pId);
                 //commentsModels.add(0,commentsModel);
-                if(profilePostModels.get(pos).getCommentsModels().size()>3) {
-                    profilePostModels.get(pos).getCommentsModels().remove(0);
-                }
                 profilePostModels.get(pos).getCommentsModels().add(commentsModel);
-                commentRecyclerView.getAdapter().notifyDataSetChanged();
+                notifyItemChanged(pos);
 
 //                populateRecycler(commentRecyclerView,commentsModels);
             }
@@ -756,8 +765,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         TextView viewMoreComments;
         EditText writeComments;
         boolean filled= false;
-        boolean loadAllComments = false;
         boolean bookmarkFilled= false;
+        boolean loadAllComments = false;
         RecyclerView commentrecyclerView;
         ArrayList<CommentsModel> commentsModels;
         private ImageView ivLike,ivComment,ivShare,ivBookmark;

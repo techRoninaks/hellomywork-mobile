@@ -1,20 +1,30 @@
 package com.roninaks.hellomywork.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Base64OutputStream;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.parse.ParseFile;
+
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
 import com.roninaks.hellomywork.helpers.EmailHelper;
@@ -31,13 +41,19 @@ import com.roninaks.hellomywork.helpers.SqlHelper;
 import com.roninaks.hellomywork.helpers.StringHelper;
 import com.roninaks.hellomywork.interfaces.SqlDelegate;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.StringTokenizer;
+
+import static android.util.Log.e;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +79,8 @@ public class CareersFragment extends Fragment implements SqlDelegate {
     Context context = getContext();
     private static final int READ_REQUEST_CODE = 42;
     boolean resumeUploaded = false;
-    private ParseFile parseFileResume;
+    private String displayName = null;
+    private String resume;
 
 
     private OnFragmentInteractionListener mListener;
@@ -142,14 +159,23 @@ public class CareersFragment extends Fragment implements SqlDelegate {
     private void uploadResume() {
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
         // browser.
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
-        // Filter to only show results that can be "opened", such as a
-        // file (as opposed to a list of contacts or timezones)
-        intent.setType("application/pdf");
+//        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+////
+////        // Filter to only show results that can be "opened", such as a
+////        // file (as opposed to a list of contacts or timezones)
+////        intent.setType("application/pdf");
+////        intent.addCategory(Intent.CATEGORY_OPENABLE);
+////        startActivityForResult(intent, READ_REQUEST_CODE);
+
+        String[] mimeTypes = {"application/pdf"};
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, READ_REQUEST_CODE);
 
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(intent, READ_REQUEST_CODE);
     }
 
 
@@ -162,53 +188,61 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         String whatsappTwo = careerWhatsappTwoET.getText().toString();
 
         if(name.isEmpty()){
+            careerNameET.setError(getString(R.string.required_field));
             Toast.makeText(context, "Name is empty", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(address.isEmpty()){
+        if(address.trim().isEmpty()){
+            careerAddressET.setError(getString(R.string.required_field));
             Toast.makeText(context, "Address is empty", Toast.LENGTH_SHORT).show();
             return;
         }
         if(primaryPhone.isEmpty()){
+            careerPrimaryPhoneET.setError(getString(R.string.required_field));
             Toast.makeText(context, "Primary phone number is empty", Toast.LENGTH_SHORT).show();
             return;
         }
         if(!(primaryPhone.length() == 10)){
+            careerPrimaryPhoneET.setError(getString(R.string.invalid_phone));
             Toast.makeText(context, "Primary phone does not contain 10 digits", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(whatsappTwo.isEmpty()){
-            Toast.makeText(context, "Whatsapp number is empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-//        if(!(whatsappTwo.length() == 10)){
-//            Toast.makeText(context, "Whatsapp does not contain 10 digits", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(secondaryPhone.isEmpty()){
-//            Toast.makeText(context, "Secondary phone number is empty", Toast.LENGTH_SHORT).show();
-//        }
-//        if(secondaryPhone.length() == 10){
-//            Toast.makeText(context, "Secondary phone does not contain 10 digits", Toast.LENGTH_SHORT).show();
-//        }
-//        if(whatsappTwo.isEmpty()){
-//            Toast.makeText(context, "Whatsapp Two number is empty", Toast.LENGTH_SHORT).show();
-//        }
-        if(whatsappTwo.length() == 10){
-            Toast.makeText(context, "requires 10 digits", Toast.LENGTH_SHORT).show();
-        }
         if(email.isEmpty()){
+            careerEmailET.setError(getString(R.string.required_field));
             Toast.makeText(context, "Email is empty", Toast.LENGTH_SHORT).show();
             return;
         }
         if(!email.contains("@") && !email.contains(".")){
+            careerEmailET.setError(getString(R.string.invalid_cred));
             Toast.makeText(context, "Email is not in proper format", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(secondaryPhone.isEmpty()){
+            careerSecondaryPhoneET.setError(getString(R.string.required_field));
+            Toast.makeText(context, "Secondary phone number is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(secondaryPhone.length() == 10){
+            careerSecondaryPhoneET.setError(getString(R.string.invalid_phone));
+            Toast.makeText(context, "Secondary phone does not contain 10 digits", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(whatsappTwo.isEmpty()){
+            careerWhatsappTwoET.setError(getString(R.string.required_field));
+            Toast.makeText(context, "Whatsapp number is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(whatsappTwo.length() == 10){
+            careerWhatsappTwoET.setError(getString(R.string.invalid_phone));
+            Toast.makeText(context, "requires 10 digits", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(!resumeUploaded){
             Toast.makeText(context, "No resume selected", Toast.LENGTH_SHORT).show();
             return;
         }
+        upload(resume,displayName);
         int zero = 0;
         SqlHelper sqlHelper = new SqlHelper(context, CareersFragment.this);
         sqlHelper.setExecutePath("careers.php");
@@ -223,7 +257,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
         contentValues.put("secondaryphone", secondaryPhone);
         contentValues.put("contacted", zero);
         sqlHelper.setParams(contentValues);
-        sqlHelper.executeUrl(false);
+        sqlHelper.executeUrl(true);
     }
 
 
@@ -257,7 +291,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
                 case "careers": {
 //                  JSONObject jsonObject = sqlHelper.getJSONResponse().getJSONObject("data");
                     String response = sqlHelper.getStringResponse();
-                    if (response.equals("success")) {
+                    if (response.equals("successful")) {
                         Toast.makeText(context, "Inquiry has been saved", Toast.LENGTH_SHORT).show();
                         careerNameET.setText("");
                         careerNameET.setText("");
@@ -266,6 +300,8 @@ public class CareersFragment extends Fragment implements SqlDelegate {
                         careerEmailET.setText("");
                         careerSecondaryPhoneET.setText("");
                         careerWhatsappTwoET.setText("");
+
+
                     } else if (response.equals("error")) {
 //                recyclerView.setVisibility(View.GONE);
 //                llContainerPlaceholder.setVisibility(View.VISIBLE);
@@ -276,7 +312,7 @@ public class CareersFragment extends Fragment implements SqlDelegate {
                 case "upload":{
                     String response = sqlHelper.getStringResponse();
                     if (!(response.equals("null"))) {
-                        Toast.makeText(context, "Upload completed", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Upload completed", Toast.LENGTH_SHORT).show();
                         careerUploadResumeBTN.setBackgroundResource(R.drawable.career_button_color_radius);
                         careerUploadResumeBTN.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
                         careerSubmitBTN.setBackgroundResource(R.drawable.card_background_shape);
@@ -285,6 +321,11 @@ public class CareersFragment extends Fragment implements SqlDelegate {
                     else {
                         Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show();
                     }
+                    try {
+                        File dir = context.getExternalFilesDir("TempFolder");
+                        deleteRecursive(dir);
+                    }catch (Exception e){}
+
                 }break;
             }
         } catch (Exception e) {
@@ -294,65 +335,74 @@ public class CareersFragment extends Fragment implements SqlDelegate {
 
     }
 
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
         super.onActivityResult(requestCode, resultCode, resultData);
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK&& resultData != null) {
+            if (hasPermission(requestCode,Manifest.permission.READ_EXTERNAL_STORAGE, context)){
+                Uri uri = resultData.getData();
+                String uriString = uri.toString();
+                File myFile = new File(uri.getPath().toString());
 
-            Uri selectedPdf = resultData.getData();
-            try {
+                String filRealpath = getFileFromContentUri(uri);
+                File myFilenew = new File(filRealpath);
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+                }
 
-                InputStream iStream = ((MainActivity) context).getContentResolver().openInputStream(selectedPdf);
-                byte[] inputData = getBytes(iStream);
-
-                long fileSizeInBytes = inputData.length;
-                long fileSizeInKB = fileSizeInBytes / 1024;
-                long fileSizeInMB = fileSizeInKB / 1024;
-
-                ParseFile resumes  = new ParseFile("image.pdf",
-                        inputData);
-                getPdf(resumes);
-            } catch (IOException e) {
-                e.printStackTrace();
-
+                resume = encodeFileToBase64Binary(myFilenew);
+                resumeUploaded= true;
             }
         }
     }
 
-    private void getPdf(ParseFile resume){
-        parseFileResume = resume;
-    }
 
-    public byte[] getBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
+    private String encodeFileToBase64Binary(File yourFile) {
+        int size = (int) yourFile.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(yourFile));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        return byteBuffer.toByteArray();
+
+        String encoded = Base64.encodeToString(bytes,Base64.NO_WRAP);
+        return encoded;
     }
 
-    public static String encodeTobase64(Bitmap image) {
-        Bitmap immagex = image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-        return imageEncoded;
-    }
-
-    private void upload(String encoded, String imageName){
+    private void upload(String encoded, String filename){
         try {
             SqlHelper sqlHelper = new SqlHelper(context, CareersFragment.this);
             sqlHelper.setExecutePath("loadresume.php");
             sqlHelper.setActionString("upload");
             ContentValues contentValues = new ContentValues();
             contentValues.put("image_bitmap",encoded);
-            contentValues.put("image_name",imageName);
+            contentValues.put("image_name",filename);
             //contentValues.put("userPassword", password);
             sqlHelper.setParams(contentValues);
             sqlHelper.setMethod(getString(R.string.method_post));
@@ -361,6 +411,96 @@ public class CareersFragment extends Fragment implements SqlDelegate {
             EmailHelper emailHelper = new EmailHelper(context, EmailHelper.TECH_SUPPORT, "Error: CareersFragment", e.getMessage() + "\n" + StringHelper.convertStackTrace(e));
             emailHelper.sendEmail();
         }
+    }
+
+
+    public static boolean hasPermission(int PERMISSION_REQUEST, String permission, Context context) {
+        if (ContextCompat.checkSelfPermission(context,
+                permission)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
+                    permission) &&
+                    ContextCompat.checkSelfPermission(context,
+                            permission)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                return false;
+
+            } else {
+
+                ActivityCompat.requestPermissions((Activity) context,
+                        new String[]{permission},
+                        PERMISSION_REQUEST);
+
+            }
+
+            return false;
+        } else {
+            return true;
+
+
+        }
+    }
+
+
+    private String getFileFromContentUri(Uri uri) {
+        //This will be the file we will use (the one that will be copied)
+        File file = null;
+        try {
+            //Create a temporary folder where the copy will be saved to
+            File temp_folder = context.getExternalFilesDir("TempFolder");
+
+            //Use ContentResolver to get the name of the original name
+            //Create a cursor and pass the Uri to it
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            //Check that the cursor is not null
+            assert cursor != null;
+            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            cursor.moveToFirst();
+            //Get the file name
+            String filename = cursor.getString(nameIndex);
+            //Close the cursor
+            cursor.close();
+
+            //open a InputStream by passing it the Uri
+            //We have to do this in a try/catch
+            InputStream is = null;
+            try {
+                is = context.getContentResolver().openInputStream(uri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            //We now have a folder and a file name, now we can create a file
+            file = new File(temp_folder + "/" + filename);
+
+            //We can now use a BufferedInputStream to pass the InputStream we opened above to it
+            BufferedInputStream bis = new BufferedInputStream(is);
+            //We will write the byte data to the FileOutputStream, but we first have to create it
+            FileOutputStream fos = new FileOutputStream(file);
+
+            byte data[] = new byte[1024];
+            long total = 0;
+            int count;
+            //Below we will read all the byte data and write it to the FileOutputStream
+            while ((count = bis.read(data)) != -1) {
+                total += count;
+                fos.write(data, 0, count);
+            }
+            //The FileOutputStream is done and the file is created and we can clean and close it
+            fos.flush();
+            fos.close();
+
+        } catch (IOException e) {
+            Log.e("IOException = ", String.valueOf(e));
+        }
+
+        //Finally we can pass the path of the file we have copied
+        return file.getAbsolutePath();
+
+
     }
 
 

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorNavigationBarBkg"
         android:minHeight="?attr/actionBarSize"
+        android:gravity="center"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,9 +22,9 @@
 
         <ImageView
             android:id="@+id/imageViewBackRegister"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="@dimen/icon_back"
+            android:layout_height="@dimen/icon_back"
+            android:padding="@dimen/standard_gap_small"
             app:srcCompat="@drawable/ic_back_white" />
 
         <TextView
