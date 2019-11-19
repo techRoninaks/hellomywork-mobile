@@ -227,7 +227,7 @@ public class ModelHelper {
             ratingsModel.setId(Integer.parseInt(jsonObject.getString("id")));
             ratingsModel.setProfileId(Integer.parseInt(jsonObject.getString("profile_id")));
             ratingsModel.setRating(Float.parseFloat(jsonObject.getString("rating")));
-            ratingsModel.setReview(jsonObject.getString("review"));
+            ratingsModel.setReview(jsonObject.getString("review").equals("null") ? "" : jsonObject.getString("review"));
             ratingsModel.setUserName(jsonObject.getString("user_name"));
             ratingsModel.setUserId(Integer.parseInt(jsonObject.getString("user_id")));
         }catch (Exception e){
