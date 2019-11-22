@@ -153,7 +153,11 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
                     Toast.makeText(context, "Descrpition is empty", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    saveInformation();
+                    try {
+                        saveInformation();
+                    }catch (Exception e){
+                        Toast.makeText(context,"Something went wrong!! Please try again",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

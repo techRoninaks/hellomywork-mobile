@@ -67,96 +67,97 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapter.ViewHolder> implements SqlDelegate {
-        private Context context;
-        private View rootview;
-        private ArrayList<ProfilePostModel> profilePostModels;
-        private ArrayList<CommentsModel> commentsModels;
-        private RequestOptions requestOptions;
-        private String baseImagePostUrl, userName;
-        private int lastVisibleItem, totalItemCount;
-        private boolean loading;
-        private OnLoadMoreListener onLoadMoreListener;
-        String imageBaseUri = "https://www.hellomywork.com/",profileCard;
+    private Context context;
+    private View rootview;
+    private ArrayList<ProfilePostModel> profilePostModels;
+    private ArrayList<CommentsModel> commentsModels;
+    private RequestOptions requestOptions;
+    private String baseImagePostUrl, userName;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListener;
+    String imageBaseUri = "https://www.hellomywork.com/",profileCard;
 
-        RecyclerView commnetsRecyclerView,commentRecyclerView;
-        CommetsAdapter commetsAdapter;
-        private String user_id;
+    RecyclerView commnetsRecyclerView,commentRecyclerView;
+    CommetsAdapter commetsAdapter;
+    private String user_id;
 //        private int colorList[] = {R.color.palette_orange, R.color.palette_brown, R.color.palette_blue, R.color.palette_green};
 
 
-        public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview) {
-            this.context = context;
-            this.profilePostModels = profilePostModels;
-            this.rootview = rootview;
-            baseImagePostUrl = "https://www.hellomywork.com/";
-            requestOptions = new RequestOptions();
-            requestOptions.placeholder(R.drawable.icon_image);
-            requestOptions.error(R.drawable.icon_image);
-        }
-        public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview, String user_id,RecyclerView recyclerView) {
-            this.context = context;
-            this.profilePostModels = profilePostModels;
-            this.rootview = rootview;
-            this.user_id = user_id;
-            baseImagePostUrl = "https://www.hellomywork.com/";
-            requestOptions = new RequestOptions();
-            requestOptions.placeholder(R.drawable.icon_image);
-            requestOptions.error(R.drawable.icon_image);
+    public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview) {
+        this.context = context;
+        this.profilePostModels = profilePostModels;
+        this.rootview = rootview;
+        baseImagePostUrl = "https://www.hellomywork.com/";
+        requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.icon_image);
+        requestOptions.error(R.drawable.icon_image);
+    }
+    public ActivityFeedAdapter(Context context, ArrayList<ProfilePostModel> profilePostModels, View rootview, String user_id,RecyclerView recyclerView) {
+        this.context = context;
+        this.profilePostModels = profilePostModels;
+        this.rootview = rootview;
+        this.user_id = user_id;
+        baseImagePostUrl = "https://www.hellomywork.com/";
+        requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.icon_image);
+        requestOptions.error(R.drawable.icon_image);
 
-            try {
-                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
+        try {
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-                        totalItemCount = getItemCount();
-                        lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                        if (!loading && (totalItemCount - lastVisibleItem - 1) == 0) {
+                    totalItemCount = getItemCount();
+                    lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    if (!loading && (totalItemCount - lastVisibleItem - 1) == 0) {
 
-                            if (onLoadMoreListener != null) {
-                                onLoadMoreListener.onLoadMore();
-                            }
-                            loading = true;
+                        if (onLoadMoreListener != null) {
+                            onLoadMoreListener.onLoadMore();
                         }
+                        loading = true;
                     }
-                });
+                }
+            });
 //        }
-            }catch (Exception e){
-            }
+        }catch (Exception e){
         }
+    }
 
 
-        @NonNull
-        @Override
-        public ActivityFeedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.profile_posts_item,parent,false);
-            return new ActivityFeedAdapter.ViewHolder(view);
-        }
+    @NonNull
+    @Override
+    public ActivityFeedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.profile_posts_item,parent,false);
+        return new ActivityFeedAdapter.ViewHolder(view);
+    }
 
-        @Override
-        public void onBindViewHolder(@NonNull final ActivityFeedAdapter.ViewHolder holder, final int position)  {
-            try {
+    @Override
+    public void onBindViewHolder(@NonNull final ActivityFeedAdapter.ViewHolder holder, final int position)  {
+        try {
 
-                holder.tvPostProfileName.setText(profilePostModels.get(position).getName());
-                holder.tvPostProfileDes.setText(profilePostModels.get(position).getDescription());
-                holder.tvPostProfileLocation.setText(profilePostModels.get(position).getLocation());
-                String date = profilePostModels.get(position).getDate();
-                date = date.split(String.valueOf(' '))[0];
-                String [] datepost = date.split("-");//Converting date to standard form.
-                holder.tvPostProfileDate.setText(datepost[2]+"-"+datepost[1]+"-"+datepost[0]);
-                holder.tvPostProfileTime.setText(profilePostModels.get(position).getTime());
-                holder.tvPostLikeCount.setText(profilePostModels.get(position).getLikeCount());
-                holder.tvPostCommentCount.setText(profilePostModels.get(position).getCommentCount());
-                holder.commentsModels = new ArrayList<>();
-                Glide.with(context)
-                        .setDefaultRequestOptions(requestOptions
+            holder.tvPostProfileName.setText(profilePostModels.get(position).getName());
+            holder.tvPostProfileDes.setText(profilePostModels.get(position).getDescription());
+            holder.tvPostProfileLocation.setText(profilePostModels.get(position).getLocation());
+            String date = profilePostModels.get(position).getDate();
+            date = date.split(String.valueOf(' '))[0];
+            String [] datepost = date.split("-");//Converting date to standard form.
+            holder.tvPostProfileDate.setText(datepost[2]+"-"+datepost[1]+"-"+datepost[0]);
+            holder.tvPostProfileTime.setText(profilePostModels.get(position).getTime());
+            holder.tvPostLikeCount.setText(profilePostModels.get(position).getLikeCount());
+            holder.tvPostCommentCount.setText(profilePostModels.get(position).getCommentCount());
+            holder.commentsModels = new ArrayList<>();
+            Glide.with(context)
+                    .setDefaultRequestOptions(requestOptions
                             .centerCrop()
-                            )
-                        .asBitmap()
-                        .load(baseImagePostUrl + profilePostModels.get(position).getImageUri())
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                    )
+                    .asBitmap()
+                    .load(baseImagePostUrl + profilePostModels.get(position).getImageUri())
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            try {
                                 int width = holder.ivPostProfileImage.getWidth();
                                 int height = holder.ivPostProfileImage.getHeight();
                                 Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -164,452 +165,386 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                                 holder.ivPostProfileImage.setImageBitmap(image);
                                 holder.tvNoImageDesc.setVisibility(View.VISIBLE);
                                 holder.tvNoImageDesc.setText(profilePostModels.get(position).getDescription());
-                                return true;
+                            }catch (Exception onLoadFailed){
                             }
+                            return true;
+                        }
 
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
-                        .into(holder.ivPostProfileImage);
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(holder.ivPostProfileImage);
 
-                if(profilePostModels.get(position).getIsLiked().equals("0")){
-                    holder.filled = false;
-                    holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
-                }
-                else if(profilePostModels.get(position).getIsLiked().equals("1")){
-                    holder.filled = true;
-                    holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
-                }
-                if(profilePostModels.get(position).getIsBoomarked().equals("0")){
-                    holder.bookmarkFilled = false;
-                    holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
-                }
-                else if(profilePostModels.get(position).getIsBoomarked().equals("1")){
-                    holder.bookmarkFilled = true;
-                    holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
-                }
-                String label = profilePostModels.get(position).getImageLabel();
+            if(profilePostModels.get(position).getIsLiked().equals("0")){
+                holder.filled = false;
+                holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
+            }
+            else if(profilePostModels.get(position).getIsLiked().equals("1")){
+                holder.filled = true;
+                holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
+            }
+            if(profilePostModels.get(position).getIsBoomarked().equals("0")){
+                holder.bookmarkFilled = false;
+                holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
+            }
+            else if(profilePostModels.get(position).getIsBoomarked().equals("1")){
+                holder.bookmarkFilled = true;
+                holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
+            }
+            String label = profilePostModels.get(position).getImageLabel();
 
-                holder.btnProfilePostOptions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PopupMenu popupMenu = new PopupMenu(context, v);
-                        Menu m = popupMenu.getMenu();
-                        MenuInflater inflater = popupMenu.getMenuInflater();
-                        inflater.inflate(R.menu.post_option_menu, popupMenu.getMenu());
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem) {
-                                switch (menuItem.getItemId()){
-                                    case R.id.post_option_report:{
-                                        if(((MainActivity) context).isLoggedIn().isEmpty()){
-                                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    switch (which){
-                                                        case DialogInterface.BUTTON_POSITIVE:
-                                                            Intent myIntent = new Intent(context, LoginActivity.class);
-                                                            context.startActivity(myIntent);
-                                                            break;
-                                                        case DialogInterface.BUTTON_NEGATIVE:
-                                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
-                                                            break;
-                                                        default:
-                                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
-                                                            break;
-                                                    }
+            holder.btnProfilePostOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(context, v);
+                    Menu m = popupMenu.getMenu();
+                    MenuInflater inflater = popupMenu.getMenuInflater();
+                    inflater.inflate(R.menu.post_option_menu, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()){
+                                case R.id.post_option_report:{
+                                    if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                switch (which){
+                                                    case DialogInterface.BUTTON_POSITIVE:
+                                                        Intent myIntent = new Intent(context, LoginActivity.class);
+                                                        context.startActivity(myIntent);
+                                                        break;
+                                                    case DialogInterface.BUTTON_NEGATIVE:
+                                                        Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                                        break;
+                                                    default:
+                                                        Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                                        break;
                                                 }
-                                            };
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                            builder.setTitle("Oho!, You are not Logged In");
-                                            builder.setMessage("You need to login to report the post").setPositiveButton("Go to login?", dialogClickListener)
-                                                    .setNegativeButton("No", dialogClickListener).show();
-                                        }else{
-                                            if(profilePostModels.get(position).getName().equals(((MainActivity) context).getUserName())){
-                                                Toast.makeText(context,"You cannot report your own post",Toast.LENGTH_SHORT).show();
                                             }
-                                            else {
-                                                reportPost(profilePostModels.get(position).getId());
-                                                profilePostModels.remove(position);
-                                                notifyDataSetChanged();
-                                            }
+                                        };
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                        builder.setTitle("Oho!, You are not Logged In");
+                                        builder.setMessage("You need to login to report the post").setPositiveButton("Go to login?", dialogClickListener)
+                                                .setNegativeButton("No", dialogClickListener).show();
+                                    }else{
+                                        if(profilePostModels.get(position).getName().equals(((MainActivity) context).getUserName())){
+                                            Toast.makeText(context,"You cannot report your own post",Toast.LENGTH_SHORT).show();
                                         }
-                                        break;
+                                        else {
+                                            reportPost(profilePostModels.get(position).getId());
+                                            profilePostModels.remove(position);
+                                            notifyDataSetChanged();
+                                        }
                                     }
-                                    case R.id.post_option_delete:{
-                                        if(((MainActivity) context).isLoggedIn().isEmpty()){
-                                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    switch (which){
-                                                        case DialogInterface.BUTTON_POSITIVE:
-                                                            Intent myIntent = new Intent(context, LoginActivity.class);
-                                                            context.startActivity(myIntent);
-                                                            break;
-                                                        case DialogInterface.BUTTON_NEGATIVE:
-                                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
-                                                            break;
-                                                        default:
-                                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
-                                                            break;
-                                                    }
+                                    break;
+                                }
+                                case R.id.post_option_delete:{
+                                    if(((MainActivity) context).isLoggedIn().isEmpty()){
+                                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                switch (which){
+                                                    case DialogInterface.BUTTON_POSITIVE:
+                                                        Intent myIntent = new Intent(context, LoginActivity.class);
+                                                        context.startActivity(myIntent);
+                                                        break;
+                                                    case DialogInterface.BUTTON_NEGATIVE:
+                                                        Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                                        break;
+                                                    default:
+                                                        Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                                        break;
                                                 }
-                                            };
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                            builder.setTitle("Oho!, You are not Logged In");
-                                            builder.setMessage("You need to login to delete the post").setPositiveButton("Go to login?", dialogClickListener)
-                                                    .setNegativeButton("No", dialogClickListener).show();
-                                        }else{
-                                            if(user_id != ((MainActivity) context).isLoggedIn()){
-                                                Toast.makeText(context, "You can't delete this post", Toast.LENGTH_SHORT).show();
                                             }
-                                            else {
-                                                deletePost(profilePostModels.get(position).getId());
-                                                profilePostModels.remove(position);
-                                                notifyDataSetChanged();
-                                            }
+                                        };
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                        builder.setTitle("Oho!, You are not Logged In");
+                                        builder.setMessage("You need to login to delete the post").setPositiveButton("Go to login?", dialogClickListener)
+                                                .setNegativeButton("No", dialogClickListener).show();
+                                    }else{
+                                        if(user_id != ((MainActivity) context).isLoggedIn()){
+                                            Toast.makeText(context, "You can't delete this post", Toast.LENGTH_SHORT).show();
                                         }
-                                        break;
+                                        else {
+                                            deletePost(profilePostModels.get(position).getId());
+                                            profilePostModels.remove(position);
+                                            notifyDataSetChanged();
+                                        }
                                     }
+                                    break;
                                 }
-                                return true;
                             }
-                        });
-                        popupMenu.show();
-                    }
-
-                    private void reportPost(String id) {
-                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                        sqlHelper.setExecutePath("postReport.php");
-                        sqlHelper.setActionString("postReport");
-                        sqlHelper.setMethod("POST");
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("postid", id);
-                        sqlHelper.setParams(contentValues);
-                        sqlHelper.executeUrl(false);
-                    }
-
-                    private void deletePost(String id) {
-                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                        sqlHelper.setExecutePath("deletePost.php");
-                        sqlHelper.setActionString("postDelete");
-                        sqlHelper.setMethod("POST");
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("postid", id);
-                        sqlHelper.setParams(contentValues);
-                        sqlHelper.executeUrl(false);
-                    }
-                });
-
-                switch (label){
-                    case "assets/img/icon/ic_random-min.png":
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
-                        break;
-                    case "assets/img/icon/ic_for_sale-min.png":
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_for_sale_min));
-                        break;
-                    case "assets/img/icon/ic_required-min.png":
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_required_min));
-                        break;
-                    case "assets/img/icon/ic_achievement-min.png":
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_achievement_min));
-                        break;
-                    case "assets/img/icon/ic_appreciation-min.png":
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_appreciation_min));
-                        break;
-                    case "assets/img/icon/ic_offers-min.png":
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_offers_min));
-                        break;
-                    default:
-                        holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
-                        break;
+                            return true;
+                        }
+                    });
+                    popupMenu.show();
                 }
-                holder.ivLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(((MainActivity) context).isLoggedIn().isEmpty()){
-                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
-                                        case DialogInterface.BUTTON_POSITIVE:
-                                            Intent myIntent = new Intent(context, LoginActivity.class);
-                                            context.startActivity(myIntent);
-                                            break;
-                                        case DialogInterface.BUTTON_NEGATIVE:
-                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
-                                            break;
-                                        default:
-                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
-                                            break;
-                                    }
+
+                private void reportPost(String id) {
+                    SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                    sqlHelper.setExecutePath("postReport.php");
+                    sqlHelper.setActionString("postReport");
+                    sqlHelper.setMethod("POST");
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("postid", id);
+                    sqlHelper.setParams(contentValues);
+                    sqlHelper.executeUrl(false);
+                }
+
+                private void deletePost(String id) {
+                    SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                    sqlHelper.setExecutePath("deletePost.php");
+                    sqlHelper.setActionString("postDelete");
+                    sqlHelper.setMethod("POST");
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("postid", id);
+                    sqlHelper.setParams(contentValues);
+                    sqlHelper.executeUrl(false);
+                }
+            });
+
+            switch (label){
+                case "assets/img/icon/ic_random-min.png":
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
+                    break;
+                case "assets/img/icon/ic_for_sale-min.png":
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_for_sale_min));
+                    break;
+                case "assets/img/icon/ic_required-min.png":
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_required_min));
+                    break;
+                case "assets/img/icon/ic_achievement-min.png":
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_achievement_min));
+                    break;
+                case "assets/img/icon/ic_appreciation-min.png":
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_appreciation_min));
+                    break;
+                case "assets/img/icon/ic_offers-min.png":
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_offers_min));
+                    break;
+                default:
+                    holder.ivPostImageLabel.setImageDrawable(context.getDrawable(R.drawable.ic_random_min));
+                    break;
+            }
+            holder.ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(((MainActivity) context).isLoggedIn().isEmpty()){
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        Intent myIntent = new Intent(context, LoginActivity.class);
+                                        context.startActivity(myIntent);
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                        break;
                                 }
-                            };
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle("Oho!, You are not Logged In");
-                            builder.setMessage("You need to login to like the post").setPositiveButton("Go to login?", dialogClickListener)
-                                    .setNegativeButton("No", dialogClickListener).show();
+                            }
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Oho!, You are not Logged In");
+                        builder.setMessage("You need to login to like the post").setPositiveButton("Go to login?", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener).show();
+                    }
+                    else {
+                        if (holder.filled) {
+                            holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
+                            holder.filled = false;
+                            int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
+                            likeCount = likeCount - 1;
+                            holder.tvPostLikeCount.setText(String.valueOf(likeCount));
+                            profilePostModels.get(position).setLikeCount(String.valueOf(likeCount));
+                            profilePostModels.get(position).setIsLiked("1");
+                            updateLike("delete");
+                        } else {
+                            holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
+                            holder.filled = true;
+                            int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
+                            likeCount =likeCount + 1;
+                            holder.tvPostLikeCount.setText(String.valueOf(likeCount));
+                            profilePostModels.get(position).setLikeCount(String.valueOf(likeCount));
+                            profilePostModels.get(position).setIsLiked("0");
+                            updateLike("add");
+                        }
+                    }
+                }
+
+                private void updateLike(String action) {
+                    SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                    sqlHelper.setExecutePath("updatelike.php");
+                    sqlHelper.setActionString("like");
+                    sqlHelper.setMethod("POST");
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("userid", ((MainActivity) context).isLoggedIn());
+                    contentValues.put("action", action);
+                    contentValues.put("postid", profilePostModels.get(position).getId());
+                    sqlHelper.setParams(contentValues);
+                    sqlHelper.executeUrl(false);
+                }
+            });
+
+            holder.viewMoreComments.setVisibility(View.VISIBLE);
+            if (Integer.valueOf(profilePostModels.get(position).getCommentCount()) <= 3 || holder.loadAllComments || profilePostModels.get(position).isCommentLoaded()){
+                holder.viewMoreComments.setVisibility(View.GONE);
+            }
+
+            holder.viewMoreComments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.loadAllComments = true;
+                    String post_id = profilePostModels.get(position).getId();
+                    SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                    sqlHelper.setExecutePath("getcomments.php");
+                    sqlHelper.setActionString("postComments");
+                    sqlHelper.setMethod("POST");
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("id", post_id);
+                    sqlHelper.setParams(contentValues);
+                    HashMap<String, String> extras = new HashMap<>();
+                    extras.put("position", "" + position);
+                    sqlHelper.setExtras(extras);
+                    sqlHelper.executeUrl(true);
+                    holder.viewMoreComments.setVisibility(View.GONE);
+                    profilePostModels.get(position).setCommentLoaded(true);
+//                            notifyDataSetChanged();
+                }
+            });
+
+            holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(((MainActivity) context).isLoggedIn().isEmpty()){
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        Intent myIntent = new Intent(context, LoginActivity.class);
+                                        context.startActivity(myIntent);
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Oho!, You are not Logged In");
+                        builder.setMessage("You need to login to make bookmark").setPositiveButton("Go to login?", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener).show();
+                    }else {
+
+                        String mapping_id = profilePostModels.get(position).getId();
+                        String is_active = profilePostModels.get(position).getIsBoomarked();
+                        if(holder.bookmarkFilled) {
+                            holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
+                            Toast.makeText(context, "Post have been removed from bookmark", Toast.LENGTH_SHORT).show();
+                            holder.bookmarkFilled= false;
                         }
                         else {
-                            if (holder.filled) {
-                                holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_lik_post_min));
-                                holder.filled = false;
-                                int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
-                                likeCount = likeCount - 1;
-                                holder.tvPostLikeCount.setText(String.valueOf(likeCount));
-                                profilePostModels.get(position).setLikeCount(String.valueOf(likeCount));
-                                profilePostModels.get(position).setIsLiked("1");
-                                updateLike("delete");
-                            } else {
-                                holder.ivLike.setImageDrawable(context.getDrawable(R.drawable.ic_like_post_fill_min));
-                                holder.filled = true;
-                                int  likeCount =Integer.parseInt(holder.tvPostLikeCount.getText().toString());
-                                likeCount =likeCount + 1;
-                                holder.tvPostLikeCount.setText(String.valueOf(likeCount));
-                                profilePostModels.get(position).setLikeCount(String.valueOf(likeCount));
-                                profilePostModels.get(position).setIsLiked("0");
-                                updateLike("add");
-                            }
+                            holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
+                            Toast.makeText(context, "Post have been added to bookmark", Toast.LENGTH_SHORT).show();
+                            holder.bookmarkFilled= true;
                         }
+                        bookmark(mapping_id,is_active);
+                        profilePostModels.get(position).setIsBoomarked(holder.bookmarkFilled ? "1" : "0");
+                        notifyDataSetChanged();
                     }
-
-                    private void updateLike(String action) {
-                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                        sqlHelper.setExecutePath("updatelike.php");
-                        sqlHelper.setActionString("like");
-                        sqlHelper.setMethod("POST");
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("userid", ((MainActivity) context).isLoggedIn());
-                        contentValues.put("action", action);
-                        contentValues.put("postid", profilePostModels.get(position).getId());
-                        sqlHelper.setParams(contentValues);
-                        sqlHelper.executeUrl(false);
-                    }
-                });
-
-                holder.viewMoreComments.setVisibility(View.VISIBLE);
-                if (Integer.valueOf(profilePostModels.get(position).getCommentCount()) <= 3 || holder.loadAllComments || profilePostModels.get(position).isCommentLoaded()){
-                    holder.viewMoreComments.setVisibility(View.GONE);
                 }
 
-                holder.viewMoreComments.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                            holder.loadAllComments = true;
-                            String post_id = profilePostModels.get(position).getId();
-                            SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                            sqlHelper.setExecutePath("getcomments.php");
-                            sqlHelper.setActionString("postComments");
-                            sqlHelper.setMethod("POST");
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put("id", post_id);
-                            sqlHelper.setParams(contentValues);
-                            HashMap<String, String> extras = new HashMap<>();
-                            extras.put("position", "" + position);
-                            sqlHelper.setExtras(extras);
-                            sqlHelper.executeUrl(true);
-                            holder.viewMoreComments.setVisibility(View.GONE);
-                            profilePostModels.get(position).setCommentLoaded(true);
-//                            notifyDataSetChanged();
-                        }
-                });
+                private void bookmark(String mapping_id,String is_active) {
 
-                holder.ivBookmark.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(((MainActivity) context).isLoggedIn().isEmpty()){
-                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
-                                        case DialogInterface.BUTTON_POSITIVE:
-                                            Intent myIntent = new Intent(context, LoginActivity.class);
-                                            context.startActivity(myIntent);
-                                            break;
-                                        case DialogInterface.BUTTON_NEGATIVE:
-                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
-                                            break;
-                                        default:
-                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
-                                            break;
-                                    }
-                                }
-                            };
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle("Oho!, You are not Logged In");
-                            builder.setMessage("You need to login to make bookmark").setPositiveButton("Go to login?", dialogClickListener)
-                                    .setNegativeButton("No", dialogClickListener).show();
-                        }else {
+                    SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                    sqlHelper.setExecutePath("updatebookmarks.php");
+                    sqlHelper.setActionString("bookmark");
+                    sqlHelper.setMethod("POST");
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("userId", ((MainActivity) context).isLoggedIn());
+                    contentValues.put("type", "posts");
+                    contentValues.put("mapping_id", mapping_id);
+                    contentValues.put("is_active", is_active);
+                    sqlHelper.setParams(contentValues);
+                    sqlHelper.executeUrl(false);
+                }
+            });
 
-                            String mapping_id = profilePostModels.get(position).getId();
-                            String is_active = profilePostModels.get(position).getIsBoomarked();
-                            if(holder.bookmarkFilled) {
-                                holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkpost_min));
-                                Toast.makeText(context, "Post have been removed from bookmark", Toast.LENGTH_SHORT).show();
-                                holder.bookmarkFilled= false;
-                            }
-                            else {
-                                holder.ivBookmark.setImageDrawable(context.getDrawable(R.drawable.ic_bookmarkfill_idcard));
-                                Toast.makeText(context, "Post have been added to bookmark", Toast.LENGTH_SHORT).show();
-                                holder.bookmarkFilled= true;
-                            }
-                            bookmark(mapping_id,is_active);
-                            profilePostModels.get(position).setIsBoomarked(holder.bookmarkFilled ? "1" : "0");
-                            notifyDataSetChanged();
-                        }
+            holder.ivShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap bitmap = viewToBitmap(holder.ivPostProfileImage, holder.ivPostProfileImage.getWidth(), holder.ivPostProfileImage.getHeight());
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("*/*");
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    File file = new File(Environment.getExternalStorageDirectory() +
+                            File.separator + "image.jpg");
+                    try {
+                        file.createNewFile();
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        fileOutputStream.write(byteArrayOutputStream.toByteArray());
                     }
-
-                    private void bookmark(String mapping_id,String is_active) {
-
-                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                        sqlHelper.setExecutePath("updatebookmarks.php");
-                        sqlHelper.setActionString("bookmark");
-                        sqlHelper.setMethod("POST");
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("userId", ((MainActivity) context).isLoggedIn());
-                        contentValues.put("type", "posts");
-                        contentValues.put("mapping_id", mapping_id);
-                        contentValues.put("is_active", is_active);
-                        sqlHelper.setParams(contentValues);
-                        sqlHelper.executeUrl(false);
+                    catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
-
-                holder.ivShare.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Bitmap bitmap = viewToBitmap(holder.ivPostProfileImage, holder.ivPostProfileImage.getWidth(), holder.ivPostProfileImage.getHeight());
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setType("*/*");
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                        File file = new File(Environment.getExternalStorageDirectory() +
-                                File.separator + "image.jpg");
-                        try {
-                            file.createNewFile();
-                            FileOutputStream fileOutputStream = new FileOutputStream(file);
-                            fileOutputStream.write(byteArrayOutputStream.toByteArray());
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        String messageBody = profilePostModels.get(position).getDescription();
-                        String messageUser = profilePostModels.get(position).getName();
-                        //String postuser = profilePostModels.get(position).get; //todo : get userid of post
+                    String messageBody = profilePostModels.get(position).getDescription();
+                    String messageUser = profilePostModels.get(position).getName();
+                    //String postuser = profilePostModels.get(position).get; //todo : get userid of post
 //                        String shareBody = "Welcome to Hello My Work.\n\nInstall Hello My work.\n\nhttps://www.hellomywork.com/";
-                        String shareBody = messageBody + "\n\n"+"From "+messageUser+"\n\n"+"Only on HelloMyWork App\n\nInstall the app for the best offers near you\n\n" + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                    String shareBody = messageBody + "\n\n"+"From "+messageUser+"\n\n"+"Only on HelloMyWork App\n\nInstall the app for the best offers near you\n\n" + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
 //                        String imgUri = imageBaseUri+profilePostModels.get(position).getImageUri();
 //                        Uri imgpath = Uri.parse(imgUri);
-                        String shareSub = "Hello my work Invitation";
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() +
-                                File.separator + "image.jpg"));
-                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        ((MainActivity) context).startActivityForResult(Intent.createChooser(shareIntent, "Share using"), 0);
+                    String shareSub = "Hello my work Invitation";
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(Environment.getExternalStorageDirectory() +
+                            File.separator + "image.jpg"));
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ((MainActivity) context).startActivityForResult(Intent.createChooser(shareIntent, "Share using"), 0);
 
-                    }
-                });
+                }
+            });
 
-                holder.tvSendComment.setOnClickListener(new View.OnClickListener() {
+            holder.tvSendComment.setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        //post comment
-                        if(((MainActivity) context).isLoggedIn().isEmpty()){
-                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
-                                        case DialogInterface.BUTTON_POSITIVE:
-                                            Intent myIntent = new Intent(context, LoginActivity.class);
-                                            context.startActivity(myIntent);
-                                            break;
-                                        case DialogInterface.BUTTON_NEGATIVE:
-                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
-                                            break;
-                                        default:
-                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
-                                            break;
-                                    }
+                @Override
+                public void onClick(View v) {
+                    //post comment
+                    if(((MainActivity) context).isLoggedIn().isEmpty()){
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        Intent myIntent = new Intent(context, LoginActivity.class);
+                                        context.startActivity(myIntent);
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                        break;
                                 }
-                            };
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle("Oho!, You are not Logged In");
-                            builder.setMessage("You need to login to make a comment").setPositiveButton("Go to login?", dialogClickListener)
-                                    .setNegativeButton("No", dialogClickListener).show();
-                        }else{
-//                            commentRecyclerView = holder.commentrecyclerView;
-                            String comment = holder.writeComments.getText().toString();
-                            if(comment.trim().isEmpty()){
-
-                            }else {
-                                String us_id = ((MainActivity) context).isLoggedIn();
-                                SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
-                                sqlHelper.setExecutePath("postcomment.php");
-                                sqlHelper.setActionString("commentPost");
-                                sqlHelper.setMethod("POST");
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("u_id", us_id);
-                                contentValues.put("comment", comment);
-                                contentValues.put("p_id", profilePostModels.get(position).getId());
-                                userName = profilePostModels.get(position).getName();
-                                HashMap<String,String> extras = new HashMap<>();
-                                extras.put("position", ""+position);
-                                sqlHelper.setExtras(extras);
-                                sqlHelper.setParams(contentValues);
-                                sqlHelper.executeUrl(true);
-                                holder.writeComments.clearFocus();
-                                holder.writeComments.setText("");
-                                int  commentCount =Integer.parseInt(holder.tvPostCommentCount.getText().toString());
-                                commentCount = commentCount+1;
-                                holder.tvPostCommentCount.setText(String.valueOf(commentCount));
-                                profilePostModels.get(position).setCommentCount(String.valueOf(commentCount));
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                             }
-                        }}
-                });
-
-                holder.writeComments.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        boolean handled = false;
-                        if (actionId == EditorInfo.IME_ACTION_SEND) {
-                            if(((MainActivity) context).isLoggedIn().isEmpty()){
-                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which){
-                                            case DialogInterface.BUTTON_POSITIVE:
-                                                Intent myIntent = new Intent(context, LoginActivity.class);
-                                                context.startActivity(myIntent);
-                                                break;
-                                            case DialogInterface.BUTTON_NEGATIVE:
-                                                Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
-                                                break;
-                                            default:
-                                                Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
-                                                break;
-                                        }
-                                    }
-                                };
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle("Oho!, You are not Logged In");
-                                builder.setMessage("You need to login to make a comment").setPositiveButton("Go to login?", dialogClickListener)
-                                        .setNegativeButton("No", dialogClickListener).show();
-                            }else {
-                                sendMessage();
-                                handled = true;
                             }
-                        }
-                        return handled;
-                    }
-
-                    private void sendMessage() {
-                        commentRecyclerView = holder.commentrecyclerView;
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Oho!, You are not Logged In");
+                        builder.setMessage("You need to login to make a comment").setPositiveButton("Go to login?", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener).show();
+                    }else{
+//                            commentRecyclerView = holder.commentrecyclerView;
                         String comment = holder.writeComments.getText().toString();
                         if(comment.trim().isEmpty()){
 
@@ -638,19 +573,87 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
                             InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                         }
+                    }}
+            });
+
+            holder.writeComments.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    boolean handled = false;
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
+                        if(((MainActivity) context).isLoggedIn().isEmpty()){
+                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Intent myIntent = new Intent(context, LoginActivity.class);
+                                            context.startActivity(myIntent);
+                                            break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        default:
+                                            Toast.makeText(context, "Nothing", Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+                                }
+                            };
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle("Oho!, You are not Logged In");
+                            builder.setMessage("You need to login to make a comment").setPositiveButton("Go to login?", dialogClickListener)
+                                    .setNegativeButton("No", dialogClickListener).show();
+                        }else {
+                            sendMessage();
+                            handled = true;
+                        }
                     }
+                    return handled;
+                }
 
-                });
-                commentsModels = profilePostModels.get(position).getCommentsModels();
-                commentRecyclerView = holder.commentrecyclerView;
-                populateRecycler(commentRecyclerView, commentsModels);
+                private void sendMessage() {
+                    commentRecyclerView = holder.commentrecyclerView;
+                    String comment = holder.writeComments.getText().toString();
+                    if(comment.trim().isEmpty()){
 
-            }catch (Exception e){
+                    }else {
+                        String us_id = ((MainActivity) context).isLoggedIn();
+                        SqlHelper sqlHelper = new SqlHelper(context, ActivityFeedAdapter.this);
+                        sqlHelper.setExecutePath("postcomment.php");
+                        sqlHelper.setActionString("commentPost");
+                        sqlHelper.setMethod("POST");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("u_id", us_id);
+                        contentValues.put("comment", comment);
+                        contentValues.put("p_id", profilePostModels.get(position).getId());
+                        userName = profilePostModels.get(position).getName();
+                        HashMap<String,String> extras = new HashMap<>();
+                        extras.put("position", ""+position);
+                        sqlHelper.setExtras(extras);
+                        sqlHelper.setParams(contentValues);
+                        sqlHelper.executeUrl(true);
+                        holder.writeComments.clearFocus();
+                        holder.writeComments.setText("");
+                        int  commentCount =Integer.parseInt(holder.tvPostCommentCount.getText().toString());
+                        commentCount = commentCount+1;
+                        holder.tvPostCommentCount.setText(String.valueOf(commentCount));
+                        profilePostModels.get(position).setCommentCount(String.valueOf(commentCount));
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
+                }
+
+            });
+            commentsModels = profilePostModels.get(position).getCommentsModels();
+            commentRecyclerView = holder.commentrecyclerView;
+            populateRecycler(commentRecyclerView, commentsModels);
+
+        }catch (Exception e){
 //            EmailHelper emailHelper = new EmailHelper(context, EmailHelper.TECH_SUPPORT, "Error: ActorAdapter", StringHelper.convertStackTrace(e));
 //            emailHelper.sendEmail();
-            }
-
         }
+
+    }
 
     private void populateRecycler(RecyclerView commentrecyclerView, ArrayList<CommentsModel> commentsModels) {
         CommetsAdapter commetsAdapter =new CommetsAdapter(context, commentsModels, commentrecyclerView);
@@ -677,31 +680,35 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     }
 
     @Override
-        public int getItemCount() {
-            return profilePostModels.size();
-        }
+    public int getItemCount() {
+        return profilePostModels.size();
+    }
 
     @Override
     public void onResponse(SqlHelper sqlHelper) {
         String response = sqlHelper.getStringResponse();
         if(sqlHelper.getActionString() == "commentPost"){
             if (response.equals("Success ")){
-                Toast.makeText(context, "Comments Added", Toast.LENGTH_SHORT).show();
-                ContentValues contentValues = sqlHelper.getParams();
-                String userComment = contentValues.get("comment").toString();
-                String userId = contentValues.getAsString("u_id");
-                String pId = contentValues.getAsString("p_id");
-                int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
-                CommentsModel commentsModel = new CommentsModel();
-                commentsModel.setComment(userComment);
-                commentsModel.setCommentName(((MainActivity) context).getUserName());
-                commentsModel.setCommentU_Id(userId);
-                commentsModel.setCommentP_Id(pId);
-                //commentsModels.add(0,commentsModel);
-                profilePostModels.get(pos).getCommentsModels().add(commentsModel);
-                notifyItemChanged(pos);
+                try {
+                    Toast.makeText(context, "Comments Added", Toast.LENGTH_SHORT).show();
+                    ContentValues contentValues = sqlHelper.getParams();
+                    String userComment = contentValues.get("comment").toString();
+                    String userId = contentValues.getAsString("u_id");
+                    String pId = contentValues.getAsString("p_id");
+                    int pos = Integer.parseInt(sqlHelper.getExtras().get("position"));
+                    CommentsModel commentsModel = new CommentsModel();
+                    commentsModel.setComment(userComment);
+                    commentsModel.setCommentName(((MainActivity) context).getUserName());
+                    commentsModel.setCommentU_Id(userId);
+                    commentsModel.setCommentP_Id(pId);
+                    //commentsModels.add(0,commentsModel);
+                    profilePostModels.get(pos).getCommentsModels().add(commentsModel);
+                    notifyItemChanged(pos);
 
 //                populateRecycler(commentRecyclerView,commentsModels);
+                }catch (Exception e){
+                    Toast.makeText(context,"Something went wrong!",Toast.LENGTH_SHORT).show();
+                }
             }
         }
         else if(sqlHelper.getActionString() == "bookmark"){
@@ -770,29 +777,29 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         RecyclerView commentrecyclerView;
         ArrayList<CommentsModel> commentsModels;
         private ImageView ivLike,ivComment,ivShare,ivBookmark;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                tvPostProfileName = itemView.findViewById(R.id.post_item_name);
-                tvPostProfileDes = itemView.findViewById(R.id.post_item_descprition);
-                tvPostProfileLocation = itemView.findViewById(R.id.post_item_loaction);
-                tvPostProfileDate = itemView.findViewById(R.id.post_item_date);
-                tvPostProfileTime = itemView.findViewById(R.id.post_item_time);
-                tvNoImageDesc = itemView.findViewById(R.id.tvNoImageTextDesc);
-                ivPostProfileImage = itemView.findViewById(R.id.post_item_post_image);
-                btnProfilePostOptions = itemView.findViewById(R.id.post_item_shareBTN);
-                ivLike=itemView.findViewById(R.id.iv_LikeButton);
-                ivComment=itemView.findViewById(R.id.iv_Comment);
-                ivShare=itemView.findViewById(R.id.iv_Share);
-                ivBookmark=itemView.findViewById(R.id.iv_Bookmark);
-                writeComments = itemView.findViewById(R.id.editText_WriteComments);
-                commentrecyclerView = itemView.findViewById(R.id.postItemCommentsRV);
-                tvPostCommentCount = itemView.findViewById(R.id.postCommentCount);
-                tvPostLikeCount = itemView.findViewById(R.id.postLikeCount);
-                ivPostImageLabel = itemView.findViewById(R.id.post_item_image_label);
-                tvSendComment = itemView.findViewById(R.id.addComment);
-                viewMoreComments = itemView.findViewById(R.id.view_more_comments);
-            }
+        public ViewHolder(View itemView) {
+            super(itemView);
+            tvPostProfileName = itemView.findViewById(R.id.post_item_name);
+            tvPostProfileDes = itemView.findViewById(R.id.post_item_descprition);
+            tvPostProfileLocation = itemView.findViewById(R.id.post_item_loaction);
+            tvPostProfileDate = itemView.findViewById(R.id.post_item_date);
+            tvPostProfileTime = itemView.findViewById(R.id.post_item_time);
+            tvNoImageDesc = itemView.findViewById(R.id.tvNoImageTextDesc);
+            ivPostProfileImage = itemView.findViewById(R.id.post_item_post_image);
+            btnProfilePostOptions = itemView.findViewById(R.id.post_item_shareBTN);
+            ivLike=itemView.findViewById(R.id.iv_LikeButton);
+            ivComment=itemView.findViewById(R.id.iv_Comment);
+            ivShare=itemView.findViewById(R.id.iv_Share);
+            ivBookmark=itemView.findViewById(R.id.iv_Bookmark);
+            writeComments = itemView.findViewById(R.id.editText_WriteComments);
+            commentrecyclerView = itemView.findViewById(R.id.postItemCommentsRV);
+            tvPostCommentCount = itemView.findViewById(R.id.postCommentCount);
+            tvPostLikeCount = itemView.findViewById(R.id.postLikeCount);
+            ivPostImageLabel = itemView.findViewById(R.id.post_item_image_label);
+            tvSendComment = itemView.findViewById(R.id.addComment);
+            viewMoreComments = itemView.findViewById(R.id.view_more_comments);
         }
+    }
 
     private int getColor(){
         Random rand = new Random();
@@ -818,4 +825,4 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         }
         return color;
     }
-    }
+}

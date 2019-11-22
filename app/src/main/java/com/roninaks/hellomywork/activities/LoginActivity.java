@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                             else{Toasty.error(LoginActivity.this, R.string.password_length_err, Toast.LENGTH_SHORT, false).show();}
                         }
                         else {
-                            Toasty.error(LoginActivity.this, R.string.invalid_cred, Toast.LENGTH_SHORT, false).show();
+                            Toasty.error(LoginActivity.this, "Entered passwords are not same", Toast.LENGTH_SHORT, false).show();
                             editTextPhoneNumber.setText("");
                             editTextPassword.setText("");
                         }
@@ -287,32 +287,12 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
             contentValues.put("password",password);
             sqlHelper.setParams(contentValues);
             sqlHelper.setMethod(getString(R.string.method_post));
-            sqlHelper.executeUrl(true);
+            sqlHelper.executeUrl(false);
         }catch (Exception e){
             EmailHelper emailHelper = new EmailHelper(LoginActivity.this, EmailHelper.TECH_SUPPORT, "Error: LoginActivity", e.getMessage() + "\n" + StringHelper.convertStackTrace(e));
             emailHelper.sendEmail();
         }
     }
-
-    private void checkNumber(String verifyOtp,String message,String userPhone){
-        try {
-            SqlHelper sqlHelper = new SqlHelper(LoginActivity.this, LoginActivity.this);
-            sqlHelper.setExecutePath("test1.php");
-            sqlHelper.setActionString("otp");
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("message",message);
-            contentValues.put("number",userPhone);
-            contentValues.put("OTP",verifyOtp);
-            sqlHelper.setParams(contentValues);
-            sqlHelper.setMethod(getString(R.string.method_post));
-            sqlHelper.executeUrl(true);
-        }catch (Exception e){
-            EmailHelper emailHelper = new EmailHelper(LoginActivity.this, EmailHelper.TECH_SUPPORT, "Error: LoginActivity", e.getMessage() + "\n" + StringHelper.convertStackTrace(e));
-            emailHelper.sendEmail();
-        }
-    }
-
-
 
     @Override
     public void onResponse(SqlHelper sqlHelper) {

@@ -252,50 +252,53 @@ public class ProfileFragment extends Fragment implements SqlDelegate {
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(postadDescrption.getText().toString().trim().isEmpty()){
-                    Toast.makeText(context, "Descrpition is empty", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if (tagButton.equals("")) {
-                        Toast.makeText(context, "Please select a post category", Toast.LENGTH_SHORT).show();
+                try {
+                    if (postadDescrption.getText().toString().trim().isEmpty()) {
+                        Toast.makeText(context, "Descrpition is empty", Toast.LENGTH_SHORT).show();
                     } else {
-                        saveInformation();
-                        refreshData();
-                        fetchProfilePostInfo(context, "fetch_id", "1");
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-                        recyclerView.setLayoutManager(layoutManager);
-                        activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels, rootView, us_id, recyclerView);
-                        recyclerView.setAdapter(activityFeedAdapter);
+                        if (tagButton.equals("")) {
+                            Toast.makeText(context, "Please select a post category", Toast.LENGTH_SHORT).show();
+                        } else {
+                            saveInformation();
+                            refreshData();
+                            fetchProfilePostInfo(context, "fetch_id", "1");
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+                            recyclerView.setLayoutManager(layoutManager);
+                            activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModels, rootView, us_id, recyclerView);
+                            recyclerView.setAdapter(activityFeedAdapter);
 
-                        if (tagButton.equals("assets/img/icon/ic_required-min.png")) {
-                            activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired, rootView, us_id, recyclerView);
-                            recyclerView.setAdapter(activityFeedAdapter);
-                        }
-                        if (tagButton.equals("assets/img/icon/ic_achievement-min.png")) {
-                            activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement, rootView, us_id, recyclerView);
-                            recyclerView.setAdapter(activityFeedAdapter);
-                        }
-                        if (tagButton.equals("assets/img/icon/ic_appreciation-min.png")) {
-                            activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation, rootView, us_id, recyclerView);
-                            recyclerView.setAdapter(activityFeedAdapter);
-                        }
-                        if (tagButton.equals("assets/img/icon/ic_offers-min.png")) {
-                            activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers, rootView, us_id, recyclerView);
-                            recyclerView.setAdapter(activityFeedAdapter);
-                        }
-                        if (tagButton.equals("assets/img/icon/ic_for_sale-min.png")) {
-                            activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale, rootView, us_id, recyclerView);
-                            recyclerView.setAdapter(activityFeedAdapter);
-                        }
-                        setDefaultButton(false);
-                        postadDescrption.setText("");
+                            if (tagButton.equals("assets/img/icon/ic_required-min.png")) {
+                                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsRequired, rootView, us_id, recyclerView);
+                                recyclerView.setAdapter(activityFeedAdapter);
+                            }
+                            if (tagButton.equals("assets/img/icon/ic_achievement-min.png")) {
+                                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAchivement, rootView, us_id, recyclerView);
+                                recyclerView.setAdapter(activityFeedAdapter);
+                            }
+                            if (tagButton.equals("assets/img/icon/ic_appreciation-min.png")) {
+                                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsAppreciation, rootView, us_id, recyclerView);
+                                recyclerView.setAdapter(activityFeedAdapter);
+                            }
+                            if (tagButton.equals("assets/img/icon/ic_offers-min.png")) {
+                                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsOffers, rootView, us_id, recyclerView);
+                                recyclerView.setAdapter(activityFeedAdapter);
+                            }
+                            if (tagButton.equals("assets/img/icon/ic_for_sale-min.png")) {
+                                activityFeedAdapter = new ActivityFeedAdapter(context, profilePostModelsForSale, rootView, us_id, recyclerView);
+                                recyclerView.setAdapter(activityFeedAdapter);
+                            }
+                            setDefaultButton(false);
+                            postadDescrption.setText("");
 
-                        //change button after post
-                        buttonPost.setBackgroundResource(R.drawable.career_button_color_radius);
-                        buttonPost.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
-                        buttonImageUpload.setBackgroundResource(R.drawable.card_background_shape);
-                        buttonImageUpload.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+                            //change button after post
+                            buttonPost.setBackgroundResource(R.drawable.career_button_color_radius);
+                            buttonPost.setTextColor(getResources().getColor(R.color.colorTextWhitePrimary));
+                            buttonImageUpload.setBackgroundResource(R.drawable.card_background_shape);
+                            buttonImageUpload.setTextColor(getResources().getColor(R.color.colorTextBlackPrimary));
+                        }
                     }
+                }catch (Exception e){
+                    Toast.makeText(context,"Something went wrong!! Please try again",Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -248,6 +248,7 @@ HELLOmywork is determinant to provide to our service providers the best possible
     <string name="admin_login_password_hint">Password</string>
     <string name="back_to_home">Back to home</string>
     <string name="options_logout">Logout</string>
+    <string name="rating_comments">Comments</string>
     <string-array name="org_array">
         <item>Organisation</item>
         <item>Private</item>
