@@ -106,7 +106,7 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
         buttonForsale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagButton = "assets/img/icon/ic_ForSale-min.png";
+                tagButton = "assets/img/icon/ic_for_sale-min.png";
                 setButtonActive(buttonForsale);
             }
         });
@@ -120,28 +120,28 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
         buttonRequired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagButton = "assets/img/icon/ic_Required-min.png";
+                tagButton = "assets/img/icon/ic_required-min.png";
                 setButtonActive(buttonRequired);
             }
         });
         buttonAchievemnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagButton = "assets/img/icon/ic_Achievement-min.png";
+                tagButton = "assets/img/icon/ic_achievement-min.png";
                 setButtonActive(buttonAchievemnet);
             }
         });
         buttonAppreciations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagButton = "assets/img/icon/ic_Appreciations-min.png";
+                tagButton = "assets/img/icon/ic_appreciation-min.png";
                 setButtonActive(buttonAppreciations);
             }
         });
         buttonOffers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagButton = "assets/img/icon/ic_Offers-min.png";
+                tagButton = "assets/img/icon/ic_offers-min.png";
                 setButtonActive(buttonOffers);
             }
         });
@@ -149,11 +149,15 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etPostAd.equals("")){
+                if(etPostAd.getText().toString().trim().isEmpty()){
                     Toast.makeText(context, "Descrpition is empty", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    saveInformation();
+                    try {
+                        saveInformation();
+                    }catch (Exception e){
+                        Toast.makeText(context,"Something went wrong!! Please try again",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -191,7 +195,7 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
         ContentValues params = new ContentValues();
         params.put("u_id", ((MainActivity) context).isLoggedIn());
         params.put("des", etPostAd.getText().toString());
-        params.put("tag", tagButton);
+        params.put("tag", tagButton.toLowerCase());
         params.put("image", imageChanged ? StringHelper.imageToString(bitmap) : "1");
         params.put("mob", "1");
         sqlHelper.setParams(params);
@@ -229,6 +233,7 @@ public class PostAdFragment extends DialogFragment implements SqlDelegate {
                 case "submit":{
                     Toast.makeText(context, "Posted Successfully", Toast.LENGTH_SHORT).show();
                     dismiss();
+                    bitmap = null;
                     break;
                 }
             }

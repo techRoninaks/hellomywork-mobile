@@ -139,6 +139,16 @@
             android:orientation="vertical"
             android:id="@+id/containerService">
 
+
+            <TextView
+                android:id="@+id/services_noresults"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:text="No results"
+                android:gravity="center" />
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvServices"
                 android:layout_width="match_parent"
@@ -195,6 +205,7 @@
             android:orientation="vertical"
             android:id="@+id/containerUnions"
             android:visibility="gone">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,3 +1,4 @@
+
 package com.roninaks.hellomywork.fragments;
 
 import android.content.Context;
@@ -9,36 +10,52 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.roninaks.hellomywork.R;
 
-
-public class ManageCustomerFragment extends Fragment {
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link MoreOptionsFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link MoreOptionsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class MoreOptionsFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
+    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private Context context;
-    private WebView webViewManageCustomer;
     private View rootview;
+
+    String[] array = {"Manage Categories","Manage Unions","Manage Tasks","Manage Contests",
+            "Manage Leads","Manage Posts","Import Data","Add new Customer","Ad Management"};
 
     private OnFragmentInteractionListener mListener;
 
-    public ManageCustomerFragment() {
+    public MoreOptionsFragment() {
         // Required empty public constructor
     }
 
-    public static ManageCustomerFragment newInstance(String param1, String param2) {
-        ManageCustomerFragment fragment = new ManageCustomerFragment();
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment MoreOptionsFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static MoreOptionsFragment newInstance(String param1, String param2) {
+        MoreOptionsFragment fragment = new MoreOptionsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,25 +77,16 @@ public class ManageCustomerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         context = getActivity();
-        rootview = inflater.inflate(R.layout.fragment_manage_customer, container, false);
+        rootview = inflater.inflate(R.layout.fragment_more_options, container, false);
 
-        webViewManageCustomer = rootview.findViewById(R.id.webview_customer_manage);
-        webViewManageCustomer.setWebViewClient(new WebViewClient());
-        WebSettings webSettings = webViewManageCustomer.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webViewManageCustomer.loadUrl("https://www.hellomywork.com/admin/customer.html");
-
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            CookieManager.getInstance().setAcceptThirdPartyCookies(webViewManageCustomer, true);
-        } else {
-            CookieManager.getInstance().setAcceptCookie(true);
-        }
-
-
+        ArrayAdapter adapter = new ArrayAdapter<String>(context,R.layout.item_individual_more_optoins,R.id.tV_item_more_option,array);
+        ListView listView = (ListView) rootview.findViewById(R.id.listview_moreoptions);
+        listView.setAdapter(adapter);
+        // Inflate the layout for this fragment
         return rootview;
     }
 
-
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -113,7 +121,7 @@ public class ManageCustomerFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-
+        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

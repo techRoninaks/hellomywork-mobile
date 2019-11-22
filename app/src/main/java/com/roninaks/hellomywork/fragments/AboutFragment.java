@@ -8,11 +8,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.roninaks.hellomywork.R;
+import com.roninaks.hellomywork.activities.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +36,7 @@ public class AboutFragment extends Fragment {
     private TextView tvAbout;
     private View rootView;
     private Context context;
+    private ImageView ivBack;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,6 +77,7 @@ public class AboutFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_about, container, false);
         context = getActivity();
         tvAbout = (TextView) rootView.findViewById(R.id.tvAbout);
+        ivBack = rootView.findViewById(R.id.backBtnAboutus);
 
         //Setting Defaults
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -81,6 +85,13 @@ public class AboutFragment extends Fragment {
         } else {
             tvAbout.setText(Html.fromHtml(context.getString(R.string.about_content)));
         }
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).onBackPressed();
+            }
+        });
         return rootView;
     }
 

@@ -27,29 +27,29 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tvMainRating"
                 android:textColor="@color/colorTextWhitePrimary"
-                android:text="3.5"
+                android:text="0"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"
                 android:textSize="@dimen/font_page_title"/>
         </RelativeLayout>
         <!-- Total Ratings -->
         <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="105 people watched"
-           android:textColor="@color/colorTextBlackSecondary"
-           android:textSize="@dimen/font_text_important"
-           android:textStyle="bold"
-           android:id="@+id/tvRatingCount"
-           android:layout_marginTop="@dimen/standard_gap_medium"
-           android:layout_marginBottom="@dimen/standard_gap_medium"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 people watched"
+            android:textColor="@color/colorTextBlackSecondary"
+            android:textSize="@dimen/font_text_important"
+            android:textStyle="bold"
+            android:id="@+id/tvRatingCount"
+            android:layout_marginTop="@dimen/standard_gap_medium"
+            android:layout_marginBottom="@dimen/standard_gap_medium"/>
         <!-- Ratings Bar -->
         <RatingBar
             style="@style/CustomRatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:rating="4.5"
+            android:rating="0"
             android:id="@+id/rb_UserRating"
             android:stepSize="1"
             android:layout_marginTop="@dimen/standard_gap_medium"
@@ -57,31 +57,31 @@
             />
         <!-- Review Text -->
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/containerEditTextName"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/standard_gap_large"
+            android:layout_marginRight="@dimen/standard_gap_large"
+            android:layout_marginTop="@dimen/standard_gap_medium"
+            android:layout_marginBottom="@dimen/standard_gap_medium"
+            android:background="@drawable/custom_textview"
+            android:paddingTop="@dimen/standard_gap_medium"
+            android:paddingBottom="@dimen/standard_gap_medium"
+            android:paddingStart="@dimen/standard_gap_large">
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/containerEditTextName"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/standard_gap_large"
-                android:layout_marginRight="@dimen/standard_gap_large"
-                android:layout_marginTop="@dimen/standard_gap_medium"
-                android:layout_marginBottom="@dimen/standard_gap_medium"
-                android:background="@drawable/custom_textview"
-                android:paddingTop="@dimen/standard_gap_medium"
-                android:paddingBottom="@dimen/standard_gap_medium"
-                android:paddingStart="@dimen/standard_gap_large">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/etReview"
-                    android:hint="@string/ps_name"
-                    android:background="@android:color/transparent"
-                    android:layout_marginStart="@dimen/standard_gap_extra_small"
-                    android:layout_marginEnd="@dimen/standard_gap_extra_small"
-                    android:maxLines="1"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:textSize="@dimen/font_inputs"/>
-            </LinearLayout>
+                android:id="@+id/etReview"
+                android:hint="@string/rating_comments"
+                android:background="@android:color/transparent"
+                android:layout_marginStart="@dimen/standard_gap_extra_small"
+                android:layout_marginEnd="@dimen/standard_gap_extra_small"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textSize="@dimen/font_inputs"/>
+        </LinearLayout>
         <!-- Submit Button -->
         <Button
             android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAlignment="textStart"
-                android:text="203 Reviews"
+                android:text="0 Reviews"
                 android:textColor="@color/colorTextBlackPrimary"
                 android:textStyle="bold"
                 android:textSize="@dimen/font_list_title"

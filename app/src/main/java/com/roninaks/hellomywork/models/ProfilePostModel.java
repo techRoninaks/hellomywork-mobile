@@ -16,6 +16,17 @@ public class ProfilePostModel {
     private String isBoomarked ;
     private String isLiked ;
     private String imageLabel;
+    private boolean commentLoaded;
+
+
+    public ProfilePostModel(){
+        commentLoaded = false;
+    }
+
+
+    public boolean isCommentLoaded() {
+        return commentLoaded;
+    }
 
     public String getImageLabel() {
         return imageLabel;
@@ -122,4 +133,6 @@ public class ProfilePostModel {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public void setCommentLoaded(boolean commentLoaded){this.commentLoaded = commentLoaded;}
 }

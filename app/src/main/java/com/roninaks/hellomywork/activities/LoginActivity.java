@@ -30,8 +30,6 @@ import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
 
-import static com.roninaks.hellomywork.activities.RegisterActivity.generateOtp;
-
 public class LoginActivity extends AppCompatActivity implements SqlDelegate {
 
     //This is a test commit
@@ -96,10 +94,15 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         try{
                             if (userPhone.length() > 9) {
                                 String genOtp =generateOtp();
-                                checkNumber(genOtp, "OTP for verification is ", userPhone);
-                                SharedPreferences sharedPreferences  = LoginActivity.this.getSharedPreferences("hwm",0);
-                                sharedPreferences.edit().putString("otp",genOtp).commit();
+//                                checkNumber(genOtp, "OTP for verification is " + genOtp, userPhone);
+//                                SharedPreferences sharedPreferences  = LoginActivity.this.getSharedPreferences("hwm",0);
+//                                sharedPreferences.edit().putString("otp",genOtp).commit();
                                 Intent intent = new Intent(LoginActivity.this, verifyOtpActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("name","$%5login5%$");
+                                bundle.putString("phone", editTextPhoneNumber.getText().toString());
+                                bundle.putString("otp", genOtp);
+                                intent.putExtra("bundle", bundle);
                                 intent.putExtra("change_pass", true);
                                 startActivity(intent);
                             }
@@ -126,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                             else{Toasty.error(LoginActivity.this, R.string.password_length_err, Toast.LENGTH_SHORT, false).show();}
                         }
                         else {
-                            Toasty.error(LoginActivity.this, R.string.invalid_cred, Toast.LENGTH_SHORT, false).show();
+                            Toasty.error(LoginActivity.this, "Entered passwords are not same", Toast.LENGTH_SHORT, false).show();
                             editTextPhoneNumber.setText("");
                             editTextPassword.setText("");
                         }
@@ -145,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                 try {
                     switch (view.getId()) {
                         case R.id.textView_SignUp:
+                            finish();
                             Intent myIntent = new Intent(LoginActivity.this,RegisterActivity.class);
                             startActivity(myIntent);
                             break;
@@ -283,33 +287,12 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
             contentValues.put("password",password);
             sqlHelper.setParams(contentValues);
             sqlHelper.setMethod(getString(R.string.method_post));
-            sqlHelper.executeUrl(true);
+            sqlHelper.executeUrl(false);
         }catch (Exception e){
             EmailHelper emailHelper = new EmailHelper(LoginActivity.this, EmailHelper.TECH_SUPPORT, "Error: LoginActivity", e.getMessage() + "\n" + StringHelper.convertStackTrace(e));
             emailHelper.sendEmail();
         }
     }
-
-    private void checkNumber(String verifyOtp,String message,String userPhone){
-        try {
-            SqlHelper sqlHelper = new SqlHelper(LoginActivity.this, LoginActivity.this);
-            sqlHelper.setExecutePath("test.php");
-            sqlHelper.setActionString("otp");
-            String verOtp = String.valueOf(verifyOtp);
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("message",message);
-            contentValues.put("number",userPhone);
-            contentValues.put("OTP",verOtp);
-            sqlHelper.setParams(contentValues);
-            sqlHelper.setMethod(getString(R.string.method_post));
-            sqlHelper.executeUrl(true);
-        }catch (Exception e){
-            EmailHelper emailHelper = new EmailHelper(LoginActivity.this, EmailHelper.TECH_SUPPORT, "Error: LoginActivity", e.getMessage() + "\n" + StringHelper.convertStackTrace(e));
-            emailHelper.sendEmail();
-        }
-    }
-
-
 
     @Override
     public void onResponse(SqlHelper sqlHelper) {
@@ -317,20 +300,24 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
             switch (sqlHelper.getActionString()){
                 case "login": {
                     JSONObject jsonObject = sqlHelper.getJSONResponse();
-                    String response = "";
+                    String responseUserId = "";
+                    String responseUserName = "";
                     try {
-                        response = jsonObject.getString("userId");
+                        responseUserId = jsonObject.getString("userId");
+                        responseUserName = jsonObject.getString("userName");
                     } catch (Exception e) {
-                        response = "unsuccessful";
+                        responseUserId = "unsuccessful";
                     }
-                    if (!(response.equals("unsuccessful"))) {
+                    if (!(responseUserId.equals("unsuccessful"))) {
                         SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
-                        sharedPreferences.edit().putString("user_id", response)
+                        sharedPreferences.edit().putString("user_id", responseUserId)
+                                .commit();
+                        sharedPreferences.edit().putString("user_name", responseUserName)
                                 .commit();
                         sharedPreferences.edit().putBoolean("is_loggedin",true).commit();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
-                    } else if (response.equals("unsuccessful")) {
+                    } else if (responseUserId.equals("unsuccessful")) {
                         editTextPassword.setText("");
                         editTextPhoneNumber.setText("");
                         if (errorCount % ERROR_THRESHOLD == 0) {
@@ -359,7 +346,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                             errorCount++;
                             Toasty.error(LoginActivity.this, R.string.invalid_cred, Toast.LENGTH_SHORT, false).show();
                         }
-                    } else if (response.equals(getString(R.string.exception))) {
+                    } else if (responseUserId.equals(getString(R.string.exception))) {
                         Toast.makeText(LoginActivity.this, getString(R.string.unexpected), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -373,28 +360,31 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
                         response = "null";
                     }
 
-                    if (response.equals("null")) {
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                                        break;
-
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        dialog.dismiss();
-                                        break;
-                                }
-                            }
-                        };
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
-                        alertDialog.setTitle("Register");
-                        alertDialog.setMessage("Number does not exist in database.Do you want to register?");
-                        alertDialog.setPositiveButton(R.string.confirmation_yes, dialogClickListener);
-                        alertDialog.setNegativeButton(R.string.confirmation_no, dialogClickListener);
-                        alertDialog.show();
-                    }
+//                    if (response.equals("null")) {
+//                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                switch (which) {
+//                                    case DialogInterface.BUTTON_POSITIVE:
+//                                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+//                                        break;
+//
+//                                    case DialogInterface.BUTTON_NEGATIVE:
+//                                        dialog.dismiss();
+//                                        break;
+//                                }
+//                            }
+//                        };
+//                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+//                        alertDialog.setTitle("Register");
+//                        alertDialog.setMessage("Number does not exist in database.Do you want to register?");
+//                        alertDialog.setPositiveButton(R.string.confirmation_yes, dialogClickListener);
+//                        alertDialog.setNegativeButton(R.string.confirmation_no, dialogClickListener);
+//                        alertDialog.show();
+//                    }
+//                    else{
+//
+//                    }
 
                 }break;
 
@@ -423,6 +413,7 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
         editTextPassword.setVisibility(View.VISIBLE);
         editTextPassword.setHint("Re-enter password");
         editTextPassword.setText("");
+        tvForgotPassword.setVisibility(View.GONE);
         btnLogIn.setText(getString(R.string.save_password));
 
     }
@@ -435,6 +426,13 @@ public class LoginActivity extends AppCompatActivity implements SqlDelegate {
         editTextPassword.setText("");
         tvForgotPassword.setVisibility(View.VISIBLE);
         btnLogIn.setText(getString(R.string.login_button));
+    }
+
+    private static String generateOtp(){
+        double randomOtp;
+        randomOtp = Math.floor(100000 + Math.random() * 900000);
+        int x = (int) randomOtp;
+        return String.valueOf(x);
     }
 
 }

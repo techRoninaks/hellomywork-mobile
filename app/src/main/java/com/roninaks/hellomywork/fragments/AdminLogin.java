@@ -7,12 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.roninaks.hellomywork.R;
@@ -43,6 +45,7 @@ public class AdminLogin extends Fragment implements SqlDelegate {
     //Private Members
     private EditText etEmail, etPassword;
     private Button btnSubmit;
+    private ImageView btnBack;
     private View rootView;
     private Context context;
     private OnFragmentInteractionListener mListener;
@@ -89,8 +92,10 @@ public class AdminLogin extends Fragment implements SqlDelegate {
             Fragment fragment = DashboardFragment.newInstance(sharedPreferences.getString("emp_id", ""), sharedPreferences.getString("emp_name", ""));
             ((AdminActivity) context).initFragment(fragment, "Dashboard");
         }
+        ((AdminActivity) context).hideFab();
         etEmail = (EditText) rootView.findViewById(R.id.etEmail);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
+        btnBack = rootView.findViewById(R.id.imgBack);
         btnSubmit = (Button) rootView.findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +103,12 @@ public class AdminLogin extends Fragment implements SqlDelegate {
                 if(validate()){
                     attemptSignup();
                 }
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AdminActivity) context).onBackPressed();
             }
         });
         return rootView;
@@ -140,6 +151,10 @@ public class AdminLogin extends Fragment implements SqlDelegate {
                         sharedPreferences.edit().putBoolean("is_loggedin_admin", true).commit();
                         sharedPreferences.edit().putString("emp_id", jsonObject.getString("userId")).commit();
                         sharedPreferences.edit().putString("emp_name", jsonObject.getString("userName")).commit();
+                        int count = ((AdminActivity) context).getSupportFragmentManager().getBackStackEntryCount();
+                        if (count > 0) {
+                            ((AdminActivity) context).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        }
                         Fragment fragment = DashboardFragment.newInstance(jsonObject.getString("userId"), jsonObject.getString("userName"));
                         ((AdminActivity) context).initFragment(fragment, "Dashboard");
                     }
@@ -192,14 +207,20 @@ public class AdminLogin extends Fragment implements SqlDelegate {
     }
 
     private void attemptSignup(){
-        SqlHelper sqlHelper = new SqlHelper(context, AdminLogin.this);
-        sqlHelper.setExecutePath("admin/login/assets/php/login.php");
-        sqlHelper.setMethod("POST");
-        sqlHelper.setActionString("login");
-        ContentValues params = new ContentValues();
-        params.put("userEmail", etEmail.getText().toString());
-        params.put("userPassword", etPassword.getText().toString());
-        sqlHelper.setParams(params);
-        sqlHelper.executeUrl(true);
-    }
+        try {
+            SqlHelper sqlHelper = new SqlHelper(context, AdminLogin.this);
+            sqlHelper.setMasterUrl(context.getString(R.string.master_url));
+            sqlHelper.setExecutePath("admin/login/assets/php/login.php");
+            sqlHelper.setMethod("POST");
+            sqlHelper.setActionString("login");
+            ContentValues params = new ContentValues();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userEmail", etEmail.getText().toString());
+            jsonObject.put("userPassword", etPassword.getText().toString());
+            params.put("jsonObj", jsonObject.toString());
+            sqlHelper.setParams(params);
+            sqlHelper.executeUrl(true);
+        }
+        catch(Exception e){}
+        }
 }

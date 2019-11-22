@@ -19,27 +19,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/llContainerHeader"
-                android:paddingTop="@dimen/standard_gap_large"
-                android:paddingBottom="@dimen/standard_gap_large">
+                android:paddingTop="@dimen/standard_gap_small"
+                android:background="@color/colorNavigationBarBkg">
                 <ImageView
-                    android:layout_width="@dimen/icon_contact"
-                    android:layout_height="@dimen/icon_contact"
-                    android:src="@drawable/ic_back_black"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_back_white"
                     android:id="@+id/imgBack"
+                    android:padding="@dimen/standard_gap_small"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginLeft="@dimen/standard_gap_large"/>
+                    android:layout_marginStart="@dimen/standard_gap_large"
+                    android:layout_marginEnd="@dimen/standard_gap_large"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/Careers_main_title"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorTextBlackPrimary"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/font_page_title"
-                    android:textAlignment="center"
+                    android:layout_below="@+id/imgBack"
+                    android:layout_alignBottom="@+id/imgBack"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"/>
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="-31dp"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/Careers_main_title"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorTextWhitePrimary"
+                    android:textSize="@dimen/font_page_title"
+                    android:textStyle="bold" />
             </RelativeLayout>
             <!-- Banner Section -->
             <LinearLayout
@@ -101,6 +108,8 @@
                         android:layout_marginLeft="25dp"
                         android:hint="@string/careers_name_hint"
                         android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:background="@drawable/career_edit_background"
                         android:id="@+id/careerNameEditText"
                         />
@@ -112,6 +121,7 @@
                         android:layout_marginLeft="25dp"
                         android:padding="10dp"
                         android:hint="@string/careers_address_hint"
+                        android:imeOptions="actionNext"
                         android:background="@drawable/career_edit_background"
                         android:id="@+id/careerAddressEditText"/>
                     <LinearLayout
@@ -128,6 +138,8 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginRight="25dp"
                             android:layout_weight=".5"
+                            android:imeOptions="actionNext"
+                            android:singleLine="true"
                             android:background="@drawable/career_edit_background"
                             android:hint="@string/careers_primaryphone_hint"
                             android:inputType="number"
@@ -141,6 +153,8 @@
                         android:layout_marginLeft="25dp"
                         android:padding="10dp"
                         android:hint="@string/careers_email_hint"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:background="@drawable/career_edit_background"
                         android:id="@+id/careerEmailEditText"/>
                     <LinearLayout
@@ -160,6 +174,8 @@
                             android:layout_weight=".5"
                             android:background="@drawable/career_edit_background"
                             android:hint="@string/careers_secondaryphone_hint"
+                            android:imeOptions="actionNext"
+                            android:singleLine="true"
                             android:inputType="number"
                             android:padding="10dp" />
 
@@ -175,6 +191,8 @@
                             android:background="@drawable/career_edit_background"
                             android:hint="@string/careers_whatsapp_two_hint"
                             android:inputType="number"
+                            android:imeOptions="actionNext"
+                            android:singleLine="true"
                             android:padding="10dp" />
                     </LinearLayout>
 
@@ -182,14 +200,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:weightSum="5"
+                        android:baselineAligned="true">
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:layout_marginBottom="25dp"
                             android:text="@string/careers_upload_text"
-                            android:layout_gravity="left"
+                            android:layout_weight="1"
                             android:textColor="@color/colorTextBlackPrimary"
                             android:background="@drawable/career_button_radius"
                             android:elevation="8dp"
@@ -197,12 +216,17 @@
                             android:id="@+id/careerUploadBTN"
                             />
 
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"/>
+
                         <Button
                             android:id="@+id/careerSubmitBTN"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right|end"
-                            android:layout_marginLeft="25dp"
+                            android:layout_weight="1"
+                            android:padding="@dimen/standard_gap_small"
                             android:background="@drawable/career_button_color_radius"
                             android:elevation="8dp"
                             android:text="@string/careers_submit_text"

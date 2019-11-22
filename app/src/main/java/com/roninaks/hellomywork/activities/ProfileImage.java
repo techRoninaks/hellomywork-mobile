@@ -55,7 +55,7 @@ public class ProfileImage extends Activity implements SqlDelegate {
             requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.profile_default);
             requestOptions.error(R.drawable.profile_default);
-            uploadUrl = ProfileImage.this.getString(R.string.master_url) + "upload.php";
+            uploadUrl = ProfileImage.this.getString(R.string.master_url) + ProfileImage.this.getString(R.string.driver_path) + "upload.php";
             imageView = findViewById(R.id.imageView);
             btnCamera = findViewById(R.id.btn_Camera);
             btnGallery = findViewById(R.id.btn_Gallery);

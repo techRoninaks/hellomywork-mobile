@@ -48,18 +48,18 @@ public class SqlHelper {
 
     //Constructors
     public SqlHelper(Context context){
-        MasterUrl = context.getString(R.string.master_url);
+        MasterUrl = context.getString(R.string.master_url) + context.getString(R.string.driver_path);
         this.context = context;
         isService = false;
     }
     public SqlHelper(Context context, SqlDelegate sqlDelegate){
         this.context = context;
         this.sqlDelegate = sqlDelegate;
-        MasterUrl = context.getString(R.string.master_url);
+        MasterUrl = context.getString(R.string.master_url) + context.getString(R.string.driver_path);
         isService = false;
     }
     public SqlHelper(Context context, SqlDelegate sqlDelegate, String executePath){
-        this.MasterUrl = context.getString(R.string.master_url);
+        this.MasterUrl = context.getString(R.string.master_url) + context.getString(R.string.driver_path);
         this.context = context;
         this.ExecutePath = executePath;
         this.sqlDelegate = sqlDelegate;

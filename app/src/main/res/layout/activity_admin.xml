@@ -47,7 +47,7 @@
     </LinearLayout>
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
-        android:id="@+id/navigation"
+        android:id="@+id/navigation_bar_admin"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         android:layout_marginEnd="0dp"
@@ -58,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation"
+        app:menu="@menu/navigation_admin"
         app:itemBackground="@android:color/transparent"
         app:itemTextColor="@color/colorTextWhitePrimary"
         app:itemIconTint="@color/colorTextWhitePrimary"/>

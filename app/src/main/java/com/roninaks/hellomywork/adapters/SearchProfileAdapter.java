@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +136,15 @@ public class SearchProfileAdapter extends RecyclerView.Adapter implements SqlDel
                         ((MainActivity) context).initFragment(fragment);
                     }
                 });
-                View.OnClickListener actionListeners = new View.OnClickListener() {
+                if(!serviceProviderModels.get(position).isPremium()){
+                    ((ProfileViewHolder) holder).llIdCard.setBackgroundResource(R.drawable.id_card_free_blue);
+                }else if(serviceProviderModels.get(position).getOrgType().equals("personel") && serviceProviderModels.get(position).isPremium()){
+                    ((ProfileViewHolder) holder).llIdCard.setBackgroundResource(R.drawable.id_card_premium_green);
+                }else if (serviceProviderModels.get(position).getOrgType().equals("company")){
+                    ((ProfileViewHolder) holder).llIdCard.setBackgroundResource(R.drawable.id_card_premium_gold);
+                }
+
+                    View.OnClickListener actionListeners = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switch (v.getId()) {
@@ -332,7 +341,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter implements SqlDel
 //        Typeface tfRegular = Typeface.createFromAsset(context.getAssets(), "fonts/myriadpro.otf");
         TextView tvPremium, tvName, tvRole, tvLocation, tvRating;
         ImageView ivProfile, ivQr, ivWhatsapp, ivPhone, ivEmail, ivBookmark;
-        LinearLayout llMaster;
+        LinearLayout llMaster,llIdCard;
         public ProfileViewHolder(View itemView) {
             super(itemView);
             ivWhatsapp = itemView.findViewById(R.id.imgWhatsapp);
@@ -347,6 +356,7 @@ public class SearchProfileAdapter extends RecyclerView.Adapter implements SqlDel
             tvRating = itemView.findViewById(R.id.tvRating);
             llMaster = itemView.findViewById(R.id.containerMaster);
             ivProfile = itemView.findViewById(R.id.imgProfile);
+            llIdCard = itemView.findViewById(R.id.llIdCard);
         }
     }
 
