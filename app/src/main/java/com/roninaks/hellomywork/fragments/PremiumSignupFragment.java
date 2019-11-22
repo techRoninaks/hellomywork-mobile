@@ -463,7 +463,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         params.put("country", "IN");
         params.put("type", spOrgType.getSelectedItem().toString());
         String address = etAddress.getText().toString();
-        address = address.replace(" ", "&#32;");
+//        address = address.replace(" ", "&#32;");
         params.put("address", address);
         params.put("state", spState.getSelectedItem().toString());
         params.put("location", spLocation.getSelectedItem().toString());
@@ -499,7 +499,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         params.put("country", "IN");
         params.put("type", spOrgType.getSelectedItem().toString());
         String address = etAddress.getText().toString();
-        address = address.replace(" ", "&#32;");
+//        address = address.replace(" ", "&#32;");
         params.put("address", address);
         params.put("state", spState.getSelectedItem().toString());
         params.put("location", spLocation.getSelectedItem().toString());
