@@ -148,10 +148,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             holder.tvPostLikeCount.setText(profilePostModels.get(position).getLikeCount());
             holder.tvPostCommentCount.setText(profilePostModels.get(position).getCommentCount());
             holder.commentsModels = new ArrayList<>();
-            Glide.with(context)
-                    .setDefaultRequestOptions(requestOptions
-                            .centerCrop()
-                    )
+            Glide.with(context).setDefaultRequestOptions(requestOptions
+            )
                     .asBitmap()
                     .load(baseImagePostUrl + profilePostModels.get(position).getImageUri())
                     .listener(new RequestListener<Bitmap>() {

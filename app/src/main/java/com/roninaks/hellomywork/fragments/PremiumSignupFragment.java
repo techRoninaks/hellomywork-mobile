@@ -485,7 +485,7 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
 
     private void submitInformation(){
         SqlHelper sqlHelper = new SqlHelper(context, PremiumSignupFragment.this);
-        sqlHelper.setExecutePath("postprofiledata.php");
+        sqlHelper.setExecutePath(type.equals("new") ? "postprofiledata.php" : "updateprofiledata.php");
         sqlHelper.setMethod("POST");
         sqlHelper.setActionString("submit");
         ContentValues params = new ContentValues();

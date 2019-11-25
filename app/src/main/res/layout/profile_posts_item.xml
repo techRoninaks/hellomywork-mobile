@@ -105,9 +105,12 @@
                         <ImageView
                             android:id="@+id/post_item_post_image"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerInside"
+                            android:adjustViewBounds="true"
                             android:layout_marginBottom="20dp"
-                            android:src="@drawable/union_banner_photo" />
+                            android:maxHeight="300dp"
+                            android:src="@drawable/test" />
 
                         <ImageView
                             android:layout_width="90dp"

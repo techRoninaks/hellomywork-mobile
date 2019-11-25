@@ -245,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity implements SqlDelegate{
             }
 
             //user not in database
-            if (!response.equals("")) {
+            if (!response.equals("") || (!response_number.equals("") && response_isActive.equals("0"))) {
                 SharedPreferences sharedPreferences = this.getSharedPreferences("hmw", 0);
 //                sharedPreferences.edit().putString("otp", String.valueOf(verifyOtp)).commit();
                 sharedPreferences.edit().putBoolean("change_pass",false).commit();
