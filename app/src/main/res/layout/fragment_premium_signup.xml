@@ -247,40 +247,50 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/containerSpinnerCountry"
+                            android:id="@+id/containerACCountry"
                             android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/standard_gap_large"
                             android:layout_marginRight="@dimen/standard_gap_small"
-                            android:background="@drawable/custom_textview_white"
+                            android:background="@drawable/custom_textview"
                             android:paddingTop="@dimen/standard_gap_medium"
                             android:paddingBottom="@dimen/standard_gap_medium"
                             android:paddingStart="@dimen/standard_gap_large"
                             android:layout_weight="1">
-                            <Spinner
+                            <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/colorNavigationBarBkg"
-                                android:tooltipText="@string/ps_country"
-                                android:id="@+id/spinner_country"></Spinner>
+                                android:id="@+id/ac_country"
+                                android:hint="@string/ps_country"
+                                android:background="@android:color/transparent"
+                                android:layout_marginStart="@dimen/standard_gap_extra_small"
+                                android:layout_marginEnd="@dimen/standard_gap_extra_small"
+                                android:maxLines="1"
+                                android:imeOptions="actionNext"
+                                android:textSize="@dimen/font_inputs"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/containerSpinnerState"
+                            android:id="@+id/containerACState"
                             android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/standard_gap_small"
                             android:layout_marginRight="@dimen/standard_gap_large"
-                            android:background="@drawable/custom_textview_white"
+                            android:background="@drawable/custom_textview"
                             android:paddingTop="@dimen/standard_gap_medium"
                             android:paddingBottom="@dimen/standard_gap_medium"
                             android:paddingStart="@dimen/standard_gap_large"
                             android:layout_weight="1">
-                            <Spinner
+                            <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/colorNavigationBarBkg"
-                                android:tooltipText="@string/ps_state"
-                                android:id="@+id/spinner_state"></Spinner>
+                                android:id="@+id/ac_state"
+                                android:hint="@string/ps_state"
+                                android:background="@android:color/transparent"
+                                android:layout_marginStart="@dimen/standard_gap_extra_small"
+                                android:layout_marginEnd="@dimen/standard_gap_extra_small"
+                                android:maxLines="1"
+                                android:imeOptions="actionNext"
+                                android:textSize="@dimen/font_inputs"/>
                         </LinearLayout>
                     </LinearLayout>
                     <!-- Location and Sublocation -->
@@ -293,21 +303,26 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/containerSpinnerLocation"
+                            android:id="@+id/containerACLocation"
                             android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/standard_gap_large"
                             android:layout_marginRight="@dimen/standard_gap_small"
-                            android:background="@drawable/custom_textview_white"
+                            android:background="@drawable/custom_textview"
                             android:paddingTop="@dimen/standard_gap_medium"
                             android:paddingBottom="@dimen/standard_gap_medium"
                             android:paddingStart="@dimen/standard_gap_large"
                             android:layout_weight="1">
-                            <Spinner
+                            <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/colorNavigationBarBkg"
-                                android:tooltipText="@string/ps_location"
-                                android:id="@+id/spinner_location"></Spinner>
+                                android:id="@+id/ac_location"
+                                android:hint="@string/ps_location"
+                                android:background="@android:color/transparent"
+                                android:layout_marginStart="@dimen/standard_gap_extra_small"
+                                android:layout_marginEnd="@dimen/standard_gap_extra_small"
+                                android:maxLines="1"
+                                android:imeOptions="actionNext"
+                                android:textSize="@dimen/font_inputs"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"

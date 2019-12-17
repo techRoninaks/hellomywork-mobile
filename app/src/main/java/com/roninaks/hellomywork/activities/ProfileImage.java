@@ -303,6 +303,8 @@ public class ProfileImage extends Activity implements SqlDelegate {
                 if (resultCode == RESULT_OK) {
                     if(fragment.equals("premiumsignup")){
                         CropImage.activity(imageUri)
+                                .setMinCropResultSize(350, 350)
+                                .setFixAspectRatio(true)
                                 .start(this);
                     }else {
                         Glide.with(this)
@@ -325,6 +327,8 @@ public class ProfileImage extends Activity implements SqlDelegate {
                     imageUri = fullPhotoUri;
                     if(fragment.equals("premiumsignup")){
                         CropImage.activity(imageUri)
+                                .setMinCropResultSize(350, 350)
+                                .setFixAspectRatio(true)
                                 .start(this);
                     }else {
                         Glide.with(this)
