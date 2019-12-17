@@ -110,7 +110,7 @@
                             android:adjustViewBounds="true"
                             android:layout_marginBottom="20dp"
                             android:maxHeight="300dp"
-                            android:src="@drawable/test" />
+                            android:src="@drawable/union_banner_photo" />
 
                         <ImageView
                             android:layout_width="90dp"

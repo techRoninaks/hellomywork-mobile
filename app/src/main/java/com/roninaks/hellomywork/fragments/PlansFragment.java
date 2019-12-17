@@ -218,14 +218,14 @@ public class PlansFragment extends Fragment implements SqlDelegate {
 
     public void saveUserPlan(){
         SqlHelper sqlHelper = new SqlHelper(context, PlansFragment.this);
-        sqlHelper.setExecutePath("postpackageprofile.php");
+        sqlHelper.setExecutePath(planType.equals("free") ? "postfreeprofile.php" :"postpackageprofile.php");
         sqlHelper.setMethod("POST");
         sqlHelper.setActionString("save-package");
         ContentValues params = new ContentValues();
         params.put("id", userId);
         params.put("emid", ((MainActivity) context).isAdminLoggedIn());
         params.put("month", 0);
-        params.put("callAction", planType.equals("user") ? "personel" : "company");
+        params.put("callAction", planType.equals("user") ? "personel" : planType.equals("free") ? "free" : "company");
         sqlHelper.setParams(params);
         sqlHelper.executeUrl(true);
     }

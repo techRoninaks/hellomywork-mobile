@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -23,7 +24,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
-import es.dmoral.toasty.Toasty;
 
 import com.roninaks.hellomywork.R;
 import com.roninaks.hellomywork.activities.MainActivity;
@@ -81,7 +81,8 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
 
     //Views Declaration
     private EditText etName, etAddress, etPincode, etPrimaryPhone, etSublocation, etUnion, etEmail, etPassword, etConfirmPassword, etWhatsapp, etRole, etWebsite, etSkills, etSecondaryContacts;
-    private Spinner spCountry, spState, spLocation, spOrgType, spCategory;
+    private Spinner spOrgType, spCategory;
+    private AutoCompleteTextView acCountry, acState, acLocation;
     private CheckBox cbProspect;
     private Button btnUploadImage, btnSave, btnSubmit;
     private SwitchCompat switchPrivacy;
@@ -159,9 +160,9 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         btnUploadImage = (Button) v.findViewById(R.id.btn_Upload);
         btnSave = (Button) v.findViewById(R.id.btn_Save);
         btnSubmit = (Button) v.findViewById(R.id.btn_Submit);
-        spCountry = (Spinner) v.findViewById(R.id.spinner_country);
-        spState = (Spinner) v.findViewById(R.id.spinner_state);
-        spLocation = (Spinner) v.findViewById(R.id.spinner_location);
+        acCountry = (AutoCompleteTextView) v.findViewById(R.id.ac_country);
+        acState = (AutoCompleteTextView) v.findViewById(R.id.ac_state);
+        acLocation = (AutoCompleteTextView) v.findViewById(R.id.ac_location);
         spOrgType = (Spinner) v.findViewById(R.id.spinner_org_type);
         spCategory = (Spinner) v.findViewById(R.id.spinner_category);
         switchPrivacy = (SwitchCompat) v.findViewById(R.id.switch_Privacy);
@@ -198,9 +199,9 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 android.R.layout.simple_spinner_item,context.getResources().getStringArray(R.array.org_array));
         adapterOrgType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spOrgType.setAdapter(adapterOrgType);
-        spCountry.setAdapter(adapterCountries);
-        spLocation.setAdapter(adapterLocation);
-        spState.setAdapter(adapterStates);
+        acCountry.setAdapter(adapterCountries);
+        acLocation.setAdapter(adapterLocation);
+        acState.setAdapter(adapterStates);
         loadCategories();
         //On click listeners
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -246,6 +247,19 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 ((MainActivity) context).onBackPressed();
             }
         });
+
+//        //Autocomplete focus change listeners
+        View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    validateAutoComplete((AutoCompleteTextView) v);
+                }
+            }
+        };
+        acCountry.setOnFocusChangeListener(focusChangeListener);
+        acState.setOnFocusChangeListener(focusChangeListener);
+        acLocation.setOnFocusChangeListener(focusChangeListener);
         return  v;
     }
 
@@ -344,9 +358,9 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             String pincode = etPincode.getText().toString();
             String primaryPhone = etPrimaryPhone.getText().toString();
             String email = etEmail.getText().toString();
-            String country = spCountry.getSelectedItem().toString();
-            String state = spState.getSelectedItem().toString();
-            String location = spLocation.getSelectedItem().toString();
+            String country = acCountry.getText().toString();
+            String state = acState.getText().toString();
+            String location = acLocation.getText().toString();
             String subLocation = etSublocation.getText().toString();
             String password = etPassword.getText().toString();
             String confirmPassword = etConfirmPassword.getText().toString();
@@ -377,19 +391,16 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
                 etEmail.setError(context.getString(R.string.ps_error_invalid_email));
                 cancel = true;
             }
-            if (country.isEmpty() || country.toLowerCase().equals("country")) {
-                TextView error = (TextView) spCountry.getSelectedView();
-                error.setError(context.getString(R.string.ps_error_required));
+            if (country.isEmpty() || country.toLowerCase().equals("country") || !validateAutoComplete(acCountry)) {
+                acCountry.setError(context.getString(R.string.ps_incorrect_value));
                 cancel = true;
             }
-            if (state.isEmpty() || state.toLowerCase().equals("state")) {
-                TextView error = (TextView) spState.getSelectedView();
-                error.setError(context.getString(R.string.ps_error_required));
+            if (state.isEmpty() || state.toLowerCase().equals("state") || !validateAutoComplete(acState)) {
+                acState.setError(context.getString(R.string.ps_incorrect_value));
                 cancel = true;
             }
-            if (location.isEmpty() || location.toLowerCase().equals("location")) {
-                TextView error = (TextView) spLocation.getSelectedView();
-                error.setError(context.getString(R.string.ps_error_required));
+            if (location.isEmpty() || location.toLowerCase().equals("location") || !validateAutoComplete(acLocation)) {
+                acLocation.setError(context.getString(R.string.ps_incorrect_value));
                 cancel = true;
             }
             if (subLocation.isEmpty()) {
@@ -422,6 +433,17 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             cancel = true;
         }
         return cancel;
+    }
+
+    public boolean validateAutoComplete(AutoCompleteTextView autoCompleteTextView){
+        boolean isValid = true;
+        ArrayList<String> results = autoCompleteTextView.getId() == R.id.ac_country ? countryList : autoCompleteTextView.getId() == R.id.ac_state ? stateList : locationList;
+        if (results.size() == 0 ||
+                results.indexOf(autoCompleteTextView.getText().toString()) == -1) {
+            autoCompleteTextView.setError(context.getString(R.string.ps_incorrect_value));
+            isValid = false;
+        };
+        return  isValid;
     }
 
     //Loaders
@@ -465,8 +487,8 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         String address = etAddress.getText().toString();
 //        address = address.replace(" ", "&#32;");
         params.put("address", address);
-        params.put("state", spState.getSelectedItem().toString());
-        params.put("location", spLocation.getSelectedItem().toString());
+        params.put("state", acState.getText().toString());
+        params.put("location", acLocation.getText().toString());
         params.put("sublocation", etSublocation.getText().toString());
         params.put("pincode", etPincode.getText().toString());
         params.put("union", etUnion.getText().toString());
@@ -501,8 +523,8 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
         String address = etAddress.getText().toString();
 //        address = address.replace(" ", "&#32;");
         params.put("address", address);
-        params.put("state", spState.getSelectedItem().toString());
-        params.put("location", spLocation.getSelectedItem().toString());
+        params.put("state", acState.getText().toString());
+        params.put("location", acLocation.getText().toString());
         params.put("sublocation", etSublocation.getText().toString());
         params.put("pincode", etPincode.getText().toString());
         params.put("union", etUnion.getText().toString());
@@ -574,23 +596,23 @@ public class PremiumSignupFragment extends Fragment implements SqlDelegate {
             switchPrivacy.setChecked(serviceProviderModel.isPrivate());
             imageUrl = serviceProviderModel.getImage();
             //Set Country Spinner
-            for(int i = 0; i < spCountry.getAdapter().getCount(); i++){
+            for(int i = 0; i < acCountry.getAdapter().getCount(); i++){
                 if(countryList.get(i).toLowerCase().equals("india")){
-                    spCountry.setSelection(i);
+                    acCountry.setText("India");
                     break;
                 }
             }
             //Set Location Spinner
-            for(int i = 0; i < spLocation.getAdapter().getCount(); i++){
+            for(int i = 0; i < acLocation.getAdapter().getCount(); i++){
                 if(locationList.get(i).toLowerCase().equals(serviceProviderModel.getLocation().toLowerCase())){
-                    spLocation.setSelection(i);
+                    acLocation.setText(serviceProviderModel.getLocation());
                     break;
                 }
             }
             //Set State Spinner
-            for(int i = 0; i < spState.getAdapter().getCount(); i++){
+            for(int i = 0; i < acState.getAdapter().getCount(); i++){
                 if(stateList.get(i).toLowerCase().equals(serviceProviderModel.getState().toLowerCase())){
-                    spState.setSelection(i);
+                    acState.setText(serviceProviderModel.getState());
                     break;
                 }
             }
